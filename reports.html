@@ -408,7 +408,7 @@
         allClassData.forEach((_, i) => {
           const btn = document.getElementById(`tab-btn-${i}`);
           if (btn) {
-            btn.addEventListener('click', () => updateSummary(i));
+            btn.addEventListener('shown.bs.tab', () => updateSummary(i));
           }
         });
 
