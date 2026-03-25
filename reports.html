@@ -219,43 +219,53 @@
     .grade-A { background: #dcfce7; color: #166534; }
     .grade-B { background: #dbeafe; color: #1e40af; }
     .grade-C { background: #fef9c3; color: #854d0e; }
-    .grade-D { background: #fff7ed; color: #9a3412; }
-    .grade-E { background: #fff1f2; color: #9f1239; }
-    .grade-F { background: #fef2f2; color: #b91c1c; }
+    .grade-D { background: #ffedd5; color: #9a3412; }
+    .grade-E { background: #fee2e2; color: #991b1b; }
+    .grade-F { background: #f1f5f9; color: #475569; }
 
+    /* result badge */
     .result-pass { color: #16a34a; font-weight: 700; }
     .result-fail { color: #dc2626; font-weight: 700; }
-    .top5-star { color: #f59e0b; font-size: 0.75rem; }
 
-    /* ── FOOTER ──────────────────────────────────────────────────────────── */
-    .class-footer {
-      padding: 1rem 1.25rem; background: #fafdfa; border-top: 1px solid #f0f4f0;
-      display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--c-muted);
-    }
-    .site-footer {
-      text-align: center; padding: 2rem 1rem; font-size: 0.75rem; color: var(--c-muted);
-      border-top: 1px solid #e0ede0; margin-top: 2rem;
-    }
+    /* gender icons */
+    .gender-f { color: #ec4899; }
+    .gender-m { color: #3b82f6; }
 
-    /* ── STATUS BAR ──────────────────────────────────────────────────────── */
+    /* top5 star */
+    .top5-star { color: #f59e0b; font-size: 0.75rem; margin-left: 2px; }
+
+    /* status bar */
     .status-bar {
-      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
       margin-bottom: 1rem; font-size: 0.7rem; color: var(--c-muted);
     }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .live-dot.live { background: #22c55e; box-shadow: 0 0 8px #22c55e; animation: pulse 2s infinite; }
+    .live-dot.live { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,.6); }
     .live-dot.stale { background: #94a3b8; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
     .btn-refresh {
-      background: none; border: none; color: var(--c-green); cursor: pointer;
-      display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600;
+      background: none; border: none; color: var(--c-green);
+      font-size: 0.7rem; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.2rem;
     }
     .btn-refresh:hover { text-decoration: underline; }
     .btn-refresh.spinning i { animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    @media (max-width: 600px) {
+    /* footer */
+    .site-footer {
+      text-align: center; padding: 2rem 1rem;
+      font-size: 0.75rem; color: var(--c-muted);
+      border-top: 1px solid #e0ede0; margin-top: 2rem;
+    }
+    .class-footer {
+      margin-top: 1.25rem; padding-top: 1rem;
+      border-top: 1px dashed #e0ede0;
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--c-muted);
+    }
+
+    /* responsive */
+    @media (max-width: 768px) {
       .summary-grid { grid-template-columns: repeat(2, 1fr); }
       .report-header { flex-direction: column; align-items: flex-start; }
       .class-footer { flex-direction: column; gap: 0.5rem; }
@@ -330,44 +340,32 @@
       <button class="btn btn-sm btn-outline-danger mt-2" onclick="location.reload()">Try Again</button>
     </div>
 
-    <div class="tab-content" id="tabContent"></div>
+    <div id="tabContent" class="tab-content d-none">
+      <!-- JS injected -->
+    </div>
   </div>
 
-  <footer class="site-footer" id="siteFooter"></footer>
+  <footer class="site-footer" id="siteFooter">
+    © 2026 Greenway School &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
-    // ─── CONFIG ──────────────────────────────────────────────────────────────
+    /* ── CONFIG ─────────────────────────────────────────────────────────── */
     const MONTHS = [
-      {
-        label:          'January 2026',
-        spreadsheetId:  '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY',
-        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:      false
-      },
-      {
-        label:          'February 2026',
-        spreadsheetId:  '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g',
-        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:      false
-      },
-      {
-        label:          'March 2026',
-        spreadsheetId:  '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM',
-        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:      true
-      }
+      { label: 'January 2026',  spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: false },
+      { label: 'February 2026', spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: false },
+      { label: 'March 2026',    spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: true }
     ];
 
-    const CURRENT_MONTH_IDX = MONTHS.findIndex(m => m.isCurrent);
-    let activeMonthIdx = CURRENT_MONTH_IDX >= 0 ? CURRENT_MONTH_IDX : MONTHS.length - 1;
-    let isFirstLoad    = true;
+    let activeMonthIdx = MONTHS.findIndex(m => m.isCurrent);
+    if (activeMonthIdx === -1) activeMonthIdx = MONTHS.length - 1;
+    let isFirstLoad = true;
 
-    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    /* ── HELPERS ────────────────────────────────────────────────────────── */
     function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function fmtTime(d) { return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
-    function rankClass(r) { if(r===1) return 'rank-1'; if(r===2) return 'rank-2'; if(r===3) return 'rank-3'; return 'rank-other'; }
+    function rankClass(r) { return r === 1 ? 'rank-1' : r === 2 ? 'rank-2' : r === 3 ? 'rank-3' : 'rank-other'; }
     function gradeClass(g) { return `grade-${(g||'F').toUpperCase()}`; }
     
     function cacheKeyForMonth(monthIdx) { return `gws_report_cache_month_${monthIdx}_v3`; }
@@ -391,6 +389,22 @@
       } catch (e) {}
     }
 
+    function driveUrlToDirectImg(url) {
+      if (!url) return null;
+      url = url.trim();
+      if (!url.startsWith('http')) return null;
+      let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      m = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      m = url.match(/uc\?.*[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
+      return null;
+    }
+
     // ─── DATA FETCHING ───────────────────────────────────────────────────────
     async function fetchSheet(sheetName, spreadsheetId) {
       const bust = Math.floor(Date.now() / 60000);
@@ -403,36 +417,59 @@
       const json = JSON.parse(match[1]);
       if (json.status !== 'ok') throw new Error(json.errors?.[0]?.message || "Sheet error");
 
-      const rows = json.table.rows;
-      const schoolName   = (rows[0]?.c?.[1]?.v || 'Greenway School').toString();
-      const period       = (rows[1]?.c?.[1]?.v || '').toString();
-      const academicYear = (rows[2]?.c?.[1]?.v || '').toString();
-      const levelName    = (rows[3]?.c?.[1]?.v || sheetName).toString();
+      const cols        = json.table.cols;
+      const rows        = json.table.rows;
+      const headerLabel = (cols[0]?.label || '').trim();
 
-      const students = [];
-      for (let i = 5; i < rows.length; i++) {
-        const c = rows[i].c;
-        if (!c || !c[1]?.v) continue;
-        const name = c[1].v.toString().trim();
-        if (/date|seen|teacher|prepared/i.test(name)) continue;
+      let schoolName   = 'Greenway School';
+      let period       = '';
+      let academicYear = '';
+      let levelName    = '';
+      let teacher      = '';
+      let preparedBy   = '';
 
-        students.push({
-          num:    (c[0]?.v || '').toString().trim(),
-          name:   name,
-          gender: (c[2]?.v || '').toString().trim(),
-          avg:    parseFloat(c[3]?.v) || 0,
-          grade:  (c[4]?.v || 'F').toString().trim(),
-          rank:   parseInt(c[5]?.v) || (students.length + 1),
-          result: (c[6]?.v || 'Fail').toString().trim()
-        });
+      const schoolMatch = headerLabel.match(/^(.+?)\s+Top 5/i);
+      if (schoolMatch) schoolName = schoolMatch[1].trim();
+
+      const periodMatch = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
+      if (periodMatch) period = periodMatch[1].trim();
+      else {
+        const pm2 = headerLabel.match(/Top 5 of\s+(.+?)(?:\s+Level|\s*$)/i);
+        if (pm2) period = pm2[1].trim();
       }
 
-      let teacher = '', preparedBy = '';
-      const lastRows = rows.slice(-5);
-      for (const r of lastRows) {
-        const txt = (r.c?.[1]?.v || '').toString();
-        const mt = txt.match(/Teacher:\s*(.+)/i); if (mt) teacher = mt[1].trim();
-        const mp = txt.match(/Prepared by:\s*(.+)/i); if (mp) preparedBy = mp[1].trim();
+      const yearMatch = headerLabel.match(/Academic Year\s*[:\-]\s*(\S+)/i);
+      if (yearMatch) academicYear = yearMatch[1].trim();
+
+      const levelMatch = headerLabel.match(/Level:\s*(.+?)\s+N\s*$/i);
+      if (levelMatch) levelName = levelMatch[1].trim();
+      else {
+        const lm2 = headerLabel.match(/Level:\s*(.+?)(?:\s+N)?$/i);
+        if (lm2) levelName = lm2[1].trim();
+      }
+
+      const students = [];
+      for (const row of rows) {
+        const cells = row.c || [];
+        const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
+        const name = String(cv(1)).trim();
+        if (!name) continue;
+        if (/^(date|seen|teacher|prepared)/i.test(name)) {
+          const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
+          if (teacherMatch) teacher = teacherMatch[1].trim();
+          const prepCol = String(cv(4) || cv(6) || '').trim();
+          if (prepCol && !/^(pass|fail)$/i.test(prepCol)) preparedBy = prepCol;
+          continue;
+        }
+        students.push({
+          num:    String(cv(0)).trim(),
+          name,
+          gender: String(cv(2)).trim(),
+          avg:    parseFloat(cv(3)) || 0,
+          grade:  String(cv(4) || 'F').trim(),
+          rank:   parseInt(cv(5)) || (students.length + 1),
+          result: String(cv(6) || 'Fail').trim()
+        });
       }
 
       return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
