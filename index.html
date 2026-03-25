@@ -255,20 +255,129 @@
       font-size: 0.74rem; color: var(--c-muted);
     }
     .class-footer span { display: flex; align-items: center; gap: 0.3rem; }
-    .class-footer strong { color: var(--c-text); }
 
     /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
     .loading-box { text-align: center; padding: 4rem 1rem; color: #888; }
     .spinner-border { width: 2.5rem; height: 2.5rem; color: var(--c-green-mid) !important; }
     .error-box { text-align: center; padding: 3rem 1rem; }
 
-    /* ── REFRESH INFO ────────────────────────────────────────────────────── */
-    .refresh-info { font-size: 0.71rem; color: #aaa; text-align: center; margin-top: 1.75rem; }
-    .refresh-dot {
-      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-      background: #66bb6a; margin-right: 4px; animation: pulse 2s infinite;
+    /* ══════════════════════════════════════════════════════════════════════
+       AUTO-UPDATE STATUS BAR
+    ══════════════════════════════════════════════════════════════════════ */
+    .update-bar {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 0.7rem 1rem;
+      margin-top: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.74rem;
+      color: var(--c-muted);
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .update-bar-left  { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .update-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+
+    /* Live dot */
+    .live-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #22c55e; flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(34,197,94,.4);
+      animation: livePulse 2s infinite;
+    }
+    .live-dot.stale { background: #f59e0b; box-shadow: 0 0 0 0 rgba(245,158,11,.4); }
+    .live-dot.error { background: #ef4444; animation: none; }
+    @keyframes livePulse {
+      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.4); }
+      70%  { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+
+    /* Countdown ring */
+    .countdown-wrap {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; color: var(--c-muted);
+    }
+    .countdown-ring {
+      position: relative; width: 28px; height: 28px;
+    }
+    .countdown-ring svg { transform: rotate(-90deg); }
+    .countdown-ring .ring-bg   { fill: none; stroke: #e2e8f0; stroke-width: 3; }
+    .countdown-ring .ring-fill { fill: none; stroke: #43a047; stroke-width: 3;
+                                  stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
+    .countdown-ring .ring-text {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 700; color: var(--c-green);
+    }
+
+    /* Monthly badge */
+    .monthly-badge {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      background: #e8f5e9; color: #2e7d32;
+      border: 1px solid #c8e6c9;
+      font-size: 0.68rem; font-weight: 600;
+      padding: 0.15rem 0.6rem; border-radius: 50px;
+    }
+
+    /* Change detected toast */
+    .change-toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+      background: #1b5e20; color: #fff;
+      padding: 0.75rem 1.1rem; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      display: flex; align-items: center; gap: 0.5rem;
+      transform: translateY(80px); opacity: 0;
+      transition: transform .35s ease, opacity .35s ease;
+      max-width: 320px;
+    }
+    .change-toast.show { transform: translateY(0); opacity: 1; }
+    .change-toast .btn-close-toast {
+      background: none; border: none; color: rgba(255,255,255,.7);
+      cursor: pointer; margin-left: auto; font-size: 1rem; line-height: 1;
+    }
+
+    /* Refresh button */
+    .btn-refresh {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--c-green-light); color: var(--c-green);
+      border: 1.5px solid #c8e6c9; border-radius: 8px;
+      font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.75rem;
+      cursor: pointer; transition: background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .btn-refresh:hover { background: #c8e6c9; border-color: #a5d6a7; }
+    .btn-refresh.spinning i { animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Update history panel */
+    .history-panel {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.73rem; color: var(--c-muted);
+    }
+    .history-panel h6 {
+      font-size: 0.74rem; font-weight: 700;
+      color: var(--c-text); margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .history-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .history-list li {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.25rem 0; border-bottom: 1px solid #f0f4f0;
+    }
+    .history-list li:last-child { border-bottom: none; }
+    .history-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .history-dot.changed { background: #22c55e; }
+    .history-dot.same    { background: #94a3b8; }
+    .history-dot.error   { background: #ef4444; }
 
     /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
     .site-footer {
@@ -282,6 +391,7 @@
     @media (max-width: 760px) {
       .cards-grid { grid-template-columns: repeat(3, 1fr); }
       .class-footer { flex-direction: column; gap: 0.3rem; text-align: center; }
+      .update-bar { flex-direction: column; align-items: flex-start; }
     }
     @media (max-width: 500px) {
       .school-name { font-size: 1.2rem; }
@@ -311,29 +421,69 @@
 
   <!-- ── MAIN ── -->
   <div class="main-content">
+
+    <!-- Loading -->
     <div id="loadingBox" class="loading-box">
       <div class="spinner-border mb-3" role="status"><span class="visually-hidden">Loading…</span></div>
       <div class="fw-semibold" style="color:#388e3c">Loading student data…</div>
       <div class="text-muted small mt-1">Fetching live data from Google Sheets</div>
     </div>
 
+    <!-- Error -->
     <div id="errorBox" class="error-box d-none">
       <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2.5rem"></i>
       <div class="fw-semibold mt-2 text-danger">Failed to load data</div>
       <div class="text-muted small mt-1" id="errorMsg"></div>
-      <button class="btn btn-sm mt-3" style="border:1.5px solid #388e3c;color:#388e3c"
-              onclick="loadAllData()">
-        <i class="bi bi-arrow-clockwise me-1"></i>Retry
+      <button class="btn-refresh mt-3" onclick="manualRefresh()">
+        <i class="bi bi-arrow-clockwise"></i> Retry
       </button>
     </div>
 
+    <!-- Tab content -->
     <div id="tabContent" class="tab-content d-none"></div>
 
-    <div class="refresh-info d-none" id="refreshInfo">
-      <span class="refresh-dot"></span>
-      Live data &nbsp;·&nbsp; Auto-refreshes every 5 min &nbsp;·&nbsp;
-      Last updated: <span id="lastUpdated">—</span>
+    <!-- ── AUTO-UPDATE STATUS BAR ── -->
+    <div class="update-bar d-none" id="updateBar">
+      <div class="update-bar-left">
+        <span class="live-dot" id="liveDot"></span>
+        <span id="updateStatus">Live data</span>
+        <span class="monthly-badge" id="monthlyBadge">
+          <i class="bi bi-calendar-check"></i>
+          <span id="currentPeriodLabel">—</span>
+        </span>
+        <span id="lastUpdatedLabel" style="color:#aaa">Last updated: <strong id="lastUpdated">—</strong></span>
+      </div>
+      <div class="update-bar-right">
+        <div class="countdown-wrap" id="countdownWrap" title="Next auto-refresh">
+          <div class="countdown-ring">
+            <svg viewBox="0 0 28 28" width="28" height="28">
+              <circle class="ring-bg"   cx="14" cy="14" r="11"/>
+              <circle class="ring-fill" id="ringFill" cx="14" cy="14" r="11"
+                      stroke-dasharray="69.1" stroke-dashoffset="0"/>
+            </svg>
+            <div class="ring-text" id="countdownText">5m</div>
+          </div>
+          <span style="font-size:0.68rem">next refresh</span>
+        </div>
+        <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">
+          <i class="bi bi-arrow-clockwise" id="refreshIcon"></i> Refresh
+        </button>
+      </div>
     </div>
+
+    <!-- ── UPDATE HISTORY ── -->
+    <div class="history-panel d-none" id="historyPanel">
+      <h6><i class="bi bi-clock-history"></i> Update History (this session)</h6>
+      <ul class="history-list" id="historyList"></ul>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- ── CHANGE DETECTED TOAST ── -->
+  <div class="change-toast" id="changeToast">
+    <i class="bi bi-arrow-repeat"></i>
+    <span id="changeToastMsg">New data detected — page updated!</span>
+    <button class="btn-close-toast" onclick="hideToast()" aria-label="Close">×</button>
   </div>
 
   <!-- ── FOOTER ── -->
@@ -345,14 +495,105 @@
 
   <script>
     /* ════════════════════════════════════════════════════════════════════
-       CONFIG — only change SPREADSHEET_ID and SHEET_NAMES when needed
+       CONFIG
+       ─ SPREADSHEET_ID : your Google Sheets document ID
+       ─ SHEET_NAMES    : list of sheet tab names to display
+       ─ REFRESH_MS     : how often to poll for changes (default: 5 min)
+       ─ MONTHLY_CACHE  : cache data per calendar month; auto-invalidates
+                          at the start of each new month
     ════════════════════════════════════════════════════════════════════ */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
     const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
-    const REFRESH_MS     = 5 * 60 * 1000;
+    const REFRESH_MS     = 5 * 60 * 1000;   // 5 minutes between polls
     const PHOTO_STORE    = 'gws_student_photos_v2';
+    const CACHE_KEY      = 'gws_data_cache_v2';
+    const HISTORY_KEY    = 'gws_update_history';
+    const MAX_HISTORY    = 10;
 
-    /* ── LOCAL PHOTO STORAGE ─────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       MONTHLY CACHE
+       Stores fetched data keyed by "YYYY-MM" so the page always shows
+       the freshest data for the current month, and automatically
+       discards data from previous months.
+    ════════════════════════════════════════════════════════════════════ */
+    function currentMonthKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    }
+
+    function loadCache() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+        // Discard any entry that is not from the current month
+        if (raw.monthKey && raw.monthKey !== currentMonthKey()) {
+          console.info('[AutoUpdate] New month detected — cache invalidated.');
+          return null;
+        }
+        return raw.data || null;
+      } catch { return null; }
+    }
+
+    function saveCache(data) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          monthKey:  currentMonthKey(),
+          savedAt:   new Date().toISOString(),
+          data
+        }));
+      } catch (e) { console.warn('Cache save failed:', e); }
+    }
+
+    function clearCache() {
+      try { localStorage.removeItem(CACHE_KEY); } catch {}
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       UPDATE HISTORY  (persisted in localStorage, max 10 entries)
+    ════════════════════════════════════════════════════════════════════ */
+    function loadHistory() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+      catch { return []; }
+    }
+    function saveHistory(list) {
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY))); }
+      catch {}
+    }
+    function pushHistory(entry) {
+      const list = loadHistory();
+      list.unshift(entry);
+      saveHistory(list);
+      renderHistory(list);
+    }
+    function renderHistory(list) {
+      if (!list || list.length === 0) return;
+      const panel = document.getElementById('historyPanel');
+      const ul    = document.getElementById('historyList');
+      panel.classList.remove('d-none');
+      ul.innerHTML = list.map(e => `
+        <li>
+          <span class="history-dot ${e.type}"></span>
+          <span style="color:var(--c-text);font-weight:600">${e.time}</span>
+          <span>${e.msg}</span>
+        </li>`).join('');
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CHANGE DETECTION
+       Computes a lightweight fingerprint of the fetched data to detect
+       whether the Google Sheet has been updated since the last fetch.
+    ════════════════════════════════════════════════════════════════════ */
+    function fingerprint(allClasses) {
+      return allClasses.map(c =>
+        c.students.map(s => `${s.name}|${s.avg}|${s.rank}|${s.grade}|${s.result}`).join(';')
+        + `|period:${c.period}`
+      ).join('||');
+    }
+
+    let lastFingerprint = null;
+
+    /* ════════════════════════════════════════════════════════════════════
+       LOCAL PHOTO STORAGE
+    ════════════════════════════════════════════════════════════════════ */
     function loadPhotoStore() {
       try { return JSON.parse(localStorage.getItem(PHOTO_STORE) || '{}'); }
       catch { return {}; }
@@ -365,7 +606,9 @@
       return `${sheetName}||${studentName.trim()}`;
     }
 
-    /* ── GOOGLE DRIVE PHOTO CONVERTER ───────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       GOOGLE DRIVE PHOTO HELPER
+    ════════════════════════════════════════════════════════════════════ */
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
@@ -378,12 +621,16 @@
       return null;
     }
 
-    /* ── FETCH & PARSE A SHEET ──────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       FETCH & PARSE A SHEET
+    ════════════════════════════════════════════════════════════════════ */
     async function fetchSheet(sheetName) {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-      const res = await fetch(url);
+      // Cache-bust with a per-minute timestamp so browsers don't serve stale responses
+      const bust = Math.floor(Date.now() / 60000);
+      const url  = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
+      const res  = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status} for sheet "${sheetName}"`);
-      const text = await res.text();
+      const text  = await res.text();
       const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
       if (!match) throw new Error(`Unexpected response for "${sheetName}"`);
       const json = JSON.parse(match[1]);
@@ -391,28 +638,17 @@
       return parseGviz(json, sheetName);
     }
 
-    /* ── DYNAMIC PARSER ─────────────────────────────────────────────── */
-    /*
-      Real sheet structure (confirmed by inspection):
-      ─ col[0].label  = merged header containing ALL metadata:
-          "Greenway School Top 5 of March-test  Academic Year : 2025-2026 Level: Beginner A N"
-      ─ col[1].label  = "Student Name"
-      ─ col[2].label  = "Gender "
-      ─ col[3].label  = "Average "
-      ─ col[4].label  = "Grade"
-      ─ col[5].label  = "Rank"
-      ─ col[6].label  = "Result"
-      ─ col[7].label  = "" (photo URL if added, otherwise empty)
-
-      Data rows start at index 0 (gviz skips the merged header row).
-      Stop parsing when cells[1] contains "Date:" or is empty after students.
-    */
+    /* ════════════════════════════════════════════════════════════════════
+       DYNAMIC PARSER
+       All metadata (school name, period, academic year, level) is
+       extracted from col[0].label of the gviz response. Column positions
+       are detected from column labels with known-position fallbacks.
+    ════════════════════════════════════════════════════════════════════ */
     function parseGviz(json, sheetName) {
       const cols        = json.table.cols;
       const rows        = json.table.rows;
       const headerLabel = (cols[0]?.label || '').trim();
 
-      // ── Extract metadata from the merged header label ──
       let schoolName   = 'Greenway School';
       let period       = '';
       let academicYear = '';
@@ -420,11 +656,9 @@
       let teacher      = '';
       let preparedBy   = '';
 
-      // School name: everything before "Top 5"
       const schoolMatch = headerLabel.match(/^(.+?)\s+Top 5/i);
       if (schoolMatch) schoolName = schoolMatch[1].trim();
 
-      // Period: "Top 5 of <period>"
       const periodMatch = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
       if (periodMatch) period = periodMatch[1].trim();
       else {
@@ -432,11 +666,9 @@
         if (pm2) period = pm2[1].trim();
       }
 
-      // Academic Year
       const yearMatch = headerLabel.match(/Academic Year\s*[:\-]\s*(\S+)/i);
       if (yearMatch) academicYear = yearMatch[1].trim();
 
-      // Level
       const levelMatch = headerLabel.match(/Level:\s*(.+?)\s+N\s*$/i);
       if (levelMatch) levelName = levelMatch[1].trim();
       else {
@@ -444,57 +676,45 @@
         if (lm2) levelName = lm2[1].trim();
       }
 
-      // ── Determine column indices dynamically from column labels ──
+      // Detect column positions from labels
       const colIndex = {};
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
-        if (lbl === 'studentname')  colIndex.name    = i;
-        else if (lbl === 'gender')  colIndex.gender  = i;
-        else if (lbl === 'average') colIndex.avg     = i;
-        else if (lbl === 'grade')   colIndex.grade   = i;
-        else if (lbl === 'rank')    colIndex.rank    = i;
-        else if (lbl === 'result')  colIndex.result  = i;
+        if      (lbl === 'studentname') colIndex.name   = i;
+        else if (lbl === 'gender')      colIndex.gender = i;
+        else if (lbl === 'average')     colIndex.avg    = i;
+        else if (lbl === 'grade')       colIndex.grade  = i;
+        else if (lbl === 'rank')        colIndex.rank   = i;
+        else if (lbl === 'result')      colIndex.result = i;
       });
-      // Fallback to known positions if labels not found
       if (colIndex.name   === undefined) colIndex.name   = 1;
       if (colIndex.gender === undefined) colIndex.gender = 2;
       if (colIndex.avg    === undefined) colIndex.avg    = 3;
       if (colIndex.grade  === undefined) colIndex.grade  = 4;
       if (colIndex.rank   === undefined) colIndex.rank   = 5;
       if (colIndex.result === undefined) colIndex.result = 6;
-      colIndex.n     = 0;   // sequence number always col 0
-      colIndex.photo = 7;   // Google Drive photo URL (optional)
+      colIndex.n     = 0;
+      colIndex.photo = 7;
 
-      // ── Parse student rows ──
       const students = [];
       for (const row of rows) {
         const cells = row.c || [];
         const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
-
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
-
-        // Stop at footer rows
         if (/^(date|seen|teacher|prepared)/i.test(name)) {
-          // Try to extract teacher/prepared-by from this and subsequent rows
-          const teacherRow = String(cv(colIndex.name));
-          const teacherMatch = teacherRow.match(/Teacher\s*[:\-]\s*(.+)/i);
+          const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (teacherMatch) teacher = teacherMatch[1].trim();
-          const prepCol = cv(4) || cv(colIndex.result) || '';
-          if (String(prepCol).trim() && !/^(pass|fail)$/i.test(String(prepCol).trim())) {
-            preparedBy = String(prepCol).trim();
-          }
+          const prepCol = String(cv(4) || cv(colIndex.result) || '').trim();
+          if (prepCol && !/^(pass|fail)$/i.test(prepCol)) preparedBy = prepCol;
           continue;
         }
-        if (/^(date)/i.test(name)) continue;
-
         const avgRaw  = cv(colIndex.avg);
         const avg     = avgRaw !== '' ? parseFloat(avgRaw) : null;
         const rankRaw = cv(colIndex.rank);
         const rank    = rankRaw !== '' ? Math.round(parseFloat(rankRaw)) : (students.length + 1);
         const rawPhoto = String(cv(colIndex.photo)).trim();
         const photoUrl = driveUrlToDirectImg(rawPhoto);
-
         students.push({
           n:      String(cv(colIndex.n)).trim(),
           name,
@@ -507,7 +727,7 @@
         });
       }
 
-      // Extract teacher/preparedBy from footer rows if not yet found
+      // Second pass for teacher / prepared-by in footer
       for (const row of rows) {
         const cells = row.c || [];
         const cv = (i) => { const c = cells[i]; return c ? String(c.v ?? '').trim() : ''; };
@@ -526,7 +746,9 @@
       return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
     }
 
-    /* ── HELPERS ────────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       RENDER HELPERS
+    ════════════════════════════════════════════════════════════════════ */
     const rankEmoji = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
     function gradeClass(g) {
@@ -560,8 +782,17 @@
       if (l.startsWith('beginner')) return levelName;
       return `Level ${levelName}`;
     }
+    function fmtTime(d) {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    function fmtDateTime(d) {
+      return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+           + ' ' + fmtTime(d);
+    }
 
-    /* ── RENDER CARD ────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       RENDER CARD
+    ════════════════════════════════════════════════════════════════════ */
     function renderCard(s, sheetName) {
       const rankClass  = `rank-${Math.min(s.rank, 5)}`;
       const emoji      = rankEmoji[s.rank];
@@ -570,9 +801,10 @@
       const localPhoto = store[key] || null;
       const displayUrl = localPhoto || s.photoUrl;
 
-      const safeKey = CSS.escape ? CSS.escape(key) : key.replace(/[^a-zA-Z0-9_-]/g, '_');
-      const imgId   = `pi_${safeKey}`;
-      const phId    = `ph_${safeKey}`;
+      const safeKey  = key.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const imgId    = `pi_${safeKey}`;
+      const phId     = `ph_${safeKey}`;
+      const uploadId = `up_${safeKey}`;
 
       const photoContent = displayUrl
         ? `<img class="card-photo" id="${imgId}"
@@ -592,12 +824,9 @@
         ? `<div class="rank-badge">${emoji}</div>`
         : `<div class="rank-badge"><span class="rank-num">#${s.rank}</span></div>`;
 
-      const uploadId = `up_${safeKey}`;
-
       return `
         <div class="student-card ${rankClass}">
           <div class="card-accent"></div>
-
           <div class="card-photo-wrap"
                onclick="document.getElementById('${uploadId}').click()"
                title="Click to upload photo">
@@ -614,7 +843,6 @@
                  data-imgid="${imgId}"
                  data-phid="${phId}"
                  onchange="handleUpload(this)" />
-
           <div class="card-body-inner">
             <div class="card-name" title="${escHtml(s.name)}">${escHtml(s.name)}</div>
             <div class="card-divider"></div>
@@ -631,21 +859,21 @@
         </div>`;
     }
 
-    /* ── HANDLE LOCAL IMAGE UPLOAD ──────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       HANDLE LOCAL IMAGE UPLOAD
+    ════════════════════════════════════════════════════════════════════ */
     function handleUpload(input) {
       const file = input.files[0];
       if (!file) return;
       const key   = input.dataset.key;
       const imgId = input.dataset.imgid;
       const phId  = input.dataset.phid;
-
       const reader = new FileReader();
       reader.onload = function(e) {
         const dataUrl = e.target.result;
         const store = loadPhotoStore();
         store[key] = dataUrl;
         savePhotoStore(store);
-
         const imgEl = document.getElementById(imgId);
         const phEl  = document.getElementById(phId);
         if (imgEl) {
@@ -665,27 +893,24 @@
       reader.readAsDataURL(file);
     }
 
-    /* ── BUILD GRID ─────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       BUILD UI
+    ════════════════════════════════════════════════════════════════════ */
     function buildGrid(students, sheetName) {
       const sorted = students.slice().sort((a, b) => a.rank - b.rank).slice(0, 5);
       return `<div class="cards-grid">${sorted.map(s => renderCard(s, sheetName)).join('')}</div>`;
     }
 
-    /* ── BUILD TAB PANE ─────────────────────────────────────────────── */
     function buildTabPane(classData, index) {
       const { sheetName, levelName, students, teacher, preparedBy } = classData;
       const displayName = levelDisplay(levelName, sheetName);
-
       const hasTie = students.length > 1 && students.every(s => s.rank === students[0].rank);
       const tieNote = hasTie
-        ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>`
-        : '';
-
+        ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>` : '';
       const footerTeacher    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
       const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
       const classFooter = (footerTeacher || footerPreparedBy)
         ? `<div class="class-footer">${footerTeacher}${footerPreparedBy}</div>` : '';
-
       return `
         <div class="tab-pane fade ${index === 0 ? 'show active' : ''}"
              id="tab-pane-${index}" role="tabpanel" aria-labelledby="tab-btn-${index}">
@@ -699,21 +924,19 @@
         </div>`;
     }
 
-    /* ── BUILD ALL TABS ─────────────────────────────────────────────── */
     function buildUI(allClasses) {
       const tabsEl    = document.getElementById('classTabs');
       const contentEl = document.getElementById('tabContent');
       tabsEl.innerHTML    = '';
       contentEl.innerHTML = '';
 
-      // Update global header from first successful sheet
       const first = allClasses[0];
       if (first) {
         if (first.schoolName)   document.getElementById('schoolName').textContent   = first.schoolName;
         if (first.academicYear) document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
         if (first.period)       document.getElementById('periodBadge').textContent  = `⭐ Top 5 of ${first.period}`;
+        if (first.period)       document.getElementById('currentPeriodLabel').textContent = first.period;
 
-        // Update site footer dynamically
         const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
         const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
         const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
@@ -738,36 +961,201 @@
       });
     }
 
-    /* ── LOAD ALL DATA ──────────────────────────────────────────────── */
-    async function loadAllData() {
+    /* ════════════════════════════════════════════════════════════════════
+       COUNTDOWN RING
+    ════════════════════════════════════════════════════════════════════ */
+    let countdownInterval = null;
+    let nextRefreshAt     = null;
+    const RING_CIRCUMFERENCE = 69.1; // 2π × r (r=11)
+
+    function startCountdown() {
+      nextRefreshAt = Date.now() + REFRESH_MS;
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(tickCountdown, 1000);
+      tickCountdown();
+    }
+
+    function tickCountdown() {
+      const remaining = Math.max(0, nextRefreshAt - Date.now());
+      const mins      = Math.floor(remaining / 60000);
+      const secs      = Math.floor((remaining % 60000) / 1000);
+      const fraction  = remaining / REFRESH_MS;
+      const offset    = RING_CIRCUMFERENCE * (1 - fraction);
+
+      const ringFill = document.getElementById('ringFill');
+      const countdownText = document.getElementById('countdownText');
+      if (ringFill)      ringFill.style.strokeDashoffset = offset;
+      if (countdownText) countdownText.textContent = mins > 0 ? `${mins}m` : `${secs}s`;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       TOAST
+    ════════════════════════════════════════════════════════════════════ */
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('changeToast');
+      document.getElementById('changeToastMsg').textContent = msg;
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(hideToast, 5000);
+    }
+    function hideToast() {
+      document.getElementById('changeToast').classList.remove('show');
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       STATUS BAR UPDATE
+    ════════════════════════════════════════════════════════════════════ */
+    function setStatus(type, msg) {
+      const dot    = document.getElementById('liveDot');
+      const status = document.getElementById('updateStatus');
+      dot.className    = 'live-dot ' + (type === 'live' ? '' : type);
+      status.textContent = msg;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       MAIN LOAD FUNCTION
+       ─ On first load: tries cache first, then fetches fresh data
+       ─ On subsequent polls: always fetches fresh, compares fingerprint
+       ─ On new month: cache is auto-invalidated, fresh fetch is forced
+    ════════════════════════════════════════════════════════════════════ */
+    let isFirstLoad = true;
+
+    async function loadAllData(isManual = false) {
       const loadingBox  = document.getElementById('loadingBox');
       const errorBox    = document.getElementById('errorBox');
       const tabContent  = document.getElementById('tabContent');
-      const refreshInfo = document.getElementById('refreshInfo');
+      const updateBar   = document.getElementById('updateBar');
+      const refreshBtn  = document.getElementById('refreshBtn');
+      const refreshIcon = document.getElementById('refreshIcon');
 
-      loadingBox.classList.remove('d-none');
-      errorBox.classList.add('d-none');
-      tabContent.classList.add('d-none');
+      // Show spinner on first load only; silent refresh on subsequent polls
+      if (isFirstLoad || isManual) {
+        loadingBox.classList.remove('d-none');
+        errorBox.classList.add('d-none');
+        tabContent.classList.add('d-none');
+        updateBar.classList.add('d-none');
+      }
+
+      if (isManual) {
+        refreshBtn.classList.add('spinning');
+        clearCache();
+      }
 
       try {
-        const results = await Promise.all(SHEET_NAMES.map(fetchSheet));
-        buildUI(results);
-        loadingBox.classList.add('d-none');
-        tabContent.classList.remove('d-none');
-        refreshInfo.classList.remove('d-none');
-        document.getElementById('lastUpdated').textContent =
-          new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let results;
+        const cached = !isManual && isFirstLoad ? loadCache() : null;
+
+        if (cached) {
+          // Serve from cache instantly, then silently verify in background
+          results = cached;
+          buildUI(results);
+          lastFingerprint = fingerprint(results);
+          loadingBox.classList.add('d-none');
+          tabContent.classList.remove('d-none');
+          updateBar.classList.remove('d-none');
+          setStatus('stale', 'Loaded from cache — verifying…');
+          document.getElementById('lastUpdated').textContent = 'cached';
+          isFirstLoad = false;
+
+          // Background verification
+          Promise.all(SHEET_NAMES.map(fetchSheet)).then(fresh => {
+            const newFp = fingerprint(fresh);
+            if (newFp !== lastFingerprint) {
+              lastFingerprint = newFp;
+              saveCache(fresh);
+              buildUI(fresh);
+              const now = new Date();
+              document.getElementById('lastUpdated').textContent = fmtTime(now);
+              setStatus('live', 'Live data');
+              showToast('Sheet updated — page refreshed with latest data!');
+              pushHistory({ type: 'changed', time: fmtDateTime(now), msg: 'New data detected from Google Sheets.' });
+            } else {
+              setStatus('live', 'Live data');
+              const now = new Date();
+              document.getElementById('lastUpdated').textContent = fmtTime(now);
+              pushHistory({ type: 'same', time: fmtDateTime(now), msg: 'No changes detected.' });
+            }
+          }).catch(err => {
+            setStatus('stale', 'Using cached data');
+            console.warn('Background verify failed:', err);
+          });
+
+        } else {
+          // Full fresh fetch
+          results = await Promise.all(SHEET_NAMES.map(fetchSheet));
+          const newFp = fingerprint(results);
+          const changed = lastFingerprint !== null && newFp !== lastFingerprint;
+
+          if (changed) {
+            showToast('New data detected — page updated with latest results!');
+          }
+
+          lastFingerprint = newFp;
+          saveCache(results);
+          buildUI(results);
+
+          const now = new Date();
+          loadingBox.classList.add('d-none');
+          tabContent.classList.remove('d-none');
+          updateBar.classList.remove('d-none');
+          setStatus('live', 'Live data');
+          document.getElementById('lastUpdated').textContent = fmtTime(now);
+
+          pushHistory({
+            type: changed ? 'changed' : 'same',
+            time: fmtDateTime(now),
+            msg:  changed ? 'Data changed — page updated.' : 'No changes detected.',
+          });
+
+          isFirstLoad = false;
+        }
+
+        startCountdown();
+
       } catch (err) {
         console.error(err);
         loadingBox.classList.add('d-none');
-        errorBox.classList.remove('d-none');
-        document.getElementById('errorMsg').textContent = err.message;
+        if (isFirstLoad) {
+          errorBox.classList.remove('d-none');
+          document.getElementById('errorMsg').textContent = err.message;
+        } else {
+          // Silent failure on background poll — keep showing existing data
+          setStatus('error', 'Refresh failed — retrying soon');
+          updateBar.classList.remove('d-none');
+          tabContent.classList.remove('d-none');
+          pushHistory({ type: 'error', time: fmtDateTime(new Date()), msg: `Fetch failed: ${err.message}` });
+        }
+      } finally {
+        if (isManual) refreshBtn.classList.remove('spinning');
       }
     }
 
-    /* ── INIT ───────────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════════════════
+       MANUAL REFRESH
+    ════════════════════════════════════════════════════════════════════ */
+    function manualRefresh() {
+      loadAllData(true);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       VISIBILITY API — resume polling when tab becomes visible again
+    ════════════════════════════════════════════════════════════════════ */
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        const stale = nextRefreshAt && Date.now() > nextRefreshAt;
+        if (stale) loadAllData(false);
+      }
+    });
+
+    /* ════════════════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════════════════ */
     loadAllData();
-    setInterval(loadAllData, REFRESH_MS);
+    setInterval(() => loadAllData(false), REFRESH_MS);
+
+    // Restore history on page load
+    renderHistory(loadHistory());
   </script>
 </body>
 </html>
