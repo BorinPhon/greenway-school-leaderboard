@@ -180,6 +180,25 @@
     .upload-overlay span { font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: 0.5px; }
     .upload-input { display: none; }
 
+    /* Upload progress spinner overlay */
+    .upload-spinner {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.4rem;
+      border-radius: var(--r-card) var(--r-card) 0 0;
+      z-index: 10; color: #fff; font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.4px; text-transform: uppercase;
+    }
+    .spinner-ring {
+      width: 28px; height: 28px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* Google Drive photo badge — bottom-left corner of photo */
     .drive-badge {
       position: absolute; bottom: 5px; left: 6px;
@@ -518,6 +537,11 @@
     const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
     const REFRESH_MS     = 5 * 60 * 1000;   // 5 minutes between polls
     const PHOTO_STORE    = 'gws_student_photos_v2';
+
+    // ── PHOTO UPLOAD CONFIG ──────────────────────────────────────────────────
+    // Paste your Google Apps Script Web App URL here after deploying Code.gs.
+    // Leave as empty string '' to disable Drive upload (local-only mode).
+    const SCRIPT_URL = '';  // e.g. 'https://script.google.com/macros/s/AKfy.../exec'
     const CACHE_KEY      = 'gws_data_cache_v2';
     const HISTORY_KEY    = 'gws_update_history';
     const MAX_HISTORY    = 10;
@@ -891,34 +915,139 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
-       HANDLE LOCAL IMAGE UPLOAD
+       HANDLE PHOTO UPLOAD
+       Flow:
+         1. Read file as base64 data URL (instant preview)
+         2. Show local preview immediately so user sees the photo right away
+         3. If SCRIPT_URL is configured: POST to Google Apps Script
+            → Script saves to Google Drive + writes URL to Sheet col H
+            → On success: replace local preview with Drive URL (visible to all)
+         4. If SCRIPT_URL is empty: save to localStorage only (local-only mode)
     ════════════════════════════════════════════════════════════════════ */
+
+    // Show/hide the uploading spinner overlay on a card photo wrap
+    function setCardUploading(uploadId, uploading) {
+      const input = document.getElementById(uploadId);
+      if (!input) return;
+      const wrap = input.closest('.card-photo-wrap') || input.parentElement;
+      if (!wrap) return;
+      let spinner = wrap.querySelector('.upload-spinner');
+      if (uploading) {
+        if (!spinner) {
+          spinner = document.createElement('div');
+          spinner.className = 'upload-spinner';
+          spinner.innerHTML = '<div class="spinner-ring"></div><span>Uploading…</span>';
+          wrap.appendChild(spinner);
+        }
+        spinner.style.display = 'flex';
+      } else {
+        if (spinner) spinner.style.display = 'none';
+      }
+    }
+
+    // Apply a photo URL to the card image element
+    function applyPhotoToCard(imgId, phId, url) {
+      const imgEl = document.getElementById(imgId);
+      const phEl  = document.getElementById(phId);
+      if (imgEl) {
+        imgEl.src = url;
+        imgEl.style.display = 'block';
+        if (phEl) phEl.style.display = 'none';
+      } else if (phEl) {
+        const newImg = document.createElement('img');
+        newImg.className = 'card-photo';
+        newImg.id  = imgId;
+        newImg.src = url;
+        newImg.alt = imgId;
+        newImg.onerror = () => { newImg.style.display='none'; if(phEl) phEl.style.display='flex'; };
+        phEl.parentNode.insertBefore(newImg, phEl);
+        phEl.style.display = 'none';
+      }
+    }
+
     function handleUpload(input) {
       const file = input.files[0];
       if (!file) return;
-      const key   = input.dataset.key;
-      const imgId = input.dataset.imgid;
-      const phId  = input.dataset.phid;
+
+      const key      = input.dataset.key;
+      const imgId    = input.dataset.imgid;
+      const phId     = input.dataset.phid;
+      const uploadId = input.id;
+
+      // Parse sheetName and studentName from key (format: "SheetName||StudentName")
+      const parts       = key.split('||');
+      const sheetName   = parts[0]  || '';
+      const studentName = parts.slice(1).join('||') || '';
+
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         const dataUrl = e.target.result;
+
+        // ── Step 1: Instant local preview ──────────────────────────────────
+        applyPhotoToCard(imgId, phId, dataUrl);
+
+        // Always save locally as fallback
         const store = loadPhotoStore();
         store[key] = dataUrl;
         savePhotoStore(store);
-        const imgEl = document.getElementById(imgId);
-        const phEl  = document.getElementById(phId);
-        if (imgEl) {
-          imgEl.src = dataUrl;
-          imgEl.style.display = 'block';
-          if (phEl) phEl.style.display = 'none';
-        } else if (phEl) {
-          const newImg = document.createElement('img');
-          newImg.className = 'card-photo';
-          newImg.id  = imgId;
-          newImg.src = dataUrl;
-          newImg.alt = key;
-          phEl.parentNode.insertBefore(newImg, phEl);
-          phEl.style.display = 'none';
+
+        // ── Step 2: Upload to Google Drive via Apps Script ──────────────────
+        if (!SCRIPT_URL) {
+          showToast('✅ Photo saved locally on this device.');
+          return;
+        }
+
+        setCardUploading(uploadId, true);
+
+        try {
+          const resp = await fetch(SCRIPT_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sheetName,
+              studentName,
+              imageData: dataUrl,
+              fileName:  file.name
+            })
+          });
+
+          const result = await resp.json();
+
+          if (result.success && result.photoUrl) {
+            // Replace local preview with the permanent Drive URL
+            applyPhotoToCard(imgId, phId, result.photoUrl);
+
+            // Update local store with Drive URL (so it persists across refreshes)
+            store[key] = result.photoUrl;
+            savePhotoStore(store);
+
+            // Add the Google Drive badge to the photo wrap
+            const imgEl = document.getElementById(imgId);
+            if (imgEl) {
+              const wrap = imgEl.closest('.card-photo-wrap');
+              if (wrap && !wrap.querySelector('.drive-badge')) {
+                const badge = document.createElement('div');
+                badge.className = 'drive-badge';
+                badge.title = 'Photo saved to Google Drive — visible to all visitors';
+                badge.innerHTML = '<i class="bi bi-google"></i>';
+                wrap.appendChild(badge);
+              }
+            }
+
+            if (result.warning) {
+              showToast('⚠️ Photo uploaded but student not found in sheet.');
+            } else {
+              showToast('✅ Photo saved to Google Drive — visible to everyone!');
+            }
+          } else {
+            showToast('⚠️ Drive upload failed — photo saved locally only.');
+            console.warn('Upload error:', result.error);
+          }
+        } catch (err) {
+          showToast('⚠️ Could not reach upload server — photo saved locally only.');
+          console.error('Upload fetch error:', err);
+        } finally {
+          setCardUploading(uploadId, false);
         }
       };
       reader.readAsDataURL(file);
