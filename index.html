@@ -19,14 +19,12 @@
       --green-light:  #e8f5e9;
       --green-pale:   #f1f8f1;
       --green-border: #c8e6c9;
+      --white:        #ffffff;
+      --text-dark:    #1b5e20;
+      --text-muted:   #81c784;
       --gold:         #f9a825;
       --silver:       #90a4ae;
       --bronze:       #a1887f;
-      --white:        #ffffff;
-      --text-dark:    #1b5e20;
-      --text-mid:     #388e3c;
-      --text-muted:   #81c784;
-      --accent:       #2e7d32;
     }
 
     * { box-sizing: border-box; }
@@ -48,181 +46,181 @@
     }
     .site-header::before {
       content: '';
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       pointer-events: none;
     }
     .header-inner { position: relative; z-index: 1; }
-
     .school-logo-img {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
+      width: 90px; height: 90px; border-radius: 50%;
       object-fit: cover;
       border: 3px solid rgba(255,255,255,0.6);
-      margin-bottom: 0.6rem;
-      background: #fff;
+      margin-bottom: 0.6rem; background: #fff;
     }
     .school-name {
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #fff;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.15);
-      margin: 0;
+      font-size: 1.85rem; font-weight: 800; letter-spacing: 0.5px;
+      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.15); margin: 0;
     }
-    .school-sub {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.85);
-      margin-top: 0.15rem;
-    }
+    .school-sub { font-size: 0.88rem; color: rgba(255,255,255,0.85); margin-top: 0.15rem; }
     .badge-period {
       display: inline-block;
       background: rgba(255,255,255,0.2);
       border: 1px solid rgba(255,255,255,0.45);
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.25rem 1rem;
-      border-radius: 50px;
-      margin-top: 0.6rem;
-      letter-spacing: 0.4px;
+      color: #fff; font-size: 0.78rem; font-weight: 600;
+      padding: 0.25rem 1rem; border-radius: 50px;
+      margin-top: 0.6rem; letter-spacing: 0.4px;
     }
 
     /* ── TABS ── */
     .tab-wrapper {
       background: var(--green-dark);
       padding: 0 0.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       border-bottom: 2px solid var(--green-mid);
     }
     .nav-tabs {
-      border-bottom: none;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
+      border-bottom: none; flex-wrap: nowrap;
+      overflow-x: auto; scrollbar-width: none;
     }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tabs .nav-link {
-      color: rgba(255,255,255,0.65);
-      border: none;
-      border-bottom: 3px solid transparent;
-      border-radius: 0;
-      padding: 0.85rem 1.25rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s, border-color 0.2s;
+      color: rgba(255,255,255,0.65); border: none;
+      border-bottom: 3px solid transparent; border-radius: 0;
+      padding: 0.85rem 1.25rem; font-size: 0.875rem; font-weight: 600;
+      white-space: nowrap; transition: color 0.2s, border-color 0.2s;
     }
     .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.3); }
     .nav-tabs .nav-link.active { color: #fff; background: transparent; border-bottom-color: #fff; }
 
     /* ── MAIN ── */
     .main-content {
-      max-width: 880px;
+      max-width: 900px;
       margin: 2rem auto;
       padding: 0 1rem 3rem;
     }
 
     /* ── CLASS TITLE ── */
     .class-title { text-align: center; margin-bottom: 1.75rem; }
-    .class-title h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin: 0 0 0.2rem;
-    }
-    .class-title p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+    .class-title h2 { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0 0 0.2rem; }
+    .class-title p  { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
 
-    /* ── PODIUM ── */
-    .podium-row {
+    /* ══════════════════════════════════════════
+       PYRAMID LAYOUT
+       Row 1: 1 card (rank 1) — centered
+       Row 2: 2 cards (rank 2 left, rank 3 right)
+       Row 3: 2 cards (rank 4 left, rank 5 right)
+    ══════════════════════════════════════════ */
+    .pyramid-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .pyramid-row {
       display: flex;
       justify-content: center;
-      align-items: flex-end;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      width: 100%;
     }
-    .podium-card {
+    .pyramid-row-1 { max-width: 280px; }
+    .pyramid-row-2,
+    .pyramid-row-3 { max-width: 580px; }
+
+    /* ── STUDENT CARD ── */
+    .student-card {
       flex: 1;
-      max-width: 230px;
       background: var(--white);
       border-radius: 16px;
-      padding: 1.5rem 1rem 1.25rem;
+      border: 1.5px solid var(--green-border);
+      box-shadow: none;
+      overflow: hidden;
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .student-card:hover { transform: translateY(-4px); }
+
+    /* rank accent strip on top */
+    .student-card.rank-1 { border-top: 4px solid var(--gold); }
+    .student-card.rank-2 { border-top: 4px solid var(--silver); }
+    .student-card.rank-3 { border-top: 4px solid var(--bronze); }
+    .student-card.rank-4,
+    .student-card.rank-5 { border-top: 4px solid var(--green-border); }
+
+    /* ── PHOTO AREA ── */
+    .card-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .card-photo {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photo-placeholder {
+      font-size: 3.5rem;
+      color: var(--green-mid);
+      user-select: none;
+    }
+
+    /* rank badge overlay on photo */
+    .rank-overlay {
+      position: absolute;
+      top: 8px; left: 8px;
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800;
+      background: rgba(255,255,255,0.92);
+      border: 2px solid var(--green-border);
+      line-height: 1;
+    }
+    .rank-overlay.rank-1 { border-color: var(--gold); }
+    .rank-overlay.rank-2 { border-color: var(--silver); }
+    .rank-overlay.rank-3 { border-color: var(--bronze); }
+
+    /* ── CARD BODY ── */
+    .card-body-inner {
+      padding: 0.85rem 0.75rem 1rem;
       text-align: center;
-      border: 1.5px solid var(--green-border);
-      box-shadow: none;
-      transition: transform 0.2s;
+      width: 100%;
     }
-    .podium-card:hover { transform: translateY(-4px); }
-
-    .podium-card.rank-1 { border-top: 4px solid var(--gold);   order: 2; padding-top: 2rem; }
-    .podium-card.rank-2 { border-top: 4px solid var(--silver); order: 1; }
-    .podium-card.rank-3 { border-top: 4px solid var(--bronze); order: 3; }
-
-    .rank-badge {
-      width: 46px; height: 46px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; margin: 0 auto 0.7rem;
-      background: var(--green-light);
-    }
-
-    .podium-name {
-      font-size: 0.92rem; font-weight: 700;
+    .card-name {
+      font-size: 0.9rem; font-weight: 700;
       color: var(--text-dark);
-      margin-bottom: 0.3rem; line-height: 1.3;
+      margin-bottom: 0.2rem; line-height: 1.3;
     }
-    .podium-avg {
-      font-size: 1.7rem; font-weight: 800;
-      color: var(--green-mid);
-      line-height: 1; margin-bottom: 0.3rem;
+    .card-avg {
+      font-size: 1.6rem; font-weight: 800;
+      color: var(--green-mid); line-height: 1;
+      margin-bottom: 0.25rem;
     }
-    .podium-meta { font-size: 0.75rem; color: #888; margin-bottom: 0.55rem; }
-
-    /* ── LOWER RANKS ── */
-    .lower-ranks { display: flex; flex-direction: column; gap: 0.65rem; }
-    .rank-row {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 0.85rem 1.25rem;
-      display: flex; align-items: center; gap: 1rem;
-      border: 1.5px solid var(--green-border);
-      box-shadow: none;
-      transition: transform 0.2s;
+    .card-gender {
+      font-size: 0.73rem; color: #999;
+      margin-bottom: 0.45rem;
     }
-    .rank-row:hover { transform: translateX(4px); }
-
-    .rank-num {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--green-light);
-      color: var(--text-dark);
-      font-weight: 700; font-size: 0.88rem;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+    .card-badges {
+      display: flex; justify-content: center;
+      gap: 0.35rem; flex-wrap: wrap;
     }
-    .rank-row-name  { flex: 1; font-weight: 600; font-size: 0.95rem; color: var(--text-dark); }
-    .rank-row-avg   {
-      font-size: 1.1rem; font-weight: 700;
-      color: var(--green-mid);
-      min-width: 46px; text-align: right;
-    }
-
-    /* ── BADGES ── */
     .badge-grade {
-      font-size: 0.7rem; font-weight: 700;
-      padding: 0.2em 0.55em; border-radius: 6px;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 0.2em 0.5em; border-radius: 6px;
     }
-    .badge-pass { background: #e8f5e9; color: #2e7d32; }
-    .badge-fail { background: #fce4ec; color: #c62828; }
-    .badge-gender { font-size: 0.74rem; color: #aaa; }
+    .badge-pass { background: #e8f5e9; color: #2e7d32; font-size: 0.68rem; font-weight: 700; padding: 0.2em 0.5em; border-radius: 6px; }
+    .badge-fail { background: #fce4ec; color: #c62828; font-size: 0.68rem; font-weight: 700; padding: 0.2em 0.5em; border-radius: 6px; }
+    .grade-a { background: #e8f5e9; color: #1b5e20; }
+    .grade-b { background: #f1f8e9; color: #33691e; }
+    .grade-c { background: #f9fbe7; color: #558b2f; }
+    .grade-d { background: #fff8e1; color: #f57f17; }
+    .grade-f { background: #fce4ec; color: #c62828; }
 
     /* ── TIE NOTICE ── */
-    .tie-notice {
-      font-size: 0.72rem; color: #aaa;
-      margin-top: 0.3rem; font-style: italic;
-    }
+    .tie-notice { font-size: 0.72rem; color: #aaa; margin-top: 0.3rem; font-style: italic; }
 
     /* ── LOADING / ERROR ── */
     .loading-box { text-align: center; padding: 4rem 1rem; color: #888; }
@@ -230,28 +228,12 @@
     .error-box { text-align: center; padding: 3rem 1rem; }
 
     /* ── REFRESH INFO ── */
-    .refresh-info {
-      font-size: 0.74rem; color: #aaa;
-      text-align: center; margin-top: 2rem;
-    }
+    .refresh-info { font-size: 0.74rem; color: #aaa; text-align: center; margin-top: 2rem; }
     .refresh-dot {
-      display: inline-block;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #66bb6a; margin-right: 5px;
-      animation: pulse 2s infinite;
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #66bb6a; margin-right: 5px; animation: pulse 2s infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    /* ── DIVIDER ── */
-    .section-divider {
-      height: 2px;
-      background: var(--green-border);
-      border-radius: 2px;
-      margin: 1.5rem 0;
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── FOOTER ── */
     .site-footer {
@@ -261,22 +243,15 @@
       background: var(--white);
     }
 
-    /* ── GRADE COLORS (green-toned) ── */
-    .grade-a { background: #e8f5e9; color: #1b5e20; }
-    .grade-b { background: #f1f8e9; color: #33691e; }
-    .grade-c { background: #f9fbe7; color: #558b2f; }
-    .grade-d { background: #fff8e1; color: #f57f17; }
-    .grade-f { background: #fce4ec; color: #c62828; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 576px) {
-      .school-name  { font-size: 1.35rem; }
+      .school-name { font-size: 1.35rem; }
       .school-logo-img { width: 72px; height: 72px; }
-      .podium-row   { gap: 0.5rem; }
-      .podium-card  { padding: 1rem 0.55rem; border-radius: 12px; }
-      .podium-avg   { font-size: 1.3rem; }
-      .podium-name  { font-size: 0.8rem; }
-      .rank-row     { padding: 0.75rem 1rem; }
+      .card-avg { font-size: 1.25rem; }
+      .card-name { font-size: 0.8rem; }
+      .pyramid-row-1 { max-width: 200px; }
+      .pyramid-row-2,
+      .pyramid-row-3 { max-width: 100%; }
     }
   </style>
 </head>
@@ -300,9 +275,7 @@
   <!-- MAIN -->
   <div class="main-content">
     <div id="loadingBox" class="loading-box">
-      <div class="spinner-border mb-3" role="status">
-        <span class="visually-hidden">Loading…</span>
-      </div>
+      <div class="spinner-border mb-3" role="status"><span class="visually-hidden">Loading…</span></div>
       <div class="fw-semibold" style="color:#388e3c">Loading student data…</div>
       <div class="text-muted small mt-1">Fetching live data from Google Sheets</div>
     </div>
@@ -331,16 +304,41 @@
     &nbsp;·&nbsp; Teacher: <strong>Ki Sochea</strong>
   </footer>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ─── CONFIG ──────────────────────────────────────────────
+    // ─── CONFIG ──────────────────────────────────────────────────────────────
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
     const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
     const REFRESH_MS     = 5 * 60 * 1000;
 
-    // ─── FETCH via Google Sheets gviz ────────────────────────
+    // ─── GOOGLE DRIVE PHOTO URL CONVERTER ────────────────────────────────────
+    // To add a student photo:
+    //   1. Upload the photo to Google Drive and set sharing to "Anyone with link can view"
+    //   2. Copy the shareable link — it looks like:
+    //      https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+    //   3. Paste that full URL into column H of the student's row in the Google Sheet
+    //   The webpage will automatically convert it to a direct image URL.
+    function driveUrlToDirectImg(url) {
+      if (!url) return null;
+      url = url.trim();
+      if (!url.startsWith('http')) return null;
+
+      // Format 1: https://drive.google.com/file/d/FILE_ID/view...
+      let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+
+      // Format 2: https://drive.google.com/open?id=FILE_ID
+      m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+
+      // Format 3: already a direct image URL
+      if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
+
+      return null;
+    }
+
+    // ─── FETCH SHEET ─────────────────────────────────────────────────────────
     async function fetchSheet(sheetName) {
       const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
       const res = await fetch(url);
@@ -360,16 +358,16 @@
 
       let schoolName = 'Greenway School', period = '', academicYear = '', levelName = '';
 
-      const levelMatch   = headerLabel.match(/Level:\s*(.+?)\s+N$/i);
+      const levelMatch  = headerLabel.match(/Level:\s*(.+?)\s+N$/i);
       if (levelMatch) levelName = levelMatch[1].trim();
 
-      const yearMatch    = headerLabel.match(/Academic Year\s*:\s*(\S+)/i);
+      const yearMatch   = headerLabel.match(/Academic Year\s*:\s*(\S+)/i);
       if (yearMatch) academicYear = 'Academic Year : ' + yearMatch[1];
 
-      const periodMatch  = headerLabel.match(/Top 5 of (\w+)/i);
+      const periodMatch = headerLabel.match(/Top 5 of (\w+)/i);
       if (periodMatch) period = 'Top 5 of ' + periodMatch[1];
 
-      const schoolMatch  = headerLabel.match(/^([A-Za-z ]+?)\s+Top 5/i);
+      const schoolMatch = headerLabel.match(/^([A-Za-z ]+?)\s+Top 5/i);
       if (schoolMatch) schoolName = schoolMatch[1].trim();
 
       const students = [];
@@ -378,8 +376,13 @@
         const name  = (cells[1]?.v || '').toString().trim();
         if (!name) continue;
         if (/date|seen|teacher|prepared/i.test(name)) break;
-        const avg  = parseFloat(cells[3]?.v) || 0;
-        const rank = parseInt(cells[5]?.v) || (students.length + 1);
+
+        const avg     = parseFloat(cells[3]?.v) || 0;
+        const rank    = parseInt(cells[5]?.v) || (students.length + 1);
+        // Column H (index 7) = Google Drive photo URL
+        const rawPhoto = (cells[7]?.v || '').toString().trim();
+        const photoUrl = driveUrlToDirectImg(rawPhoto);
+
         students.push({
           n:      (cells[0]?.v || '').toString().trim(),
           name,
@@ -388,91 +391,110 @@
           grade:  (cells[4]?.v || '').toString().trim(),
           rank,
           result: (cells[6]?.v || '').toString().trim(),
+          photoUrl,
         });
       }
       return { sheetName, schoolName, period, academicYear, levelName, students };
     }
 
-    // ─── HELPERS ─────────────────────────────────────────────
+    // ─── HELPERS ─────────────────────────────────────────────────────────────
     const rankEmoji  = { 1: '🥇', 2: '🥈', 3: '🥉' };
     const genderIcon = g => (g || '').toLowerCase() === 'female' ? '👩' : '👨';
 
     function gradeClass(g) {
-      const map = { A: 'grade-a', B: 'grade-b', C: 'grade-c', D: 'grade-d', F: 'grade-f' };
-      return map[(g || '').toUpperCase()] || 'grade-f';
+      const map = { A:'grade-a', B:'grade-b', C:'grade-c', D:'grade-d', F:'grade-f' };
+      return map[(g||'').toUpperCase()] || 'grade-f';
     }
     function resultBadge(result) {
-      return (result || '').toLowerCase() === 'pass'
-        ? `<span class="badge badge-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
-        : `<span class="badge badge-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
+      return (result||'').toLowerCase() === 'pass'
+        ? `<span class="badge-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
+        : `<span class="badge-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
     }
     function escHtml(str) {
-      return String(str || '')
+      return String(str||'')
         .replace(/&/g,'&amp;').replace(/</g,'&lt;')
         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // ─── RENDER PODIUM CARD ───────────────────────────────────
-    function renderPodiumCard(s, visualRank) {
+    // ─── RENDER A SINGLE STUDENT CARD ────────────────────────────────────────
+    function renderCard(s) {
+      const rankClass = `rank-${Math.min(s.rank, 5)}`;
+      const emoji     = rankEmoji[s.rank] || s.rank;
+
+      const photoHTML = s.photoUrl
+        ? `<img class="card-photo"
+               src="${escHtml(s.photoUrl)}"
+               alt="${escHtml(s.name)}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+           <div class="card-photo-placeholder" style="display:none">
+             ${(s.gender||'').toLowerCase()==='female' ? '👩' : '👨'}
+           </div>`
+        : `<div class="card-photo-placeholder">
+             ${(s.gender||'').toLowerCase()==='female' ? '👩' : '👨'}
+           </div>`;
+
       return `
-        <div class="podium-card rank-${visualRank}">
-          <div class="rank-badge">${rankEmoji[visualRank] || visualRank}</div>
-          <div class="podium-name">${escHtml(s.name)}</div>
-          <div class="podium-avg">${s.avg.toFixed(2)}</div>
-          <div class="podium-meta">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
-          <div class="d-flex justify-content-center gap-1 flex-wrap">
-            <span class="badge badge-grade ${gradeClass(s.grade)}">Grade ${escHtml(s.grade)}</span>
-            ${resultBadge(s.result)}
+        <div class="student-card ${rankClass}">
+          <div class="card-photo-wrap">
+            ${photoHTML}
+            <div class="rank-overlay ${rankClass}">${emoji}</div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-name">${escHtml(s.name)}</div>
+            <div class="card-avg">${s.avg.toFixed(2)}</div>
+            <div class="card-gender">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
+            <div class="card-badges">
+              <span class="badge-grade ${gradeClass(s.grade)}">Grade ${escHtml(s.grade)}</span>
+              ${resultBadge(s.result)}
+            </div>
           </div>
         </div>`;
     }
 
-    // ─── RENDER LOWER RANK ROW ────────────────────────────────
-    function renderRankRow(s) {
-      return `
-        <div class="rank-row">
-          <div class="rank-num">${s.rank}</div>
-          <div>
-            <div class="rank-row-name">${escHtml(s.name)}</div>
-            <div class="badge-gender">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
-          </div>
-          <div class="ms-auto d-flex align-items-center gap-2 flex-wrap justify-content-end">
-            <span class="badge badge-grade ${gradeClass(s.grade)}">Grade ${escHtml(s.grade)}</span>
-            ${resultBadge(s.result)}
-            <div class="rank-row-avg">${s.avg.toFixed(2)}</div>
-          </div>
-        </div>`;
+    // ─── BUILD PYRAMID ────────────────────────────────────────────────────────
+    // Layout:
+    //   Row 1 (center):  Rank 1
+    //   Row 2 (2 cols):  Rank 2 | Rank 3
+    //   Row 3 (2 cols):  Rank 4 | Rank 5
+    function buildPyramid(students) {
+      // Sort by rank so we can pick by rank number
+      const byRank = {};
+      students.forEach(s => { if (!byRank[s.rank]) byRank[s.rank] = s; });
+
+      // For tied classes, assign visual positions 1-5 by array order
+      const ordered = students.slice(0, 5);
+      const get = (pos) => byRank[pos] || ordered[pos - 1] || null;
+
+      const r1 = get(1);
+      const r2 = get(2);
+      const r3 = get(3);
+      const r4 = get(4);
+      const r5 = get(5);
+
+      const row1 = r1 ? `<div class="pyramid-row pyramid-row-1">${renderCard(r1)}</div>` : '';
+      const row2 = (r2 || r3)
+        ? `<div class="pyramid-row pyramid-row-2">
+             ${r2 ? renderCard(r2) : ''}
+             ${r3 ? renderCard(r3) : ''}
+           </div>` : '';
+      const row3 = (r4 || r5)
+        ? `<div class="pyramid-row pyramid-row-3">
+             ${r4 ? renderCard(r4) : ''}
+             ${r5 ? renderCard(r5) : ''}
+           </div>` : '';
+
+      return `<div class="pyramid-grid">${row1}${row2}${row3}</div>`;
     }
 
-    // ─── BUILD TAB PANE ───────────────────────────────────────
+    // ─── BUILD TAB PANE ───────────────────────────────────────────────────────
     function buildTabPane(classData, index) {
       const { levelName, sheetName, students } = classData;
       const displayName = levelName
         ? (levelName.toLowerCase().startsWith('beginner') ? levelName : `Level ${levelName}`)
         : sheetName;
 
-      const top3   = students.filter(s => s.rank <= 3);
-      const rest   = students.filter(s => s.rank > 3);
-      const hasTie = top3.length > 0 && top3.every(s => s.rank === top3[0].rank);
-
-      let podiumTriple;
-      if (hasTie) {
-        podiumTriple = [
-          { s: top3[1] || top3[0], vr: 2 },
-          { s: top3[0],            vr: 1 },
-          { s: top3[2] || top3[0], vr: 3 },
-        ];
-      } else {
-        podiumTriple = [
-          { s: top3.find(s => s.rank === 2), vr: 2 },
-          { s: top3.find(s => s.rank === 1), vr: 1 },
-          { s: top3.find(s => s.rank === 3), vr: 3 },
-        ].filter(x => x.s);
-      }
-
-      const podiumHTML = podiumTriple.map(({ s, vr }) => renderPodiumCard(s, vr)).join('');
-      const lowerHTML  = rest.map(renderRankRow).join('');
-      const tieNote    = hasTie
+      const hasTie = students.length > 1 && students.every(s => s.rank === students[0].rank);
+      const tieNote = hasTie
         ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>`
         : '';
 
@@ -484,12 +506,11 @@
             <p>Top 5 Outstanding Students</p>
             ${tieNote}
           </div>
-          <div class="podium-row">${podiumHTML}</div>
-          ${lowerHTML ? `<div class="lower-ranks">${lowerHTML}</div>` : ''}
+          ${buildPyramid(students)}
         </div>`;
     }
 
-    // ─── BUILD ALL TABS ───────────────────────────────────────
+    // ─── BUILD ALL TABS ───────────────────────────────────────────────────────
     function buildUI(allClasses) {
       const tabsEl    = document.getElementById('classTabs');
       const contentEl = document.getElementById('tabContent');
@@ -522,7 +543,7 @@
       }
     }
 
-    // ─── LOAD ALL DATA ────────────────────────────────────────
+    // ─── LOAD ALL DATA ────────────────────────────────────────────────────────
     async function loadAllData() {
       const loadingBox  = document.getElementById('loadingBox');
       const errorBox    = document.getElementById('errorBox');
@@ -535,14 +556,11 @@
       try {
         const results = await Promise.all(SHEET_NAMES.map(fetchSheet));
         buildUI(results);
-
         loadingBox.classList.add('d-none');
         tabContent.classList.remove('d-none');
         refreshInfo.classList.remove('d-none');
-
         document.getElementById('lastUpdated').textContent =
           new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
       } catch (err) {
         console.error(err);
         loadingBox.classList.add('d-none');
@@ -551,7 +569,7 @@
       }
     }
 
-    // ─── INIT ─────────────────────────────────────────────────
+    // ─── INIT ─────────────────────────────────────────────────────────────────
     loadAllData();
     setInterval(loadAllData, REFRESH_MS);
   </script>
