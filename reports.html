@@ -444,10 +444,16 @@
     function updateSummary(idx) {
       const data = allClassData[idx];
       if (data && data.students) {
-        document.getElementById('summaryGrid').innerHTML = buildSummary(data.students);
+        // Clear search first
+        const searchInput = document.getElementById('studentSearch');
+        if (searchInput) searchInput.value = '';
+        
+        // Re-calculate and update the summary specifically for this tab's data
+        const summaryGrid = document.getElementById('summaryGrid');
+        if (summaryGrid) {
+          summaryGrid.innerHTML = buildSummary(data.students);
+        }
       }
-      const searchInput = document.getElementById('studentSearch');
-      if (searchInput) searchInput.value = '';
     }
 
     function filterTable() {
