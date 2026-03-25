@@ -421,44 +421,37 @@
     /* ── MONTH NAVIGATION BAR ──────────────────────────────────────────────── */
     .month-nav {
       background: var(--c-surface);
-      border-bottom: 1px solid var(--c-border);
-      padding: 0.55rem 1rem;
-      display: flex; align-items: center; justify-content: center;
-      gap: 0.5rem; flex-wrap: wrap;
+      border-bottom: 1px so    .month-nav {
+      background: var(--c-surface); border-bottom: 2px solid var(--c-border);
+      padding: 0.6rem 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
     }
-    .month-nav-label {
-      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-right: 0.3rem;
-    }
-    .month-btn {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      padding: 0.28rem 0.85rem; border-radius: 50px;
+    .month-nav-label { font-size: 0.72rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .month-dropdown .btn-dropdown {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1.2rem; border-radius: 50px;
       border: 1.5px solid var(--c-border);
-      background: transparent; color: var(--c-muted);
-      font-size: 0.75rem; font-weight: 600; cursor: pointer;
-      transition: all .18s; white-space: nowrap;
+      background: var(--c-surface); color: var(--c-green-dark);
+      font-size: 0.8rem; font-weight: 600;
+      transition: all .2s;
     }
-    .month-btn:hover {
-      background: var(--c-green-light); color: var(--c-green-dark);
-      border-color: var(--c-green);
+    .month-dropdown .btn-dropdown:hover { background: var(--c-green-light); }
+    .month-dropdown .dropdown-menu {
+      border-radius: 12px; border: 1px solid var(--c-border);
+      box-shadow: 0 4px 12px rgba(0,0,0,.1); padding: 0.4rem;
     }
-    .month-btn.active {
-      background: var(--c-green); color: #fff;
-      border-color: var(--c-green);
+    .month-dropdown .dropdown-item {
+      border-radius: 8px; font-size: 0.8rem; font-weight: 500;
+      padding: 0.5rem 1rem; color: var(--c-muted);
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .month-btn .month-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: currentColor; opacity: 0.6;
-    }
-    .month-btn.current-month::after {
-      content: 'LIVE';
-      font-size: 0.55rem; font-weight: 800;
-      background: #22c55e; color: #fff;
-      border-radius: 3px; padding: 0 3px;
-      letter-spacing: 0.4px; margin-left: 2px;
-    }
-    .month-loading {
+    .month-dropdown .dropdown-item:hover { background: var(--c-green-light); color: var(--c-green-dark); }
+    .month-dropdown .dropdown-item.active { background: var(--c-green); color: #fff; }
+    .month-dropdown .live-indicator {
+      font-size: 0.55rem; font-weight: 800; background: #22c55e; color: #fff;
+      padding: 1px 4px; border-radius: 4px; margin-left: 8px;
+    }ing {
       display: flex; align-items: center; gap: 0.4rem;
       font-size: 0.72rem; color: var(--c-muted);
     }
@@ -501,10 +494,18 @@
     </div>
   </header>
 
-  <!-- ── MONTH NAVIGATION ── -->
-  <div class="month-nav" id="monthNav">
-    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Period:</span>
-    <!-- Month buttons injected by JS -->
+  <!-- MONTH NAVIGATION -->
+  <nav class="month-nav">
+    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Select Period:</span>
+    <div class="dropdown month-dropdown" id="monthDropdownWrap">
+      <button class="btn-dropdown dropdown-toggle" type="button" id="monthDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+        Loading...
+      </button>
+      <ul class="dropdown-menu" id="monthDropdownMenu" aria-labelledby="monthDropdownBtn">
+        <!-- JS injected -->
+      </ul>
+    </div>
+  </nav>cted by JS -->
   </div>
 
   <!-- ── TABS ── -->
@@ -1170,26 +1171,20 @@
        MONTH NAVIGATION
     ════════════════════════════════════════════════════════════════════ */
     function buildMonthNav() {
-      const nav = document.getElementById('monthNav');
-      // Keep the label, rebuild the buttons
-      const label = nav.querySelector('.month-nav-label');
-      nav.innerHTML = '';
-      if (label) nav.appendChild(label);
-      else {
-        const lbl = document.createElement('span');
-        lbl.className = 'month-nav-label';
-        lbl.innerHTML = '<i class="bi bi-calendar3 me-1"></i>Period:';
-        nav.appendChild(lbl);
-      }
-      MONTHS.forEach((m, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'month-btn' +
-          (idx === activeMonthIdx ? ' active' : '') +
-          (m.isCurrent ? ' current-month' : '');
-        btn.innerHTML = `<span class="month-dot"></span>${escHtml(m.label)}`;
-        btn.onclick = () => switchMonth(idx);
-        nav.appendChild(btn);
-      });
+      const btn = document.getElementById('monthDropdownBtn');
+      const menu = document.getElementById('monthDropdownMenu');
+      const current = MONTHS[activeMonthIdx];
+      
+      btn.innerHTML = `<i class="bi bi-calendar-event me-1"></i> ${escHtml(current.label)} ${current.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}`;
+      
+      menu.innerHTML = MONTHS.map((m, idx) => `
+        <li>
+          <a class="dropdown-item ${idx === activeMonthIdx ? 'active' : ''}" href="#" onclick="switchMonth(${idx}); return false;">
+            <span>${escHtml(m.label)}</span>
+            ${m.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}
+          </a>
+        </li>
+      `).join('');
     }
 
     async function switchMonth(idx) {
