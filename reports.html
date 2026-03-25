@@ -379,7 +379,6 @@
           const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
           if (raw.calKey && raw.calKey !== calKey) return null;
         }
-        // Cache expiry: 15 minutes
         if (raw.savedAt && (Date.now() - new Date(raw.savedAt).getTime() > 15 * 60 * 1000)) return null;
         return raw.data || null;
       } catch { return null; }
@@ -405,14 +404,12 @@
       if (json.status !== 'ok') throw new Error(json.errors?.[0]?.message || "Sheet error");
 
       const rows = json.table.rows;
-      // Standard metadata extraction matching index.html logic
       const schoolName   = (rows[0]?.c?.[1]?.v || 'Greenway School').toString();
       const period       = (rows[1]?.c?.[1]?.v || '').toString();
       const academicYear = (rows[2]?.c?.[1]?.v || '').toString();
       const levelName    = (rows[3]?.c?.[1]?.v || sheetName).toString();
 
       const students = [];
-      // Data starts from row 6 (index 5)
       for (let i = 5; i < rows.length; i++) {
         const c = rows[i].c;
         if (!c || !c[1]?.v) continue;
@@ -524,6 +521,7 @@
     function buildUI(allClasses) {
       const tabs = document.getElementById('classTabs');
       const content = document.getElementById('tabContent');
+      const FIXED_CLASS_NAMES = ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
 
       const first = allClasses[0];
       if (first) {
@@ -532,30 +530,36 @@
         document.getElementById('siteFooter').innerHTML = `© ${new Date().getFullYear()} ${escHtml(first.schoolName)} &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>`;
       }
 
-      tabs.innerHTML = allClasses.map((c, i) => `
-        <li class="nav-item">
-          <button class="nav-link ${i===0?'active':''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">${escHtml(c.levelName || c.sheetName)}</button>
-        </li>`).join('');
+      tabs.innerHTML = allClasses.map((c, i) => {
+        const displayName = FIXED_CLASS_NAMES[i] || c.levelName || c.sheetName;
+        return `
+          <li class="nav-item">
+            <button class="nav-link ${i===0?'active':''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">${escHtml(displayName)}</button>
+          </li>`;
+      }).join('');
 
-      content.innerHTML = allClasses.map((c, i) => `
-        <div class="tab-pane fade ${i===0?'show active':''}" id="pane-${i}" role="tabpanel">
-          <div class="report-header">
-            <div class="report-header-left">
-              <h2>${escHtml(c.levelName || c.sheetName)}</h2>
-              <p>${escHtml(c.schoolName)} · ${MONTHS[activeMonthIdx].label}</p>
+      content.innerHTML = allClasses.map((c, i) => {
+        const displayName = FIXED_CLASS_NAMES[i] || c.levelName || c.sheetName;
+        return `
+          <div class="tab-pane fade ${i===0?'show active':''}" id="pane-${i}" role="tabpanel">
+            <div class="report-header">
+              <div class="report-header-left">
+                <h2>${escHtml(displayName)}</h2>
+                <p>${escHtml(c.schoolName)} · ${MONTHS[activeMonthIdx].label}</p>
+              </div>
+              <div class="report-meta">
+                <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
+                <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
+              </div>
             </div>
-            <div class="report-meta">
-              <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
-              <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
+            ${buildSummary(c.students)}
+            ${buildTable(c.students)}
+            <div class="class-footer">
+              ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
+              ${c.preparedBy ? `<span>Prepared by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
             </div>
-          </div>
-          ${buildSummary(c.students)}
-          ${buildTable(c.students)}
-          <div class="class-footer">
-            ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
-            ${c.preparedBy ? `<span>Prepared by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
-          </div>
-        </div>`).join('');
+          </div>`;
+      }).join('');
     }
 
     function filterTable() {
