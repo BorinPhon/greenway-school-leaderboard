@@ -91,13 +91,14 @@
     .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tabs .nav-link {
-      color: rgba(255,255,255,.58); border: none;
+      color: rgba(255,255,255,0.65); border: none;
       border-bottom: 3px solid transparent; border-radius: 0;
-      padding: 0.72rem 1.1rem; font-size: 0.82rem; font-weight: 600;
+      padding: 0.75rem 1.1rem; font-size: 0.82rem; font-weight: 600;
       white-space: nowrap; transition: color .2s, border-color .2s;
+      background: transparent !important;
     }
-    .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,.3); }
-    .nav-tabs .nav-link.active { color: #fff; background: transparent; border-bottom-color: #fff; }
+    .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.3); background: transparent !important; }
+    .nav-tabs .nav-link.active { color: #fff; border-bottom-color: #fff; background: transparent !important; }
 
     /* ── MAIN ────────────────────────────────────────────────────────────── */
     .main-content {
