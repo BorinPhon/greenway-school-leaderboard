@@ -408,7 +408,19 @@
         allClassData.forEach((_, i) => {
           const btn = document.getElementById(`tab-btn-${i}`);
           if (btn) {
-            btn.addEventListener('shown.bs.tab', () => updateSummary(i));
+            btn.addEventListener('click', (e) => {
+              // Manual tab switching to be 100% sure
+              const tabs = document.querySelectorAll('.nav-link');
+              tabs.forEach(t => t.classList.remove('active'));
+              btn.classList.add('active');
+              
+              const panes = document.querySelectorAll('.tab-pane');
+              panes.forEach(p => p.classList.remove('show', 'active'));
+              document.getElementById(`pane-${i}`).classList.add('show', 'active');
+              
+              updateSummary(i);
+              e.preventDefault();
+            });
           }
         });
 
