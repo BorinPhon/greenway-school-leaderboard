@@ -413,27 +413,42 @@
       const json = JSON.parse(text.substring(47, text.length - 2));
       const rows = json.table.rows;
 
-      const schoolName   = rows[0]?.c[0]?.v || '';
-      const period       = rows[1]?.c[0]?.v || '';
-      const academicYear = rows[2]?.c[0]?.v || '';
-      const levelName    = rows[3]?.c[0]?.v || '';
-      const teacher      = rows[10]?.c[1]?.v || '';
-      const preparedBy   = rows[10]?.c[6]?.v || '';
+      // Find all students (looking for rows that start with a number like '01', '02')
+      const students = rows.map(r => {
+        const idVal = String(r.c[0]?.v || '').trim();
+        if (!/^\d+$/.test(idVal)) return null;
 
-      const students = rows.slice(5, 10).map(r => {
         const avg = r.c[3]?.v || 0;
         return {
-          rank:   parseInt(r.c[0]?.v || 0),
-          name:   r.c[1]?.v || 'Unknown',
+          rank:   parseInt(idVal),
+          name:   r.c[1]?.v || '',
           gender: r.c[2]?.v || '',
           avg:    typeof avg === 'number' ? avg : parseFloat(avg),
           grade:  r.c[4]?.v || '',
           result: r.c[6]?.v || '',
           photo:  driveUrlToDirectImg(r.c[7]?.v)
         };
-      }).filter(s => s.name !== 'Unknown');
+      }).filter(s => s && s.name && !s.name.includes('Date:') && !s.name.includes('Teacher'));
 
-      return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
+      // Metadata from bottom (signatures) or top if needed
+      // For March 2026, it's at the bottom
+      const footerRows = rows.filter(r => !r.c[0]?.v && r.c[1]?.v);
+      const teacherRow = footerRows.find(r => String(r.c[1]?.v).includes('Teacher'));
+      const preparedRow = footerRows.find(r => String(r.c[4]?.v).includes('Prepared') || String(r.c[6]?.v).includes('Prepared'));
+      
+      const teacher = teacherRow ? String(teacherRow.c[1]?.v).split(':')[1]?.trim() : '';
+      const preparedBy = preparedRow ? (preparedRow.c[6]?.v || preparedRow.c[5]?.v || preparedRow.c[4]?.v) : '';
+
+      return { 
+        sheetName, 
+        schoolName: 'Greenway School', 
+        period: MONTHS[activeMonthIdx].label.split(' ')[0], 
+        academicYear: '2025–2026', 
+        levelName: sheetName, 
+        teacher, 
+        preparedBy, 
+        students: students.slice(0, 5) 
+      };
     }
 
     // ─── UI BUILDERS ─────────────────────────────────────────────────────────
