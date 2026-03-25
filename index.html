@@ -593,22 +593,43 @@
 
     // ── MULTI-MONTH CONFIG ──────────────────────────────────────────────────
     // Each entry = one month of data.
-    // • label     : shown on the month navigation button
-    // • sheets    : the 6 sheet tab names for that month
-    // • isCurrent : true = this month auto-refreshes every 5 min (LIVE badge)
+    // • label         : shown on the month navigation button
+    // • spreadsheetId : the Google Spreadsheet ID for that month
+    //                    (use the ID from the URL of the month's spreadsheet)
+    // • sheets        : the 6 sheet tab names (always the same: BA, BB, Grade 1–4)
+    // • isCurrent     : true = this month auto-refreshes every 5 min (LIVE badge)
     //
-    // TO ADD A NEW MONTH: duplicate the last entry, update label/sheets/isCurrent.
+    // TO ADD A NEW MONTH:
+    //   1. Create your new monthly folder + spreadsheet in Google Drive as usual
+    //   2. Copy the spreadsheet ID from its URL
+    //   3. Set isCurrent: false on the previous month
+    //   4. Add a new entry below with the new ID and isCurrent: true
     const MONTHS = [
       {
-        label:     'March 2026',
-        sheets:    ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent: false
+        label:          'January 2026',
+        spreadsheetId:  '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      false
       },
       {
-        label:     'April 2026',
-        sheets:    ['Apr - BA', 'Apr - BB', 'Apr - Grade 1', 'Apr - Grade 2', 'Apr - Grade 3', 'Apr - Grade 4'],
-        isCurrent: true   // ← set this month as the live/current one
+        label:          'February 2026',
+        spreadsheetId:  '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      false
       },
+      {
+        label:          'March 2026',
+        spreadsheetId:  '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      true   // ← set this month as the live/current one
+      },
+      // ── NEXT MONTH TEMPLATE (uncomment and fill in when ready) ──
+      // {
+      //   label:          'April 2026',
+      //   spreadsheetId:  'PASTE_NEW_SPREADSHEET_ID_HERE',
+      //   sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+      //   isCurrent:      true
+      // },
     ];
 
     // Derived: the index of the current (live) month
@@ -749,10 +770,11 @@
     /* ════════════════════════════════════════════════════════════════════
        FETCH & PARSE A SHEET
     ════════════════════════════════════════════════════════════════════ */
-    async function fetchSheet(sheetName) {
+    async function fetchSheet(sheetName, spreadsheetId) {
       // Cache-bust with a per-minute timestamp so browsers don't serve stale responses
       const bust = Math.floor(Date.now() / 60000);
-      const url  = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
+      const sid  = spreadsheetId || SPREADSHEET_ID;
+      const url  = `https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
       const res  = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status} for sheet "${sheetName}"`);
       const text  = await res.text();
@@ -1340,7 +1362,7 @@
 
           // Background verification only for the live month
           if (isLive) {
-            Promise.all(sheetNames.map(fetchSheet)).then(fresh => {
+            Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId))).then(fresh => {
               if (activeMonthIdx !== monthIdx) return; // user switched month
               const newFp = fingerprint(fresh);
               if (newFp !== lastFingerprint) {
@@ -1365,7 +1387,7 @@
 
         } else {
           // Full fresh fetch
-          results = await Promise.all(sheetNames.map(fetchSheet));
+          results = await Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
           if (activeMonthIdx !== monthIdx) return; // user switched month mid-fetch
 
           const newFp  = fingerprint(results);
