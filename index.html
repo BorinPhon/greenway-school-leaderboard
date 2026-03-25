@@ -1248,7 +1248,7 @@
         const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
         const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
         const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
-        if (preparedBy) footerParts.push(`Prepared by <strong>${escHtml('Phoun Borin')}</strong>`);
+        if (preparedBy) footerParts.push(`Develop by <strong>${escHtml('Phoun Borin')}</strong>`);
         document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
       }
 
