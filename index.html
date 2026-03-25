@@ -1248,9 +1248,7 @@
         const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
         const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
         const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
-      // ✅ Correct — name is in quotes
         if (preparedBy) footerParts.push(`Prepared by <strong>${escHtml('Phoun Borin')}</strong>`);
-        if (teacher)    footerParts.push(`Teacher: <strong>${escHtml(teacher)}</strong>`);
         document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
       }
 
