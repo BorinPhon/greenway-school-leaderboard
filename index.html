@@ -5,17 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Greenway School – Top 5 Outstanding Students</title>
 
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── TOKENS ─────────────────────────────────────────────────────────── */
+    /* ── DESIGN TOKENS ─────────────────────────────────────────────────── */
     :root {
-      --c-bg:          #f4f7f4;
+      --c-bg:          #f2f6f2;
       --c-surface:     #ffffff;
       --c-border:      #d4e6d4;
       --c-green-dark:  #1b5e20;
@@ -23,15 +20,11 @@
       --c-green-mid:   #388e3c;
       --c-green-light: #e8f5e9;
       --c-text:        #1a2e1a;
-      --c-muted:       #6b8f6b;
-      --c-gold:        #d97706;
-      --c-silver:      #64748b;
-      --c-bronze:      #92400e;
-      --r-card:        16px;
-      --shadow-sm:     0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
-      --shadow-hover:  0 4px 8px rgba(0,0,0,.08), 0 12px 28px rgba(0,0,0,.10);
+      --c-muted:       #5a7a5a;
+      --r-card:        14px;
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.06), 0 4px 14px rgba(0,0,0,.07);
+      --shadow-hover:  0 6px 12px rgba(0,0,0,.09), 0 16px 32px rgba(0,0,0,.10);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -43,7 +36,7 @@
 
     /* ── HEADER ─────────────────────────────────────────────────────────── */
     .site-header {
-      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
       color: #fff;
       padding: 1.75rem 1rem 1.6rem;
       text-align: center;
@@ -58,30 +51,30 @@
     }
     .header-inner {
       position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
     }
     .school-logo-img {
       width: 70px; height: 70px; border-radius: 50%;
       object-fit: cover;
       border: 2px solid rgba(255,255,255,0.5);
       background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
     .school-name {
       font-size: 1.5rem; font-weight: 800; letter-spacing: 0.2px;
-      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2);
     }
-    .school-sub { font-size: 0.78rem; color: rgba(255,255,255,0.78); }
+    .school-sub  { font-size: 0.78rem; color: rgba(255,255,255,.78); }
     .badge-period {
       display: inline-flex; align-items: center; gap: 0.3rem;
-      background: rgba(255,255,255,0.14);
-      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.32);
       color: #fff; font-size: 0.72rem; font-weight: 600;
       padding: 0.2rem 0.9rem; border-radius: 50px;
       letter-spacing: 0.3px; margin-top: 0.1rem;
     }
 
-    /* ── TABS ────────────────────────────────────────────────────────────── */
+    /* ── STICKY TABS ─────────────────────────────────────────────────────── */
     .tab-wrapper {
       background: var(--c-green);
       padding: 0 0.5rem;
@@ -91,7 +84,7 @@
     .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tabs .nav-link {
-      color: rgba(255,255,255,0.58); border: none;
+      color: rgba(255,255,255,.58); border: none;
       border-bottom: 3px solid transparent; border-radius: 0;
       padding: 0.72rem 1.1rem; font-size: 0.82rem; font-weight: 600;
       white-space: nowrap; transition: color .2s, border-color .2s;
@@ -101,18 +94,15 @@
 
     /* ── MAIN ────────────────────────────────────────────────────────────── */
     .main-content {
-      max-width: 860px;
+      max-width: 900px;
       margin: 1.75rem auto;
       padding: 0 1rem 3rem;
     }
 
     /* ── SECTION TITLE ───────────────────────────────────────────────────── */
     .class-title { text-align: center; margin-bottom: 1.5rem; }
-    .class-title h2 {
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--c-text); margin-bottom: 0.15rem;
-    }
-    .class-title p { font-size: 0.77rem; color: var(--c-muted); }
+    .class-title h2 { font-size: 1.15rem; font-weight: 700; color: var(--c-text); margin-bottom: 0.15rem; }
+    .class-title p  { font-size: 0.77rem; color: var(--c-muted); }
 
     /* ── GRID ────────────────────────────────────────────────────────────── */
     .cards-grid {
@@ -141,22 +131,17 @@
     }
 
     /* Top accent bar */
-    .card-accent {
-      height: 4px;
-      width: 100%;
-      flex-shrink: 0;
-    }
+    .card-accent { height: 4px; width: 100%; flex-shrink: 0; }
     .rank-1 .card-accent { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
     .rank-2 .card-accent { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
     .rank-3 .card-accent { background: linear-gradient(90deg, #b45309, #d97706); }
     .rank-4 .card-accent,
     .rank-5 .card-accent { background: linear-gradient(90deg, #43a047, #81c784); }
 
-    /* ── PHOTO SECTION ───────────────────────────────────────────────────── */
+    /* ── PHOTO ZONE ──────────────────────────────────────────────────────── */
     .card-photo-wrap {
       position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
+      width: 100%; aspect-ratio: 1 / 1;
       background: var(--c-green-light);
       overflow: hidden;
       cursor: pointer;
@@ -169,120 +154,84 @@
     }
     .student-card:hover .card-photo { transform: scale(1.04); }
 
-    /* Placeholder when no photo */
+    /* Placeholder */
     .card-photo-placeholder {
       width: 100%; height: 100%;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.3rem;
+      align-items: center; justify-content: center; gap: 0.3rem;
       background: linear-gradient(160deg, #e8f5e9 0%, #c8e6c9 100%);
-      color: var(--c-green);
     }
-    .card-photo-placeholder .ph-icon {
-      font-size: 2.4rem;
-      opacity: 0.6;
-    }
+    .card-photo-placeholder .ph-icon { font-size: 2.4rem; color: #81c784; opacity: .7; }
     .card-photo-placeholder .ph-label {
-      font-size: 0.6rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      color: var(--c-muted);
+      font-size: 0.58rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; color: var(--c-muted);
     }
 
-    /* Upload overlay — appears on hover over photo */
+    /* Upload overlay */
     .upload-overlay {
       position: absolute; inset: 0;
-      background: rgba(27, 94, 32, 0.55);
+      background: rgba(27,94,32,.55);
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.3rem;
-      opacity: 0;
-      transition: opacity .22s ease;
-      cursor: pointer;
+      align-items: center; justify-content: center; gap: 0.3rem;
+      opacity: 0; transition: opacity .22s ease; cursor: pointer;
     }
     .card-photo-wrap:hover .upload-overlay { opacity: 1; }
-    .upload-overlay i { font-size: 1.5rem; color: #fff; }
-    .upload-overlay span {
-      font-size: 0.62rem; font-weight: 600;
-      color: rgba(255,255,255,0.9);
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    /* Hidden file input */
+    .upload-overlay i    { font-size: 1.5rem; color: #fff; }
+    .upload-overlay span { font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: 0.5px; }
     .upload-input { display: none; }
 
-    /* Rank badge — top-right corner */
+    /* Rank badge — top-right of photo */
     .rank-badge {
-      position: absolute;
-      top: 8px; right: 8px;
-      width: 28px; height: 28px;
-      border-radius: 50%;
+      position: absolute; top: 8px; right: 8px;
+      width: 28px; height: 28px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 1px 5px rgba(0,0,0,0.15);
-      border: 1.5px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 1px 5px rgba(0,0,0,.15);
+      border: 1.5px solid rgba(255,255,255,.7);
     }
     .rank-1 .rank-badge { border-color: #f59e0b; }
     .rank-2 .rank-badge { border-color: #94a3b8; }
     .rank-3 .rank-badge { border-color: #d97706; }
+    .rank-4 .rank-badge,
+    .rank-5 .rank-badge { border-color: #66bb6a; }
+    .rank-num {
+      font-size: 0.62rem; font-weight: 800; color: #555; line-height: 1;
+    }
 
     /* ── CARD BODY ───────────────────────────────────────────────────────── */
     .card-body-inner {
-      padding: 0.7rem 0.7rem 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      flex: 1;
+      padding: 0.65rem 0.65rem 0.75rem;
+      display: flex; flex-direction: column; gap: 0.4rem; flex: 1;
     }
-
-    /* Name row */
     .card-name {
-      font-size: 0.78rem; font-weight: 700;
+      font-size: 0.76rem; font-weight: 700;
       color: var(--c-text); line-height: 1.3;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       text-align: center;
     }
-
-    /* Divider */
-    .card-divider {
-      height: 1px;
-      background: var(--c-border);
-      margin: 0 -0.7rem;
-    }
-
-    /* Score row */
+    .card-divider { height: 1px; background: var(--c-border); margin: 0 -0.65rem; }
     .card-score-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.25rem;
+      display: flex; align-items: baseline; justify-content: center; gap: 3px;
     }
     .card-avg {
       font-size: 1.3rem; font-weight: 800;
-      color: var(--c-green); line-height: 1;
-      letter-spacing: -0.5px;
+      color: var(--c-green); line-height: 1; letter-spacing: -0.5px;
     }
     .card-avg-label {
-      font-size: 0.58rem; font-weight: 600;
-      color: var(--c-muted); text-transform: uppercase;
-      letter-spacing: 0.4px; margin-top: 2px;
+      font-size: 0.57rem; font-weight: 600;
+      color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.4px;
     }
-
-    /* Gender row */
     .card-gender {
-      font-size: 0.65rem; color: var(--c-muted);
-      text-align: center; display: flex;
-      align-items: center; justify-content: center; gap: 3px;
+      font-size: 0.64rem; color: var(--c-muted);
+      text-align: center; display: flex; align-items: center; justify-content: center; gap: 3px;
     }
-
-    /* Badges row */
     .card-badges {
-      display: flex; justify-content: center;
-      gap: 0.28rem; flex-wrap: wrap;
+      display: flex; justify-content: center; gap: 0.28rem; flex-wrap: wrap;
     }
     .badge-pill {
-      font-size: 0.6rem; font-weight: 700;
-      padding: 0.15em 0.55em; border-radius: 50px;
-      letter-spacing: 0.2px;
+      font-size: 0.59rem; font-weight: 700;
+      padding: 0.15em 0.55em; border-radius: 50px; letter-spacing: 0.2px;
     }
     .badge-pass { background: #dcfce7; color: #15803d; }
     .badge-fail { background: #fee2e2; color: #b91c1c; }
@@ -295,6 +244,19 @@
     /* ── TIE NOTICE ──────────────────────────────────────────────────────── */
     .tie-notice { font-size: 0.7rem; color: #aaa; margin-top: 0.3rem; font-style: italic; text-align: center; }
 
+    /* ── TEACHER FOOTER ──────────────────────────────────────────────────── */
+    .class-footer {
+      margin-top: 1.25rem;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.65rem 1rem;
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      font-size: 0.74rem; color: var(--c-muted);
+    }
+    .class-footer span { display: flex; align-items: center; gap: 0.3rem; }
+    .class-footer strong { color: var(--c-text); }
+
     /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
     .loading-box { text-align: center; padding: 4rem 1rem; color: #888; }
     .spinner-border { width: 2.5rem; height: 2.5rem; color: var(--c-green-mid) !important; }
@@ -306,9 +268,9 @@
       display: inline-block; width: 7px; height: 7px; border-radius: 50%;
       background: #66bb6a; margin-right: 4px; animation: pulse 2s infinite;
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    /* ── FOOTER ──────────────────────────────────────────────────────────── */
+    /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
     .site-footer {
       text-align: center; padding: 1rem;
       font-size: 0.74rem; color: #aaa;
@@ -317,10 +279,11 @@
     }
 
     /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
       .cards-grid { grid-template-columns: repeat(3, 1fr); }
+      .class-footer { flex-direction: column; gap: 0.3rem; text-align: center; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 500px) {
       .school-name { font-size: 1.2rem; }
       .school-logo-img { width: 58px; height: 58px; }
       .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
@@ -330,22 +293,23 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ── HEADER ── -->
   <header class="site-header">
     <div class="header-inner">
-      <img src="logo.png" alt="Greenway School Logo" class="school-logo-img" />
-      <div class="school-name">Greenway School</div>
-      <div class="school-sub" id="academicYear">Academic Year 2025–2026</div>
-      <div class="badge-period" id="periodBadge">⭐ Top 5 of March</div>
+      <img src="logo.png" alt="School Logo" class="school-logo-img"
+           onerror="this.style.display='none'" />
+      <div class="school-name" id="schoolName">Greenway School</div>
+      <div class="school-sub"  id="academicYear">Academic Year 2025–2026</div>
+      <div class="badge-period" id="periodBadge">⭐ Top 5</div>
     </div>
   </header>
 
-  <!-- TABS -->
+  <!-- ── TABS ── -->
   <div class="tab-wrapper">
     <ul class="nav nav-tabs" id="classTabs" role="tablist"></ul>
   </div>
 
-  <!-- MAIN -->
+  <!-- ── MAIN ── -->
   <div class="main-content">
     <div id="loadingBox" class="loading-box">
       <div class="spinner-border mb-3" role="status"><span class="visually-hidden">Loading…</span></div>
@@ -357,7 +321,8 @@
       <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2.5rem"></i>
       <div class="fw-semibold mt-2 text-danger">Failed to load data</div>
       <div class="text-muted small mt-1" id="errorMsg"></div>
-      <button class="btn btn-sm mt-3" style="border:1.5px solid #388e3c;color:#388e3c" onclick="loadAllData()">
+      <button class="btn btn-sm mt-3" style="border:1.5px solid #388e3c;color:#388e3c"
+              onclick="loadAllData()">
         <i class="bi bi-arrow-clockwise me-1"></i>Retry
       </button>
     </div>
@@ -371,22 +336,23 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    © 2026 Greenway School &nbsp;·&nbsp; Prepared by <strong>Smon Chiu</strong>
-    &nbsp;·&nbsp; Teacher: <strong>Ki Sochea</strong>
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer" id="siteFooter">
+    © 2026 Greenway School
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ─── CONFIG ──────────────────────────────────────────────────────────────
+    /* ════════════════════════════════════════════════════════════════════
+       CONFIG — only change SPREADSHEET_ID and SHEET_NAMES when needed
+    ════════════════════════════════════════════════════════════════════ */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
     const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
     const REFRESH_MS     = 5 * 60 * 1000;
-    const PHOTO_STORE    = 'gws_student_photos'; // localStorage key
+    const PHOTO_STORE    = 'gws_student_photos_v2';
 
-    // ─── PHOTO STORAGE (localStorage) ────────────────────────────────────────
+    /* ── LOCAL PHOTO STORAGE ─────────────────────────────────────────── */
     function loadPhotoStore() {
       try { return JSON.parse(localStorage.getItem(PHOTO_STORE) || '{}'); }
       catch { return {}; }
@@ -396,10 +362,10 @@
       catch (e) { console.warn('localStorage quota exceeded', e); }
     }
     function photoKey(sheetName, studentName) {
-      return `${sheetName}__${studentName}`;
+      return `${sheetName}||${studentName.trim()}`;
     }
 
-    // ─── GOOGLE DRIVE PHOTO URL CONVERTER ────────────────────────────────────
+    /* ── GOOGLE DRIVE PHOTO CONVERTER ───────────────────────────────── */
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
@@ -412,7 +378,7 @@
       return null;
     }
 
-    // ─── FETCH SHEET ─────────────────────────────────────────────────────────
+    /* ── FETCH & PARSE A SHEET ──────────────────────────────────────── */
     async function fetchSheet(sheetName) {
       const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
       const res = await fetch(url);
@@ -425,52 +391,142 @@
       return parseGviz(json, sheetName);
     }
 
+    /* ── DYNAMIC PARSER ─────────────────────────────────────────────── */
+    /*
+      Real sheet structure (confirmed by inspection):
+      ─ col[0].label  = merged header containing ALL metadata:
+          "Greenway School Top 5 of March-test  Academic Year : 2025-2026 Level: Beginner A N"
+      ─ col[1].label  = "Student Name"
+      ─ col[2].label  = "Gender "
+      ─ col[3].label  = "Average "
+      ─ col[4].label  = "Grade"
+      ─ col[5].label  = "Rank"
+      ─ col[6].label  = "Result"
+      ─ col[7].label  = "" (photo URL if added, otherwise empty)
+
+      Data rows start at index 0 (gviz skips the merged header row).
+      Stop parsing when cells[1] contains "Date:" or is empty after students.
+    */
     function parseGviz(json, sheetName) {
-      const cols = json.table.cols;
-      const rows = json.table.rows;
-      const headerLabel = cols[0]?.label || '';
+      const cols        = json.table.cols;
+      const rows        = json.table.rows;
+      const headerLabel = (cols[0]?.label || '').trim();
 
-      let schoolName = 'Greenway School', period = '', academicYear = '', levelName = '';
+      // ── Extract metadata from the merged header label ──
+      let schoolName   = 'Greenway School';
+      let period       = '';
+      let academicYear = '';
+      let levelName    = '';
+      let teacher      = '';
+      let preparedBy   = '';
 
-      const levelMatch  = headerLabel.match(/Level:\s*(.+?)\s+N$/i);
-      if (levelMatch) levelName = levelMatch[1].trim();
-
-      const yearMatch   = headerLabel.match(/Academic Year\s*:\s*(\S+)/i);
-      if (yearMatch) academicYear = 'Academic Year : ' + yearMatch[1];
-
-      const periodMatch = headerLabel.match(/Top 5 of (\w+)/i);
-      if (periodMatch) period = 'Top 5 of ' + periodMatch[1];
-
-      const schoolMatch = headerLabel.match(/^([A-Za-z ]+?)\s+Top 5/i);
+      // School name: everything before "Top 5"
+      const schoolMatch = headerLabel.match(/^(.+?)\s+Top 5/i);
       if (schoolMatch) schoolName = schoolMatch[1].trim();
 
+      // Period: "Top 5 of <period>"
+      const periodMatch = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
+      if (periodMatch) period = periodMatch[1].trim();
+      else {
+        const pm2 = headerLabel.match(/Top 5 of\s+(.+?)(?:\s+Level|\s*$)/i);
+        if (pm2) period = pm2[1].trim();
+      }
+
+      // Academic Year
+      const yearMatch = headerLabel.match(/Academic Year\s*[:\-]\s*(\S+)/i);
+      if (yearMatch) academicYear = yearMatch[1].trim();
+
+      // Level
+      const levelMatch = headerLabel.match(/Level:\s*(.+?)\s+N\s*$/i);
+      if (levelMatch) levelName = levelMatch[1].trim();
+      else {
+        const lm2 = headerLabel.match(/Level:\s*(.+?)(?:\s+N)?$/i);
+        if (lm2) levelName = lm2[1].trim();
+      }
+
+      // ── Determine column indices dynamically from column labels ──
+      const colIndex = {};
+      cols.forEach((c, i) => {
+        const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
+        if (lbl === 'studentname')  colIndex.name    = i;
+        else if (lbl === 'gender')  colIndex.gender  = i;
+        else if (lbl === 'average') colIndex.avg     = i;
+        else if (lbl === 'grade')   colIndex.grade   = i;
+        else if (lbl === 'rank')    colIndex.rank    = i;
+        else if (lbl === 'result')  colIndex.result  = i;
+      });
+      // Fallback to known positions if labels not found
+      if (colIndex.name   === undefined) colIndex.name   = 1;
+      if (colIndex.gender === undefined) colIndex.gender = 2;
+      if (colIndex.avg    === undefined) colIndex.avg    = 3;
+      if (colIndex.grade  === undefined) colIndex.grade  = 4;
+      if (colIndex.rank   === undefined) colIndex.rank   = 5;
+      if (colIndex.result === undefined) colIndex.result = 6;
+      colIndex.n     = 0;   // sequence number always col 0
+      colIndex.photo = 7;   // Google Drive photo URL (optional)
+
+      // ── Parse student rows ──
       const students = [];
       for (const row of rows) {
         const cells = row.c || [];
-        const name  = (cells[1]?.v || '').toString().trim();
-        if (!name) continue;
-        if (/date|seen|teacher|prepared/i.test(name)) break;
+        const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
 
-        const avg      = parseFloat(cells[3]?.v) || 0;
-        const rank     = parseInt(cells[5]?.v) || (students.length + 1);
-        const rawPhoto = (cells[7]?.v || '').toString().trim();
+        const name = String(cv(colIndex.name)).trim();
+        if (!name) continue;
+
+        // Stop at footer rows
+        if (/^(date|seen|teacher|prepared)/i.test(name)) {
+          // Try to extract teacher/prepared-by from this and subsequent rows
+          const teacherRow = String(cv(colIndex.name));
+          const teacherMatch = teacherRow.match(/Teacher\s*[:\-]\s*(.+)/i);
+          if (teacherMatch) teacher = teacherMatch[1].trim();
+          const prepCol = cv(4) || cv(colIndex.result) || '';
+          if (String(prepCol).trim() && !/^(pass|fail)$/i.test(String(prepCol).trim())) {
+            preparedBy = String(prepCol).trim();
+          }
+          continue;
+        }
+        if (/^(date)/i.test(name)) continue;
+
+        const avgRaw  = cv(colIndex.avg);
+        const avg     = avgRaw !== '' ? parseFloat(avgRaw) : null;
+        const rankRaw = cv(colIndex.rank);
+        const rank    = rankRaw !== '' ? Math.round(parseFloat(rankRaw)) : (students.length + 1);
+        const rawPhoto = String(cv(colIndex.photo)).trim();
         const photoUrl = driveUrlToDirectImg(rawPhoto);
 
         students.push({
-          n:      (cells[0]?.v || '').toString().trim(),
+          n:      String(cv(colIndex.n)).trim(),
           name,
-          gender: (cells[2]?.v || '').toString().trim(),
+          gender: String(cv(colIndex.gender)).trim(),
           avg,
-          grade:  (cells[4]?.v || '').toString().trim(),
+          grade:  String(cv(colIndex.grade)).trim(),
           rank,
-          result: (cells[6]?.v || '').toString().trim(),
+          result: String(cv(colIndex.result)).trim(),
           photoUrl,
         });
       }
-      return { sheetName, schoolName, period, academicYear, levelName, students };
+
+      // Extract teacher/preparedBy from footer rows if not yet found
+      for (const row of rows) {
+        const cells = row.c || [];
+        const cv = (i) => { const c = cells[i]; return c ? String(c.v ?? '').trim() : ''; };
+        const col1 = cv(1);
+        if (/Teacher\s*[:\-]/i.test(col1)) {
+          teacher = col1.replace(/Teacher\s*[:\-]\s*/i, '').trim();
+          const pb = cv(4);
+          if (pb && !/^(pass|fail|result)$/i.test(pb)) preparedBy = pb;
+        }
+        if (/Prepared by/i.test(col1) || /Prepared by/i.test(cv(4))) {
+          const pb = cv(4) || cv(1);
+          if (pb && !/Prepared by/i.test(pb)) preparedBy = pb;
+        }
+      }
+
+      return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
     }
 
-    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    /* ── HELPERS ────────────────────────────────────────────────────── */
     const rankEmoji = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
     function gradeClass(g) {
@@ -478,69 +534,92 @@
       return map[(g||'').toUpperCase()] || 'grade-f';
     }
     function resultBadge(result) {
-      return (result||'').toLowerCase() === 'pass'
-        ? `<span class="badge-pill badge-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
-        : `<span class="badge-pill badge-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
+      const r = (result || '').toLowerCase();
+      if (r === 'pass') return `<span class="badge-pill badge-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`;
+      if (r === 'fail') return `<span class="badge-pill badge-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
+      return `<span class="badge-pill" style="background:#f3f4f6;color:#6b7280">${escHtml(result)}</span>`;
     }
     function genderLabel(g) {
-      const lower = (g || '').toLowerCase();
-      if (lower === 'female') return '<i class="bi bi-gender-female"></i> Female';
-      if (lower === 'male')   return '<i class="bi bi-gender-male"></i> Male';
-      return g || '—';
+      const l = (g || '').toLowerCase();
+      if (l === 'female') return '<i class="bi bi-gender-female"></i> Female';
+      if (l === 'male')   return '<i class="bi bi-gender-male"></i> Male';
+      return escHtml(g) || '—';
+    }
+    function avgDisplay(avg) {
+      if (avg === null || avg === undefined || isNaN(avg)) return '—';
+      return avg.toFixed(2);
     }
     function escHtml(str) {
-      return String(str||'')
+      return String(str || '')
         .replace(/&/g,'&amp;').replace(/</g,'&lt;')
         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+    function levelDisplay(levelName, sheetName) {
+      if (!levelName) return sheetName;
+      const l = levelName.toLowerCase();
+      if (l.startsWith('beginner')) return levelName;
+      return `Level ${levelName}`;
+    }
 
-    // ─── RENDER A SINGLE STUDENT CARD ────────────────────────────────────────
+    /* ── RENDER CARD ────────────────────────────────────────────────── */
     function renderCard(s, sheetName) {
       const rankClass  = `rank-${Math.min(s.rank, 5)}`;
-      const emoji      = rankEmoji[s.rank] || '';
+      const emoji      = rankEmoji[s.rank];
       const key        = photoKey(sheetName, s.name);
       const store      = loadPhotoStore();
-      // Priority: locally uploaded > Google Drive URL
       const localPhoto = store[key] || null;
       const displayUrl = localPhoto || s.photoUrl;
 
+      const safeKey = CSS.escape ? CSS.escape(key) : key.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const imgId   = `pi_${safeKey}`;
+      const phId    = `ph_${safeKey}`;
+
       const photoContent = displayUrl
-        ? `<img class="card-photo" id="photo-img-${key}"
+        ? `<img class="card-photo" id="${imgId}"
                src="${escHtml(displayUrl)}"
                alt="${escHtml(s.name)}"
-               onerror="this.style.display='none';document.getElementById('ph-${key}').style.display='flex'" />
-           <div class="card-photo-placeholder" id="ph-${key}" style="display:none">
+               onerror="this.style.display='none';var p=document.getElementById('${phId}');if(p)p.style.display='flex'" />
+           <div class="card-photo-placeholder" id="${phId}" style="display:none">
              <i class="bi bi-person-fill ph-icon"></i>
              <span class="ph-label">No Photo</span>
            </div>`
-        : `<div class="card-photo-placeholder" id="ph-${key}">
+        : `<div class="card-photo-placeholder" id="${phId}">
              <i class="bi bi-person-fill ph-icon"></i>
              <span class="ph-label">No Photo</span>
            </div>`;
+
+      const rankBadge = emoji
+        ? `<div class="rank-badge">${emoji}</div>`
+        : `<div class="rank-badge"><span class="rank-num">#${s.rank}</span></div>`;
+
+      const uploadId = `up_${safeKey}`;
 
       return `
         <div class="student-card ${rankClass}">
           <div class="card-accent"></div>
 
-          <!-- Photo + upload -->
-          <div class="card-photo-wrap" onclick="document.getElementById('upload-${key}').click()" title="Click to upload photo">
+          <div class="card-photo-wrap"
+               onclick="document.getElementById('${uploadId}').click()"
+               title="Click to upload photo">
             ${photoContent}
             <div class="upload-overlay">
               <i class="bi bi-camera-fill"></i>
               <span>Upload Photo</span>
             </div>
-            ${emoji ? `<div class="rank-badge">${emoji}</div>` : `<div class="rank-badge" style="font-size:0.65rem;font-weight:800;color:#555">#${s.rank}</div>`}
+            ${rankBadge}
           </div>
           <input type="file" accept="image/*" class="upload-input"
-                 id="upload-${key}"
-                 onchange="handleUpload(this, '${escHtml(key)}', '${escHtml(s.name)}')" />
+                 id="${uploadId}"
+                 data-key="${escHtml(key)}"
+                 data-imgid="${imgId}"
+                 data-phid="${phId}"
+                 onchange="handleUpload(this)" />
 
-          <!-- Info -->
           <div class="card-body-inner">
             <div class="card-name" title="${escHtml(s.name)}">${escHtml(s.name)}</div>
             <div class="card-divider"></div>
             <div class="card-score-row">
-              <span class="card-avg">${s.avg.toFixed(2)}</span>
+              <span class="card-avg">${avgDisplay(s.avg)}</span>
               <span class="card-avg-label">avg</span>
             </div>
             <div class="card-gender">${genderLabel(s.gender)}</div>
@@ -552,35 +631,33 @@
         </div>`;
     }
 
-    // ─── HANDLE LOCAL IMAGE UPLOAD ────────────────────────────────────────────
-    function handleUpload(input, key, studentName) {
+    /* ── HANDLE LOCAL IMAGE UPLOAD ──────────────────────────────────── */
+    function handleUpload(input) {
       const file = input.files[0];
       if (!file) return;
+      const key   = input.dataset.key;
+      const imgId = input.dataset.imgid;
+      const phId  = input.dataset.phid;
 
       const reader = new FileReader();
       reader.onload = function(e) {
         const dataUrl = e.target.result;
-
-        // Persist to localStorage
         const store = loadPhotoStore();
         store[key] = dataUrl;
         savePhotoStore(store);
 
-        // Update the card photo in the DOM immediately
-        const imgEl = document.getElementById(`photo-img-${key}`);
-        const phEl  = document.getElementById(`ph-${key}`);
-
+        const imgEl = document.getElementById(imgId);
+        const phEl  = document.getElementById(phId);
         if (imgEl) {
           imgEl.src = dataUrl;
           imgEl.style.display = 'block';
           if (phEl) phEl.style.display = 'none';
         } else if (phEl) {
-          // Replace placeholder with actual img
           const newImg = document.createElement('img');
           newImg.className = 'card-photo';
-          newImg.id = `photo-img-${key}`;
+          newImg.id  = imgId;
           newImg.src = dataUrl;
-          newImg.alt = studentName;
+          newImg.alt = key;
           phEl.parentNode.insertBefore(newImg, phEl);
           phEl.style.display = 'none';
         }
@@ -588,24 +665,26 @@
       reader.readAsDataURL(file);
     }
 
-    // ─── BUILD GRID ───────────────────────────────────────────────────────────
+    /* ── BUILD GRID ─────────────────────────────────────────────────── */
     function buildGrid(students, sheetName) {
       const sorted = students.slice().sort((a, b) => a.rank - b.rank).slice(0, 5);
-      const cards  = sorted.map(s => renderCard(s, sheetName)).join('');
-      return `<div class="cards-grid">${cards}</div>`;
+      return `<div class="cards-grid">${sorted.map(s => renderCard(s, sheetName)).join('')}</div>`;
     }
 
-    // ─── BUILD TAB PANE ───────────────────────────────────────────────────────
+    /* ── BUILD TAB PANE ─────────────────────────────────────────────── */
     function buildTabPane(classData, index) {
-      const { levelName, sheetName, students } = classData;
-      const displayName = levelName
-        ? (levelName.toLowerCase().startsWith('beginner') ? levelName : `Level ${levelName}`)
-        : sheetName;
+      const { sheetName, levelName, students, teacher, preparedBy } = classData;
+      const displayName = levelDisplay(levelName, sheetName);
 
       const hasTie = students.length > 1 && students.every(s => s.rank === students[0].rank);
       const tieNote = hasTie
         ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>`
         : '';
+
+      const footerTeacher    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
+      const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
+      const classFooter = (footerTeacher || footerPreparedBy)
+        ? `<div class="class-footer">${footerTeacher}${footerPreparedBy}</div>` : '';
 
       return `
         <div class="tab-pane fade ${index === 0 ? 'show active' : ''}"
@@ -616,22 +695,35 @@
             ${tieNote}
           </div>
           ${buildGrid(students, sheetName)}
+          ${classFooter}
         </div>`;
     }
 
-    // ─── BUILD ALL TABS ───────────────────────────────────────────────────────
+    /* ── BUILD ALL TABS ─────────────────────────────────────────────── */
     function buildUI(allClasses) {
       const tabsEl    = document.getElementById('classTabs');
       const contentEl = document.getElementById('tabContent');
       tabsEl.innerHTML    = '';
       contentEl.innerHTML = '';
 
-      allClasses.forEach((data, i) => {
-        const { levelName, sheetName } = data;
-        const displayName = levelName
-          ? (levelName.toLowerCase().startsWith('beginner') ? levelName : `Level ${levelName}`)
-          : sheetName;
+      // Update global header from first successful sheet
+      const first = allClasses[0];
+      if (first) {
+        if (first.schoolName)   document.getElementById('schoolName').textContent   = first.schoolName;
+        if (first.academicYear) document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
+        if (first.period)       document.getElementById('periodBadge').textContent  = `⭐ Top 5 of ${first.period}`;
 
+        // Update site footer dynamically
+        const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
+        const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
+        const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
+        if (preparedBy) footerParts.push(`Prepared by <strong>${escHtml(preparedBy)}</strong>`);
+        if (teacher)    footerParts.push(`Teacher: <strong>${escHtml(teacher)}</strong>`);
+        document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
+      }
+
+      allClasses.forEach((data, i) => {
+        const displayName = levelDisplay(data.levelName, data.sheetName);
         const li = document.createElement('li');
         li.className = 'nav-item';
         li.innerHTML = `
@@ -644,15 +736,9 @@
         tabsEl.appendChild(li);
         contentEl.insertAdjacentHTML('beforeend', buildTabPane(data, i));
       });
-
-      const d = allClasses[0];
-      if (d) {
-        if (d.academicYear) document.getElementById('academicYear').textContent = d.academicYear;
-        if (d.period)       document.getElementById('periodBadge').textContent  = '⭐ ' + d.period;
-      }
     }
 
-    // ─── LOAD ALL DATA ────────────────────────────────────────────────────────
+    /* ── LOAD ALL DATA ──────────────────────────────────────────────── */
     async function loadAllData() {
       const loadingBox  = document.getElementById('loadingBox');
       const errorBox    = document.getElementById('errorBox');
@@ -661,6 +747,7 @@
 
       loadingBox.classList.remove('d-none');
       errorBox.classList.add('d-none');
+      tabContent.classList.add('d-none');
 
       try {
         const results = await Promise.all(SHEET_NAMES.map(fetchSheet));
@@ -678,7 +765,7 @@
       }
     }
 
-    // ─── INIT ─────────────────────────────────────────────────────────────────
+    /* ── INIT ───────────────────────────────────────────────────────── */
     loadAllData();
     setInterval(loadAllData, REFRESH_MS);
   </script>
