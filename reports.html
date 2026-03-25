@@ -28,22 +28,11 @@
     /* ── HEADER ─────────────────────────────────────────────────────────── */
     .site-header {
       background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
-      color: #fff; padding: 1.5rem 1rem 1.4rem; text-align: center; position: relative; overflow: hidden;
-    }
-    .site-header::before {
-      content: ''; position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    .header-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
-    .school-logo-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.5); background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); }
-    .school-name { font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2); }
-    .school-sub  { font-size: 0.76rem; color: rgba(255,255,255,.78); }
-    .page-badge  {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.32);
-      color: #fff; font-size: 0.72rem; font-weight: 600;
-      padding: 0.2rem 0.9rem; border-radius: 50px; margin-top: 0.2rem;
+      color: #fff;
+      padding: 1.75rem 1rem 1.6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
     .nav-back {
       position: absolute; top: 1rem; left: 1rem; z-index: 2;
@@ -54,6 +43,37 @@
       transition: background .18s;
     }
     .nav-back:hover { background: rgba(255,255,255,.28); color: #fff; }
+
+    .site-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header-inner {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    }
+    .school-logo-img {
+      width: 70px; height: 70px; border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.5);
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
+    .school-name {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: 0.2px;
+      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2);
+    }
+    .school-sub  { font-size: 0.78rem; color: rgba(255,255,255,.78); }
+    .badge-period {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.32);
+      color: #fff; font-size: 0.72rem; font-weight: 600;
+      padding: 0.2rem 0.9rem; border-radius: 50px;
+      letter-spacing: 0.3px; margin-top: 0.1rem;
+    }
 
     /* ── MONTH NAV ───────────────────────────────────────────────────────── */
     .month-nav {
@@ -284,10 +304,11 @@
   <header class="site-header">
     <a href="index.html" class="nav-back"><i class="bi bi-arrow-left"></i> Leaderboard</a>
     <div class="header-inner">
-      <img src="logo.png" alt="School Logo" class="school-logo-img" onerror="this.style.display='none'" />
+      <img src="logo.png" alt="School Logo" class="school-logo-img"
+           onerror="this.style.display='none'" />
       <div class="school-name" id="schoolName">Greenway School</div>
-      <div class="school-sub" id="academicYear">Academic Year 2025–2026</div>
-      <div class="page-badge" id="periodBadge">⭐ Top 5 of March</div>
+      <div class="school-sub"  id="academicYear">Academic Year 2025–2026</div>
+      <div class="badge-period" id="periodBadge">⭐ Top 5</div>
     </div>
   </header>
 
