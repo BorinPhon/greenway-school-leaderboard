@@ -418,7 +418,9 @@
                   <span class="badge-period"><i class="bi bi-mortarboard me-1"></i>${escHtml(d.academicYear)}</span>
                 </div>
               </div>
-              ${buildTable(d.students)}
+              <div class="table-container">
+                ${buildTable(d.students)}
+              </div>
             </div>
           </div>`).join('');
 
@@ -434,7 +436,6 @@
     }
 
     function updateSummary(idx) {
-      // Small delay to ensure the tab-pane is active if needed, but not strictly necessary for data
       const data = allClassData[idx];
       if (data && data.students) {
         document.getElementById('summaryGrid').innerHTML = buildSummary(data.students);
