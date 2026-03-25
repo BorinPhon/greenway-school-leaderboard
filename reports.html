@@ -399,7 +399,7 @@
         tabsEl.innerHTML = allClassData.map((d, i) => `
           <li class="nav-item">
             <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button" 
-                    onclick="setTimeout(() => updateSummary(${i}), 50)">
+                    onclick="updateSummary(${i})">
               ${escHtml(d.sheetName)}
             </button>
           </li>`).join('');
@@ -434,7 +434,11 @@
     }
 
     function updateSummary(idx) {
-      document.getElementById('summaryGrid').innerHTML = buildSummary(allClassData[idx].students);
+      // Small delay to ensure the tab-pane is active if needed, but not strictly necessary for data
+      const data = allClassData[idx];
+      if (data && data.students) {
+        document.getElementById('summaryGrid').innerHTML = buildSummary(data.students);
+      }
       document.getElementById('studentSearch').value = '';
     }
 
