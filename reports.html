@@ -300,11 +300,18 @@
       const rows = json.table.rows;
 
       // Header info (from top of sheet)
-      // Level name is usually in row 3, but let's fall back to sheet name if it's a student row
+      // Header info (from top of sheet)
       let levelName = sheetName;
-      if (rows[3] && rows[3].c && rows[3].c[0] && rows[3].c[0].v) {
-        const val = String(rows[3].c[0].v).trim();
-        if (!/^\d+$/.test(val)) levelName = val;
+      // Look for level name in the first 5 rows
+      for (let i = 0; i < 5; i++) {
+        if (rows[i] && rows[i].c && rows[i].c[0] && rows[i].c[0].v) {
+          const val = String(rows[i].c[0].v).trim();
+          // If it's a long string and not a student ID, it's likely the level name
+          if (val.length > 5 && !/^\d+$/.test(val)) {
+            levelName = val;
+            break;
+          }
+        }
       }
       
       const academicYear = rows[2]?.c[0]?.v || '';
@@ -391,8 +398,9 @@
         const tabsEl = document.getElementById('classTabs');
         tabsEl.innerHTML = allClassData.map((d, i) => `
           <li class="nav-item">
-            <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button" onclick="updateSummary(${i})">
-              ${escHtml(d.levelName || d.sheetName)}
+            <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button" 
+                    onclick="setTimeout(() => updateSummary(${i}), 50)">
+              ${escHtml(d.sheetName)}
             </button>
           </li>`).join('');
 
