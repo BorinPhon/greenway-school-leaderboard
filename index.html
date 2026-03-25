@@ -1216,7 +1216,7 @@
       const tieNote = hasTie
         ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>` : '';
       const footerTeacher    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
-      const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
+      const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Checked by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
       const classFooter = (footerTeacher || footerPreparedBy)
         ? `<div class="class-footer">${footerTeacher}${footerPreparedBy}</div>` : '';
       return `
@@ -1248,7 +1248,7 @@
         const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
         const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
         const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
-        if (preparedBy) footerParts.push(`Develop by <strong>${escHtml('Phoun Borin')}</strong>`);
+        if (preparedBy) footerParts.push(`Developed by <strong>${escHtml('Phoun Borin')}</strong>`);
         document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
       }
 
