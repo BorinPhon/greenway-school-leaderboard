@@ -407,7 +407,9 @@
         // Add event listeners for tab changes
         allClassData.forEach((_, i) => {
           const btn = document.getElementById(`tab-btn-${i}`);
-          btn.addEventListener('shown.bs.tab', () => updateSummary(i));
+          if (btn) {
+            btn.addEventListener('click', () => updateSummary(i));
+          }
         });
 
         const panesEl = document.getElementById('tabPanes');
