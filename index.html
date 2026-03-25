@@ -10,36 +10,42 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --green-dark:   #2e7d32;
-      --green-mid:    #43a047;
+      --green-dark:   #1b5e20;
+      --green-mid:    #2e7d32;
+      --green-accent: #43a047;
       --green-light:  #e8f5e9;
-      --green-pale:   #f1f8f1;
+      --green-pale:   #f0f7f0;
       --green-border: #c8e6c9;
       --white:        #ffffff;
-      --text-dark:    #1b5e20;
-      --text-muted:   #81c784;
-      --gold:         #f9a825;
-      --silver:       #90a4ae;
-      --bronze:       #a1887f;
+      --text-dark:    #1a2e1a;
+      --text-muted:   #6a9f6a;
+      --gold:         #f59e0b;
+      --gold-light:   #fef3c7;
+      --silver:       #94a3b8;
+      --silver-light: #f1f5f9;
+      --bronze:       #b45309;
+      --bronze-light: #fef3c7;
+      --radius-card:  14px;
+      --shadow-card:  0 2px 12px rgba(0,0,0,0.07);
     }
 
     * { box-sizing: border-box; }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--green-pale);
       min-height: 100vh;
     }
 
     /* ── HEADER ── */
     .site-header {
-      background: linear-gradient(135deg, #2e7d32 0%, #388e3c 60%, #43a047 100%);
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #388e3c 100%);
       color: #fff;
-      padding: 2.25rem 1rem 2rem;
+      padding: 1.6rem 1rem 1.5rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -47,36 +53,36 @@
     .site-header::before {
       content: '';
       position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       pointer-events: none;
     }
-    .header-inner { position: relative; z-index: 1; }
+    .header-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
     .school-logo-img {
-      width: 90px; height: 90px; border-radius: 50%;
+      width: 72px; height: 72px; border-radius: 50%;
       object-fit: cover;
-      border: 3px solid rgba(255,255,255,0.6);
-      margin-bottom: 0.6rem; background: #fff;
+      border: 2.5px solid rgba(255,255,255,0.55);
+      background: #fff;
     }
     .school-name {
-      font-size: 1.85rem; font-weight: 800; letter-spacing: 0.5px;
-      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.15); margin: 0;
+      font-size: 1.55rem; font-weight: 800; letter-spacing: 0.3px;
+      color: #fff; text-shadow: 0 1px 5px rgba(0,0,0,0.18); margin: 0;
     }
-    .school-sub { font-size: 0.88rem; color: rgba(255,255,255,0.85); margin-top: 0.15rem; }
+    .school-sub { font-size: 0.8rem; color: rgba(255,255,255,0.8); }
     .badge-period {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.45);
-      color: #fff; font-size: 0.78rem; font-weight: 600;
-      padding: 0.25rem 1rem; border-radius: 50px;
-      margin-top: 0.6rem; letter-spacing: 0.4px;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff; font-size: 0.73rem; font-weight: 600;
+      padding: 0.22rem 0.85rem; border-radius: 50px;
+      letter-spacing: 0.3px;
     }
 
     /* ── TABS ── */
     .tab-wrapper {
-      background: var(--green-dark);
+      background: var(--green-mid);
       padding: 0 0.5rem;
       position: sticky; top: 0; z-index: 100;
-      border-bottom: 2px solid var(--green-mid);
+      border-bottom: 2px solid var(--green-accent);
     }
     .nav-tabs {
       border-bottom: none; flex-wrap: nowrap;
@@ -84,9 +90,9 @@
     }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tabs .nav-link {
-      color: rgba(255,255,255,0.65); border: none;
+      color: rgba(255,255,255,0.6); border: none;
       border-bottom: 3px solid transparent; border-radius: 0;
-      padding: 0.85rem 1.25rem; font-size: 0.875rem; font-weight: 600;
+      padding: 0.75rem 1.1rem; font-size: 0.83rem; font-weight: 600;
       white-space: nowrap; transition: color 0.2s, border-color 0.2s;
     }
     .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.3); }
@@ -94,59 +100,69 @@
 
     /* ── MAIN ── */
     .main-content {
-      max-width: 900px;
-      margin: 2rem auto;
+      max-width: 820px;
+      margin: 1.5rem auto;
       padding: 0 1rem 3rem;
     }
 
     /* ── CLASS TITLE ── */
-    .class-title { text-align: center; margin-bottom: 1.75rem; }
-    .class-title h2 { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0 0 0.2rem; }
-    .class-title p  { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+    .class-title { text-align: center; margin-bottom: 1.4rem; }
+    .class-title h2 { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin: 0 0 0.15rem; }
+    .class-title p  { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
 
     /* ══════════════════════════════════════════
        PYRAMID LAYOUT
-       Row 1: 1 card (rank 1) — centered
-       Row 2: 2 cards (rank 2 left, rank 3 right)
-       Row 3: 2 cards (rank 4 left, rank 5 right)
     ══════════════════════════════════════════ */
     .pyramid-grid {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
     }
     .pyramid-row {
       display: flex;
       justify-content: center;
-      gap: 4rem;
+      gap: 1.25rem;
       width: 100%;
     }
-    .pyramid-row-1 { max-width: 280px; }
+    .pyramid-row-1 { max-width: 220px; }
     .pyramid-row-2,
-    .pyramid-row-3 { max-width: 100%; justify-content: space-between; gap: 1.5rem; }
+    .pyramid-row-3 { max-width: 100%; justify-content: space-between; }
 
-    /* ── STUDENT CARD ── */
+    /* ══════════════════════════════════════════
+       STUDENT CARD — Modern Compact Design
+    ══════════════════════════════════════════ */
     .student-card {
       flex: 1;
       background: var(--white);
-      border-radius: 16px;
-      border: 1.5px solid var(--green-border);
-      box-shadow: none;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--green-border);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
-      transition: transform 0.2s;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
-    .student-card:hover { transform: translateY(-4px); }
+    .student-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.11);
+    }
 
-    /* rank accent strip on top */
-    .student-card.rank-1 { border-top: 4px solid var(--gold); }
-    .student-card.rank-2 { border-top: 4px solid var(--silver); }
-    .student-card.rank-3 { border-top: 4px solid var(--bronze); }
-    .student-card.rank-4,
-    .student-card.rank-5 { border-top: 4px solid var(--green-border); }
+    /* Thin colored left-border accent instead of top strip */
+    .student-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      border-radius: var(--radius-card) var(--radius-card) 0 0;
+    }
+    .student-card.rank-1::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .student-card.rank-2::before { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
+    .student-card.rank-3::before { background: linear-gradient(90deg, #b45309, #d97706); }
+    .student-card.rank-4::before,
+    .student-card.rank-5::before { background: linear-gradient(90deg, var(--green-accent), #66bb6a); }
 
     /* ── PHOTO AREA ── */
     .card-photo-wrap {
@@ -163,93 +179,119 @@
       display: block;
     }
     .card-photo-placeholder {
-      font-size: 3.5rem;
-      color: var(--green-mid);
+      font-size: 3rem;
+      color: var(--green-accent);
       user-select: none;
     }
 
-    /* rank badge overlay on photo */
+    /* Rank badge — pill style, bottom-left of photo */
     .rank-overlay {
       position: absolute;
-      top: 8px; left: 8px;
-      width: 34px; height: 34px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; font-weight: 800;
-      background: rgba(255,255,255,0.92);
-      border: 2px solid var(--green-border);
-      line-height: 1;
+      bottom: 7px; left: 7px;
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px;
+      border-radius: 50px;
+      font-size: 0.7rem; font-weight: 700;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      background: rgba(255,255,255,0.88);
+      border: 1.5px solid rgba(255,255,255,0.6);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      line-height: 1.4;
     }
-    .rank-overlay.rank-1 { border-color: var(--gold); }
-    .rank-overlay.rank-2 { border-color: var(--silver); }
-    .rank-overlay.rank-3 { border-color: var(--bronze); }
+    .rank-overlay.rank-1 { color: #b45309; border-color: #f59e0b; }
+    .rank-overlay.rank-2 { color: #475569; border-color: #94a3b8; }
+    .rank-overlay.rank-3 { color: #92400e; border-color: #d97706; }
+    .rank-overlay.rank-4,
+    .rank-overlay.rank-5 { color: var(--green-mid); border-color: var(--green-accent); }
 
     /* ── CARD BODY ── */
     .card-body-inner {
-      padding: 0.85rem 0.75rem 1rem;
+      padding: 0.65rem 0.65rem 0.75rem;
       text-align: center;
       width: 100%;
     }
     .card-name {
-      font-size: 0.9rem; font-weight: 700;
+      font-size: 0.8rem; font-weight: 700;
       color: var(--text-dark);
-      margin-bottom: 0.2rem; line-height: 1.3;
+      margin-bottom: 0.15rem; line-height: 1.3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* Score displayed as a compact pill */
+    .card-avg-wrap {
+      display: flex; justify-content: center; align-items: baseline;
+      gap: 2px; margin-bottom: 0.3rem;
     }
     .card-avg {
-      font-size: 1.6rem; font-weight: 800;
+      font-size: 1.35rem; font-weight: 800;
       color: var(--green-mid); line-height: 1;
-      margin-bottom: 0.25rem;
     }
+    .card-avg-label {
+      font-size: 0.62rem; font-weight: 600;
+      color: var(--text-muted); letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
     .card-gender {
-      font-size: 0.73rem; color: #999;
-      margin-bottom: 0.45rem;
+      font-size: 0.68rem; color: #aaa;
+      margin-bottom: 0.35rem;
     }
     .card-badges {
       display: flex; justify-content: center;
-      gap: 0.35rem; flex-wrap: wrap;
+      gap: 0.3rem; flex-wrap: wrap;
     }
     .badge-grade {
-      font-size: 0.68rem; font-weight: 700;
-      padding: 0.2em 0.5em; border-radius: 6px;
+      font-size: 0.63rem; font-weight: 700;
+      padding: 0.18em 0.5em; border-radius: 5px;
     }
-    .badge-pass { background: #e8f5e9; color: #2e7d32; font-size: 0.68rem; font-weight: 700; padding: 0.2em 0.5em; border-radius: 6px; }
-    .badge-fail { background: #fce4ec; color: #c62828; font-size: 0.68rem; font-weight: 700; padding: 0.2em 0.5em; border-radius: 6px; }
-    .grade-a { background: #e8f5e9; color: #1b5e20; }
-    .grade-b { background: #f1f8e9; color: #33691e; }
-    .grade-c { background: #f9fbe7; color: #558b2f; }
-    .grade-d { background: #fff8e1; color: #f57f17; }
-    .grade-f { background: #fce4ec; color: #c62828; }
+    .badge-pass {
+      background: #dcfce7; color: #15803d;
+      font-size: 0.63rem; font-weight: 700;
+      padding: 0.18em 0.5em; border-radius: 5px;
+    }
+    .badge-fail {
+      background: #fee2e2; color: #b91c1c;
+      font-size: 0.63rem; font-weight: 700;
+      padding: 0.18em 0.5em; border-radius: 5px;
+    }
+    .grade-a { background: #dcfce7; color: #14532d; }
+    .grade-b { background: #d1fae5; color: #065f46; }
+    .grade-c { background: #ecfccb; color: #365314; }
+    .grade-d { background: #fef9c3; color: #713f12; }
+    .grade-f { background: #fee2e2; color: #991b1b; }
 
     /* ── TIE NOTICE ── */
-    .tie-notice { font-size: 0.72rem; color: #aaa; margin-top: 0.3rem; font-style: italic; }
+    .tie-notice { font-size: 0.7rem; color: #aaa; margin-top: 0.3rem; font-style: italic; }
 
     /* ── LOADING / ERROR ── */
     .loading-box { text-align: center; padding: 4rem 1rem; color: #888; }
-    .spinner-border { width: 3rem; height: 3rem; color: var(--green-mid) !important; }
+    .spinner-border { width: 2.5rem; height: 2.5rem; color: var(--green-accent) !important; }
     .error-box { text-align: center; padding: 3rem 1rem; }
 
     /* ── REFRESH INFO ── */
-    .refresh-info { font-size: 0.74rem; color: #aaa; text-align: center; margin-top: 2rem; }
+    .refresh-info { font-size: 0.72rem; color: #aaa; text-align: center; margin-top: 1.75rem; }
     .refresh-dot {
-      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-      background: #66bb6a; margin-right: 5px; animation: pulse 2s infinite;
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: #66bb6a; margin-right: 4px; animation: pulse 2s infinite;
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── FOOTER ── */
     .site-footer {
-      text-align: center; padding: 1.25rem;
-      font-size: 0.78rem; color: #aaa;
-      border-top: 1.5px solid var(--green-border);
+      text-align: center; padding: 1rem;
+      font-size: 0.75rem; color: #aaa;
+      border-top: 1px solid var(--green-border);
       background: var(--white);
     }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 576px) {
-      .school-name { font-size: 1.35rem; }
-      .school-logo-img { width: 72px; height: 72px; }
-      .card-avg { font-size: 1.25rem; }
-      .card-name { font-size: 0.8rem; }
-      .pyramid-row-1 { max-width: 200px; }
+      .school-name { font-size: 1.2rem; }
+      .school-logo-img { width: 60px; height: 60px; }
+      .card-avg { font-size: 1.1rem; }
+      .card-name { font-size: 0.72rem; }
+      .pyramid-row-1 { max-width: 170px; }
       .pyramid-row-2,
       .pyramid-row-3 { max-width: 100%; }
     }
@@ -313,26 +355,17 @@
     const REFRESH_MS     = 5 * 60 * 1000;
 
     // ─── GOOGLE DRIVE PHOTO URL CONVERTER ────────────────────────────────────
-    // To add a student photo:
-    //   1. Upload the photo to Google Drive and set sharing to "Anyone with link can view"
-    //   2. Copy the shareable link — it looks like:
-    //      https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-    //   3. Paste that full URL into column H of the student's row in the Google Sheet
-    //   The webpage will automatically convert it to a direct image URL.
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
       if (!url.startsWith('http')) return null;
 
-      // Format 1: https://drive.google.com/file/d/FILE_ID/view...
       let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
 
-      // Format 2: https://drive.google.com/open?id=FILE_ID
       m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
 
-      // Format 3: already a direct image URL
       if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
 
       return null;
@@ -377,9 +410,8 @@
         if (!name) continue;
         if (/date|seen|teacher|prepared/i.test(name)) break;
 
-        const avg     = parseFloat(cells[3]?.v) || 0;
-        const rank    = parseInt(cells[5]?.v) || (students.length + 1);
-        // Column H (index 7) = Google Drive photo URL
+        const avg      = parseFloat(cells[3]?.v) || 0;
+        const rank     = parseInt(cells[5]?.v) || (students.length + 1);
         const rawPhoto = (cells[7]?.v || '').toString().trim();
         const photoUrl = driveUrlToDirectImg(rawPhoto);
 
@@ -419,7 +451,7 @@
     // ─── RENDER A SINGLE STUDENT CARD ────────────────────────────────────────
     function renderCard(s) {
       const rankClass = `rank-${Math.min(s.rank, 5)}`;
-      const emoji     = rankEmoji[s.rank] || s.rank;
+      const emoji     = rankEmoji[s.rank] || `#${s.rank}`;
 
       const photoHTML = s.photoUrl
         ? `<img class="card-photo"
@@ -437,11 +469,14 @@
         <div class="student-card ${rankClass}">
           <div class="card-photo-wrap">
             ${photoHTML}
-            <div class="rank-overlay ${rankClass}">${emoji}</div>
+            <div class="rank-overlay ${rankClass}">${emoji} Rank ${s.rank}</div>
           </div>
           <div class="card-body-inner">
-            <div class="card-name">${escHtml(s.name)}</div>
-            <div class="card-avg">${s.avg.toFixed(2)}</div>
+            <div class="card-name" title="${escHtml(s.name)}">${escHtml(s.name)}</div>
+            <div class="card-avg-wrap">
+              <span class="card-avg">${s.avg.toFixed(2)}</span>
+              <span class="card-avg-label">avg</span>
+            </div>
             <div class="card-gender">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
             <div class="card-badges">
               <span class="badge-grade ${gradeClass(s.grade)}">Grade ${escHtml(s.grade)}</span>
@@ -452,16 +487,10 @@
     }
 
     // ─── BUILD PYRAMID ────────────────────────────────────────────────────────
-    // Layout:
-    //   Row 1 (center):  Rank 1
-    //   Row 2 (2 cols):  Rank 2 | Rank 3
-    //   Row 3 (2 cols):  Rank 4 | Rank 5
     function buildPyramid(students) {
-      // Sort by rank so we can pick by rank number
       const byRank = {};
       students.forEach(s => { if (!byRank[s.rank]) byRank[s.rank] = s; });
 
-      // For tied classes, assign visual positions 1-5 by array order
       const ordered = students.slice(0, 5);
       const get = (pos) => byRank[pos] || ordered[pos - 1] || null;
 
