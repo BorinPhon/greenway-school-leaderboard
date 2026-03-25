@@ -399,10 +399,16 @@
         tabsEl.innerHTML = allClassData.map((d, i) => `
           <li class="nav-item">
             <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button" 
-                    onclick="updateSummary(${i})">
+                    id="tab-btn-${i}">
               ${escHtml(d.sheetName)}
             </button>
           </li>`).join('');
+
+        // Add event listeners for tab changes
+        allClassData.forEach((_, i) => {
+          const btn = document.getElementById(`tab-btn-${i}`);
+          btn.addEventListener('shown.bs.tab', () => updateSummary(i));
+        });
 
         const panesEl = document.getElementById('tabPanes');
         panesEl.innerHTML = allClassData.map((d, i) => `
@@ -438,24 +444,10 @@
     function updateSummary(idx) {
       const data = allClassData[idx];
       if (data && data.students) {
-        // Force immediate update of the summary grid
-        const summaryHtml = buildSummary(data.students);
-        document.getElementById('summaryGrid').innerHTML = summaryHtml;
+        document.getElementById('summaryGrid').innerHTML = buildSummary(data.students);
       }
-      
-      // Reset search
       const searchInput = document.getElementById('studentSearch');
       if (searchInput) searchInput.value = '';
-      
-      // Ensure the correct tab-pane is showing (Bootstrap should handle this, but let's be safe)
-      const allPanes = document.querySelectorAll('.tab-pane');
-      allPanes.forEach((p, i) => {
-        if (i === idx) {
-          p.classList.add('show', 'active');
-        } else {
-          p.classList.remove('show', 'active');
-        }
-      });
     }
 
     function filterTable() {
