@@ -224,8 +224,8 @@
 
   <div class="main-content">
     <div id="loadingBox" class="text-center py-5">
-      <div class="spinner-border text-success mb-3"></div>
-      <p class="text-muted small fw-bold">Loading report data...</p>
+      <div class="spinner-border text-success" role="status"></div>
+      <p class="mt-2 text-muted small">Loading performance reports...</p>
     </div>
 
     <div id="errorBox" class="d-none text-center py-5">
@@ -295,14 +295,10 @@
       const json = JSON.parse(text.substring(47, text.length - 2));
       const rows = json.table.rows;
 
-      // Header info (from top of sheet)
-      // Header info (from top of sheet)
       let levelName = sheetName;
-      // Look for level name in the first 5 rows
       for (let i = 0; i < 5; i++) {
         if (rows[i] && rows[i].c && rows[i].c[0] && rows[i].c[0].v) {
           const val = String(rows[i].c[0].v).trim();
-          // If it's a long string and not a student ID, it's likely the level name
           if (val.length > 5 && !/^\d+$/.test(val)) {
             levelName = val;
             break;
@@ -312,11 +308,9 @@
       
       const academicYear = rows[2]?.c[0]?.v || '';
 
-      // Find all students (looking for rows that start with a number like '01', '02')
       const students = rows.map(r => {
         if (!r || !r.c) return null;
         const idVal = String(r.c[0]?.v || '').trim();
-        // Check if first column is a numeric ID (like '01' or '1')
         if (!idVal || !/^\d+$/.test(idVal)) return null;
 
         const avg = r.c[3]?.v || 0;
@@ -395,19 +389,10 @@
         const tabsEl = document.getElementById('classTabs');
         tabsEl.innerHTML = allClassData.map((d, i) => `
           <li class="nav-item">
-            <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button" 
-                    id="tab-btn-${i}">
+            <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">
               ${escHtml(d.sheetName)}
             </button>
           </li>`).join('');
-
-        // Add event listeners for tab changes
-        allClassData.forEach((_, i) => {
-          const btn = document.getElementById(`tab-btn-${i}`);
-          if (btn) {
-            btn.addEventListener('click', () => onTabSwitch());
-          }
-        });
 
         const panesEl = document.getElementById('tabPanes');
         panesEl.innerHTML = allClassData.map((d, i) => `
@@ -431,6 +416,15 @@
               </div>
             </div>
           </div>`).join('');
+
+        // Listen for tab switches to clear search
+        const tabBtns = tabsEl.querySelectorAll('.nav-link');
+        tabBtns.forEach(btn => {
+          btn.addEventListener('shown.bs.tab', () => {
+            document.getElementById('studentSearch').value = '';
+          });
+        });
+
         loading.classList.add('d-none');
         content.classList.remove('d-none');
       } catch (err) {
@@ -441,14 +435,10 @@
       }
     }
 
-    function onTabSwitch() {
-      const searchInput = document.getElementById('studentSearch');
-      if (searchInput) searchInput.value = '';
-    }
-
     function filterTable() {
       const input = document.getElementById('studentSearch').value.toUpperCase();
       const activePane = document.querySelector('.tab-pane.active');
+      if (!activePane) return;
       const rows = activePane.querySelectorAll('.student-table-body tr');
 
       rows.forEach(row => {
