@@ -180,6 +180,18 @@
     .upload-overlay span { font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: 0.5px; }
     .upload-input { display: none; }
 
+    /* Google Drive photo badge — bottom-left corner of photo */
+    .drive-badge {
+      position: absolute; bottom: 5px; left: 6px;
+      background: rgba(255,255,255,.92);
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.62rem; color: #4285F4;
+      box-shadow: 0 1px 4px rgba(0,0,0,.18);
+      z-index: 2; pointer-events: none;
+    }
+
     /* Rank badge — top-right of photo */
     .rank-badge {
       position: absolute; top: 8px; right: 8px;
@@ -608,15 +620,26 @@
 
     /* ════════════════════════════════════════════════════════════════════
        GOOGLE DRIVE PHOTO HELPER
+       Converts any Google Drive share link into a direct embeddable URL.
+       Priority chain: Drive URL → local upload → placeholder.
     ════════════════════════════════════════════════════════════════════ */
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
       if (!url.startsWith('http')) return null;
+      // Format 1: /file/d/{fileId}/view  or  /file/d/{fileId}
       let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      // Format 2: ?id={fileId}  (older Drive share links)
       m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      // Format 3: /open?id={fileId}
+      m = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      // Format 4: uc?export=view&id={fileId}
+      m = url.match(/uc\?.*[?&]id=([a-zA-Z0-9_-]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      // Format 5: direct image URL (jpg/png/webp etc.)
       if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
       return null;
     }
@@ -687,14 +710,19 @@
         else if (lbl === 'rank')        colIndex.rank   = i;
         else if (lbl === 'result')      colIndex.result = i;
       });
+      // Also detect Photo URL column by label
+      cols.forEach((c, i) => {
+        const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
+        if (lbl === 'photourl' || lbl === 'photo' || lbl === 'photolink') colIndex.photo = i;
+      });
       if (colIndex.name   === undefined) colIndex.name   = 1;
       if (colIndex.gender === undefined) colIndex.gender = 2;
       if (colIndex.avg    === undefined) colIndex.avg    = 3;
       if (colIndex.grade  === undefined) colIndex.grade  = 4;
       if (colIndex.rank   === undefined) colIndex.rank   = 5;
       if (colIndex.result === undefined) colIndex.result = 6;
-      colIndex.n     = 0;
-      colIndex.photo = 7;
+      if (colIndex.photo  === undefined) colIndex.photo  = 7;
+      colIndex.n = 0;
 
       const students = [];
       for (const row of rows) {
@@ -806,6 +834,8 @@
       const phId     = `ph_${safeKey}`;
       const uploadId = `up_${safeKey}`;
 
+      // Priority: local upload > Drive URL > placeholder
+      const isDrivePhoto = !localPhoto && !!s.photoUrl;
       const photoContent = displayUrl
         ? `<img class="card-photo" id="${imgId}"
                src="${escHtml(displayUrl)}"
@@ -814,10 +844,11 @@
            <div class="card-photo-placeholder" id="${phId}" style="display:none">
              <i class="bi bi-person-fill ph-icon"></i>
              <span class="ph-label">No Photo</span>
-           </div>`
+           </div>
+           ${isDrivePhoto ? '<div class="drive-badge" title="Photo from Google Drive"><i class="bi bi-google"></i></div>' : ''}`
         : `<div class="card-photo-placeholder" id="${phId}">
              <i class="bi bi-person-fill ph-icon"></i>
-             <span class="ph-label">No Photo</span>
+             <span class="ph-label">Upload Photo</span>
            </div>`;
 
       const rankBadge = emoji
@@ -833,7 +864,7 @@
             ${photoContent}
             <div class="upload-overlay">
               <i class="bi bi-camera-fill"></i>
-              <span>Upload Photo</span>
+              <span>${isDrivePhoto ? 'Replace Photo' : 'Upload Photo'}</span>
             </div>
             ${rankBadge}
           </div>
