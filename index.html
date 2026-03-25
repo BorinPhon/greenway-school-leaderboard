@@ -86,7 +86,6 @@
     .tab-wrapper {
       background: var(--c-green);
       padding: 0 0.5rem;
-      position: sticky; top: 0; z-index: 100;
       border-bottom: 2px solid var(--c-green-mid);
     }
     .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
@@ -421,10 +420,15 @@
     /* ── MONTH NAVIGATION BAR ──────────────────────────────────────────────── */
     .month-nav {
       background: var(--c-surface);
-      border-bottom: 1px so    .month-nav {
-      background: var(--c-surface); border-bottom: 2px solid var(--c-border);
-      padding: 0.6rem 1rem;
-      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      border-bottom: 2px solid var(--c-border);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     .month-nav-label { font-size: 0.72rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; }
     
