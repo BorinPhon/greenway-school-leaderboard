@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greenway School – Top 5 Outstanding Students</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gold:    #FFD700;
+      --silver:  #C0C0C0;
+      --bronze:  #CD7F32;
+      --navy:    #0d1b3e;
+      --navy2:   #162447;
+      --accent:  #1f6feb;
+      --body-bg: #eef2ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--body-bg);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: linear-gradient(135deg, #0d1b3e 0%, #162447 55%, #1a3a6e 100%);
+      color: #fff;
+      padding: 2.5rem 1rem 2.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; }
+    .school-logo  { font-size: 3rem; line-height: 1; margin-bottom: 0.3rem; }
+    .school-name  {
+      font-size: 2rem; font-weight: 800; letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    }
+    .school-sub   { font-size: 0.9rem; opacity: 0.8; margin-top: 0.15rem; }
+    .badge-period {
+      display: inline-block;
+      background: rgba(255,215,0,0.18);
+      border: 1px solid rgba(255,215,0,0.45);
+      color: var(--gold);
+      font-size: 0.8rem; font-weight: 600;
+      padding: 0.25rem 1rem;
+      border-radius: 50px;
+      margin-top: 0.65rem;
+      letter-spacing: 0.4px;
+    }
+
+    /* ── TABS ── */
+    .tab-wrapper {
+      background: var(--navy);
+      padding: 0 0.5rem;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.28);
+    }
+    .nav-tabs {
+      border-bottom: none;
+      gap: 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tabs .nav-link {
+      color: rgba(255,255,255,0.6);
+      border: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      padding: 0.9rem 1.3rem;
+      font-size: 0.875rem; font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.25); }
+    .nav-tabs .nav-link.active { color: var(--gold); background: transparent; border-bottom-color: var(--gold); }
+
+    /* ── MAIN ── */
+    .main-content {
+      max-width: 880px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem;
+    }
+
+    /* ── CLASS TITLE ── */
+    .class-title { text-align: center; margin-bottom: 1.75rem; }
+    .class-title h2 { font-size: 1.45rem; font-weight: 700; color: var(--navy); margin: 0 0 0.2rem; }
+    .class-title p  { font-size: 0.82rem; color: #6c757d; margin: 0; }
+
+    /* ── PODIUM ── */
+    .podium-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .podium-card {
+      flex: 1;
+      max-width: 230px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 1.5rem 1rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+      position: relative;
+      transition: transform 0.22s, box-shadow 0.22s;
+    }
+    .podium-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,0.13); }
+
+    .podium-card.rank-1 { border-top: 4px solid var(--gold);   order: 2; padding-top: 2rem; }
+    .podium-card.rank-2 { border-top: 4px solid var(--silver); order: 1; }
+    .podium-card.rank-3 { border-top: 4px solid var(--bronze); order: 3; }
+
+    .rank-badge {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin: 0 auto 0.7rem;
+    }
+    .rank-1 .rank-badge { background: rgba(255,215,0,0.14); }
+    .rank-2 .rank-badge { background: rgba(192,192,192,0.14); }
+    .rank-3 .rank-badge { background: rgba(205,127,50,0.14); }
+
+    .podium-name {
+      font-size: 0.92rem; font-weight: 700; color: #1a1a2e;
+      margin-bottom: 0.3rem; line-height: 1.3;
+    }
+    .podium-avg {
+      font-size: 1.7rem; font-weight: 800; color: var(--accent);
+      line-height: 1; margin-bottom: 0.3rem;
+    }
+    .podium-meta { font-size: 0.75rem; color: #6c757d; margin-bottom: 0.55rem; }
+
+    /* ── LOWER RANKS ── */
+    .lower-ranks { display: flex; flex-direction: column; gap: 0.7rem; }
+    .rank-row {
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.9rem 1.25rem;
+      display: flex; align-items: center; gap: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rank-row:hover { transform: translateX(5px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .rank-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: #eef2ff; color: var(--navy);
+      font-weight: 700; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-row-name  { flex: 1; font-weight: 600; font-size: 0.95rem; color: #1a1a2e; }
+    .rank-row-avg   { font-size: 1.1rem; font-weight: 700; color: var(--accent); min-width: 46px; text-align: right; }
+
+    /* ── BADGES ── */
+    .badge-grade {
+      font-size: 0.7rem; font-weight: 700;
+      padding: 0.2em 0.55em; border-radius: 6px;
+    }
+    .badge-pass { background: #d1fae5; color: #065f46; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-gender { font-size: 0.74rem; color: #6c757d; }
+
+    /* ── TIE NOTICE ── */
+    .tie-notice {
+      font-size: 0.72rem; color: #9ca3af;
+      margin-top: 0.3rem; font-style: italic;
+    }
+
+    /* ── LOADING / ERROR ── */
+    .loading-box { text-align: center; padding: 4rem 1rem; color: #6c757d; }
+    .spinner-border { width: 3rem; height: 3rem; }
+    .error-box { text-align: center; padding: 3rem 1rem; }
+
+    /* ── REFRESH INFO ── */
+    .refresh-info {
+      font-size: 0.74rem; color: #9ca3af;
+      text-align: center; margin-top: 2rem;
+    }
+    .refresh-dot {
+      display: inline-block;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #22c55e; margin-right: 5px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      text-align: center; padding: 1.25rem;
+      font-size: 0.78rem; color: #9ca3af;
+      border-top: 1px solid #e5e7eb; background: #fff;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 576px) {
+      .school-name  { font-size: 1.4rem; }
+      .podium-row   { gap: 0.5rem; }
+      .podium-card  { padding: 1rem 0.55rem; border-radius: 12px; }
+      .podium-avg   { font-size: 1.3rem; }
+      .podium-name  { font-size: 0.8rem; }
+      .rank-row     { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="school-logo">🏫</div>
+      <div class="school-name">Greenway School</div>
+      <div class="school-sub" id="academicYear">Academic Year 2025–2026</div>
+      <div class="badge-period" id="periodBadge">⭐ Top 5 of March</div>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tab-wrapper">
+    <ul class="nav nav-tabs" id="classTabs" role="tablist"></ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div id="loadingBox" class="loading-box">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Loading…</span>
+      </div>
+      <div class="fw-semibold">Loading student data…</div>
+      <div class="text-muted small mt-1">Fetching live data from Google Sheets</div>
+    </div>
+
+    <div id="errorBox" class="error-box d-none">
+      <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2.5rem"></i>
+      <div class="fw-semibold mt-2 text-danger">Failed to load data</div>
+      <div class="text-muted small mt-1" id="errorMsg"></div>
+      <button class="btn btn-outline-primary btn-sm mt-3" onclick="loadAllData()">
+        <i class="bi bi-arrow-clockwise me-1"></i>Retry
+      </button>
+    </div>
+
+    <div id="tabContent" class="tab-content d-none"></div>
+
+    <div class="refresh-info d-none" id="refreshInfo">
+      <span class="refresh-dot"></span>
+      Live data &nbsp;·&nbsp; Auto-refreshes every 5 min &nbsp;·&nbsp;
+      Last updated: <span id="lastUpdated">—</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    © 2026 Greenway School &nbsp;·&nbsp; Prepared by <strong>Smon Chiu</strong>
+    &nbsp;·&nbsp; Teacher: <strong>Ki Sochea</strong>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ─── CONFIG ──────────────────────────────────────────────
+    const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
+    const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
+    const REFRESH_MS     = 5 * 60 * 1000; // 5 minutes
+
+    // ─── FETCH via Google Sheets gviz (no API key needed) ────
+    async function fetchSheet(sheetName) {
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status} for sheet "${sheetName}"`);
+      const text = await res.text();
+      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
+      if (!match) throw new Error(`Unexpected response format for sheet "${sheetName}"`);
+      const json = JSON.parse(match[1]);
+      if (json.status !== 'ok') throw new Error(`Sheet error: ${json.errors?.[0]?.message || 'unknown'}`);
+      return parseGviz(json, sheetName);
+    }
+
+    function parseGviz(json, sheetName) {
+      const cols = json.table.cols;
+      const rows = json.table.rows;
+
+      // The first column header contains metadata: "SchoolName Period AcademicYear Level N"
+      const headerLabel = cols[0]?.label || '';
+
+      // Parse metadata from header label
+      let schoolName = 'Greenway School';
+      let period = '';
+      let academicYear = '';
+      let levelName = '';
+
+      const levelMatch = headerLabel.match(/Level:\s*(.+?)\s+N$/i);
+      if (levelMatch) levelName = levelMatch[1].trim();
+
+      const yearMatch = headerLabel.match(/Academic Year\s*:\s*(\S+)/i);
+      if (yearMatch) academicYear = 'Academic Year : ' + yearMatch[1];
+
+      const periodMatch = headerLabel.match(/Top 5 of (\w+)/i);
+      if (periodMatch) period = 'Top 5 of ' + periodMatch[1];
+
+      const schoolMatch = headerLabel.match(/^([A-Za-z ]+?)\s+Top 5/i);
+      if (schoolMatch) schoolName = schoolMatch[1].trim();
+
+      // Parse student rows — stop at non-student rows
+      const students = [];
+      for (const row of rows) {
+        const cells = row.c || [];
+        const name = (cells[1]?.v || '').toString().trim();
+        if (!name) continue;
+        if (/date|seen|teacher|prepared/i.test(name)) break;
+
+        const avg = parseFloat(cells[3]?.v) || 0;
+        const rank = parseInt(cells[5]?.v) || (students.length + 1);
+        students.push({
+          n:      (cells[0]?.v || '').toString().trim(),
+          name,
+          gender: (cells[2]?.v || '').toString().trim(),
+          avg,
+          grade:  (cells[4]?.v || '').toString().trim(),
+          rank,
+          result: (cells[6]?.v || '').toString().trim(),
+        });
+      }
+
+      return { sheetName, schoolName, period, academicYear, levelName, students };
+    }
+
+    // ─── HELPERS ─────────────────────────────────────────────
+    const rankEmoji  = { 1: '🥇', 2: '🥈', 3: '🥉' };
+    const genderIcon = g => (g || '').toLowerCase() === 'female' ? '👩' : '👨';
+
+    const gradeColors = {
+      A: { bg: '#ede9fe', fg: '#5b21b6' },
+      B: { bg: '#dbeafe', fg: '#1e40af' },
+      C: { bg: '#dcfce7', fg: '#166534' },
+      D: { bg: '#fef9c3', fg: '#854d0e' },
+      F: { bg: '#fee2e2', fg: '#991b1b' },
+    };
+    function gradeStyle(g) {
+      const c = gradeColors[(g || '').toUpperCase()] || { bg: '#f3f4f6', fg: '#374151' };
+      return `background:${c.bg};color:${c.fg}`;
+    }
+    function resultBadge(result) {
+      return (result || '').toLowerCase() === 'pass'
+        ? `<span class="badge badge-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
+        : `<span class="badge badge-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
+    }
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ─── RENDER PODIUM CARD (rank 1-3) ───────────────────────
+    function renderPodiumCard(s, visualRank) {
+      return `
+        <div class="podium-card rank-${visualRank}">
+          <div class="rank-badge">${rankEmoji[visualRank] || visualRank}</div>
+          <div class="podium-name">${escHtml(s.name)}</div>
+          <div class="podium-avg">${s.avg.toFixed(2)}</div>
+          <div class="podium-meta">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
+          <div class="d-flex justify-content-center gap-1 flex-wrap">
+            <span class="badge badge-grade" style="${gradeStyle(s.grade)}">Grade ${escHtml(s.grade)}</span>
+            ${resultBadge(s.result)}
+          </div>
+        </div>`;
+    }
+
+    // ─── RENDER LOWER RANK ROW (rank 4-5) ────────────────────
+    function renderRankRow(s) {
+      return `
+        <div class="rank-row">
+          <div class="rank-num">${s.rank}</div>
+          <div>
+            <div class="rank-row-name">${escHtml(s.name)}</div>
+            <div class="badge-gender">${genderIcon(s.gender)} ${escHtml(s.gender)}</div>
+          </div>
+          <div class="ms-auto d-flex align-items-center gap-2 flex-wrap justify-content-end">
+            <span class="badge badge-grade" style="${gradeStyle(s.grade)}">Grade ${escHtml(s.grade)}</span>
+            ${resultBadge(s.result)}
+            <div class="rank-row-avg">${s.avg.toFixed(2)}</div>
+          </div>
+        </div>`;
+    }
+
+    // ─── BUILD ONE TAB PANE ───────────────────────────────────
+    function buildTabPane(classData, index) {
+      const { sheetName, levelName, students } = classData;
+      const displayName = levelName
+        ? (levelName.toLowerCase().startsWith('beginner') ? levelName : `Level ${levelName}`)
+        : sheetName;
+
+      const top3 = students.filter(s => s.rank <= 3);
+      const rest  = students.filter(s => s.rank > 3);
+      const hasTie = top3.length > 0 && top3.every(s => s.rank === top3[0].rank);
+
+      // Podium order: 2-left, 1-center, 3-right
+      let podiumTriple;
+      if (hasTie) {
+        podiumTriple = [
+          { s: top3[1] || top3[0], vr: 2 },
+          { s: top3[0],            vr: 1 },
+          { s: top3[2] || top3[0], vr: 3 },
+        ];
+      } else {
+        podiumTriple = [
+          { s: top3.find(s => s.rank === 2), vr: 2 },
+          { s: top3.find(s => s.rank === 1), vr: 1 },
+          { s: top3.find(s => s.rank === 3), vr: 3 },
+        ].filter(x => x.s);
+      }
+
+      const podiumHTML = podiumTriple.map(({ s, vr }) => renderPodiumCard(s, vr)).join('');
+      const lowerHTML  = rest.map(renderRankRow).join('');
+
+      const tieNote = hasTie
+        ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>`
+        : '';
+
+      return `
+        <div class="tab-pane fade ${index === 0 ? 'show active' : ''}"
+             id="tab-pane-${index}" role="tabpanel" aria-labelledby="tab-btn-${index}">
+          <div class="class-title">
+            <h2>${escHtml(displayName)}</h2>
+            <p>Top 5 Outstanding Students</p>
+            ${tieNote}
+          </div>
+          <div class="podium-row">${podiumHTML}</div>
+          ${lowerHTML ? `<div class="lower-ranks">${lowerHTML}</div>` : ''}
+        </div>`;
+    }
+
+    // ─── BUILD ALL TABS ───────────────────────────────────────
+    function buildUI(allClasses) {
+      const tabsEl    = document.getElementById('classTabs');
+      const contentEl = document.getElementById('tabContent');
+      tabsEl.innerHTML    = '';
+      contentEl.innerHTML = '';
+
+      allClasses.forEach((data, i) => {
+        const { levelName, sheetName } = data;
+        const displayName = levelName
+          ? (levelName.toLowerCase().startsWith('beginner') ? levelName : `Level ${levelName}`)
+          : sheetName;
+
+        const li = document.createElement('li');
+        li.className = 'nav-item';
+        li.innerHTML = `
+          <button class="nav-link ${i === 0 ? 'active' : ''}"
+            id="tab-btn-${i}" data-bs-toggle="tab"
+            data-bs-target="#tab-pane-${i}" type="button" role="tab"
+            aria-controls="tab-pane-${i}" aria-selected="${i === 0}">
+            ${escHtml(displayName)}
+          </button>`;
+        tabsEl.appendChild(li);
+        contentEl.insertAdjacentHTML('beforeend', buildTabPane(data, i));
+      });
+
+      // Update header from first class
+      const d = allClasses[0];
+      if (d) {
+        if (d.academicYear) document.getElementById('academicYear').textContent = d.academicYear;
+        if (d.period)       document.getElementById('periodBadge').textContent  = '⭐ ' + d.period;
+      }
+    }
+
+    // ─── LOAD ALL DATA ────────────────────────────────────────
+    async function loadAllData() {
+      const loadingBox  = document.getElementById('loadingBox');
+      const errorBox    = document.getElementById('errorBox');
+      const tabContent  = document.getElementById('tabContent');
+      const refreshInfo = document.getElementById('refreshInfo');
+
+      loadingBox.classList.remove('d-none');
+      errorBox.classList.add('d-none');
+
+      try {
+        const results = await Promise.all(SHEET_NAMES.map(fetchSheet));
+        buildUI(results);
+
+        loadingBox.classList.add('d-none');
+        tabContent.classList.remove('d-none');
+        refreshInfo.classList.remove('d-none');
+
+        document.getElementById('lastUpdated').textContent =
+          new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      } catch (err) {
+        console.error(err);
+        loadingBox.classList.add('d-none');
+        errorBox.classList.remove('d-none');
+        document.getElementById('errorMsg').textContent = err.message;
+      }
+    }
+
+    // ─── INIT + AUTO-REFRESH ──────────────────────────────────
+    loadAllData();
+    setInterval(loadAllData, REFRESH_MS);
+  </script>
+</body>
+</html>
