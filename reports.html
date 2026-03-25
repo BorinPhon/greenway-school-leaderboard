@@ -542,19 +542,18 @@
               <h2>${escHtml(FIXED_CLASS_NAMES[i])}</h2>
               <p>${escHtml(c.schoolName)} · ${MONTHS[activeMonthIdx].label}</p>
             </div>
-              <div class="report-meta">
-                <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
-                <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
-              </div>
+            <div class="report-meta">
+              <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
+              <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
             </div>
-            ${buildSummary(c.students)}
-            ${buildTable(c.students)}
-            <div class="class-footer">
-              ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
-              ${c.preparedBy ? `<span>Checked by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
-            </div>
-          </div>`;
-      }).join('');
+          </div>
+          ${buildSummary(c.students)}
+          ${buildTable(c.students)}
+          <div class="class-footer">
+            ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
+            ${c.preparedBy ? `<span>Checked by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
+          </div>
+        </div>`).join('');
     }
 
     function filterTable() {
