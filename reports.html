@@ -98,6 +98,35 @@
     /* ── MAIN ────────────────────────────────────────────────────────────── */
     .main-content { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
 
+    /* ── SEARCH BAR ──────────────────────────────────────────────────────── */
+    .search-bar-wrap {
+      margin-bottom: 1rem;
+      display: flex; gap: 0.75rem; align-items: center;
+    }
+    .search-input-group {
+      flex: 1; position: relative;
+    }
+    .search-input-group i {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      color: var(--c-muted); font-size: 0.9rem;
+    }
+    .search-input {
+      width: 100%; padding: 0.6rem 1rem 0.6rem 2.5rem;
+      border-radius: 10px; border: 1px solid #e0ede0;
+      background: var(--c-surface); font-size: 0.85rem;
+      transition: border-color .2s;
+    }
+    .search-input:focus { outline: none; border-color: var(--c-green); }
+
+    .btn-print {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--c-surface); border: 1px solid var(--c-border);
+      color: var(--c-green-dark); font-size: 0.8rem; font-weight: 600;
+      padding: 0.55rem 1rem; border-radius: 10px; cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-print:hover { background: var(--c-green-light); }
+
     /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
     .loading-box {
       text-align: center; padding: 3rem 1rem;
@@ -150,14 +179,16 @@
       background: var(--c-green); color: #fff;
       padding: 0.65rem 0.85rem; font-weight: 600; font-size: 0.75rem;
       text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap;
+      position: sticky; top: 0; z-index: 10;
     }
     .report-table thead th:first-child { border-radius: 0; }
     .report-table tbody tr { border-bottom: 1px solid #f0f4f0; transition: background .15s; }
+    .report-table tbody tr:nth-child(even) { background: #fafdfa; }
     .report-table tbody tr:last-child { border-bottom: none; }
-    .report-table tbody tr:hover { background: var(--c-green-light); }
+    .report-table tbody tr:hover { background: var(--c-green-light) !important; }
     .report-table tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
     .report-table tbody tr.top5-row { background: #f0fdf4; }
-    .report-table tbody tr.top5-row:hover { background: #dcfce7; }
+    .report-table tbody tr.top5-row:hover { background: #dcfce7 !important; }
 
     /* rank badge */
     .rank-badge {
@@ -216,377 +247,241 @@
     }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; animation: pulse 2s infinite; }
     .live-dot.stale { background: #f59e0b; animation: none; }
-    .live-dot.error { background: #ef4444; animation: none; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    .btn-refresh {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: var(--c-green); color: #fff; border: none; border-radius: 6px;
-      padding: 0.28rem 0.75rem; font-size: 0.72rem; font-weight: 600; cursor: pointer;
-      transition: background .18s; margin-left: auto;
+    .live-dot.error { background: #dc2626; animation: none; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .refresh-btn {
+      background: none; border: none; padding: 0; color: var(--c-green);
+      cursor: pointer; font-size: 0.9rem; transition: transform .3s;
     }
-    .btn-refresh:hover { background: var(--c-green-dark); }
-    .btn-refresh.spinning i { animation: spin .6s linear infinite; }
+    .refresh-btn.spinning i { animation: spin 1s linear infinite; display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
     .site-footer {
-      text-align: center; padding: 1rem; font-size: 0.74rem; color: #aaa;
-      border-top: 1px solid var(--c-border); background: var(--c-surface);
+      text-align: center; padding: 1.5rem; font-size: 0.75rem; color: var(--c-muted);
+      border-top: 1px solid #e0ede0; background: var(--c-surface);
     }
 
-    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
-    @media (max-width: 700px) {
-      .summary-grid { grid-template-columns: repeat(2, 1fr); }
-      .report-header { flex-direction: column; }
-      .report-table { font-size: 0.76rem; }
-      .report-table thead th, .report-table tbody td { padding: 0.5rem 0.6rem; }
+    /* ── PRINT STYLES ────────────────────────────────────────────────────── */
+    @media print {
+      .site-header, .month-nav, .tab-wrapper, .search-bar-wrap, .status-bar, .nav-back { display: none !important; }
+      body { background: #fff; padding: 0; }
+      .main-content { max-width: 100%; margin: 0; padding: 0; }
+      .table-wrap { border: 1px solid #000; box-shadow: none; border-radius: 0; }
+      .report-table thead th { background: #eee !important; color: #000 !important; border: 1px solid #000; position: static; }
+      .report-table tbody td { border: 1px solid #000; }
+      .report-header { border: 1px solid #000; border-radius: 0; }
+      .summary-card { border: 1px solid #000; border-radius: 0; }
+      .tab-pane { display: block !important; opacity: 1 !important; }
+      .tab-pane:not(.active) { display: none !important; }
     }
-    @media (max-width: 480px) {
+
+    @media (max-width: 576px) {
       .summary-grid { grid-template-columns: repeat(2, 1fr); }
-      .school-name { font-size: 1.15rem; }
+      .report-header { flex-direction: column; align-items: flex-start; }
+      .month-nav { justify-content: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
+  <!-- HEADER -->
   <header class="site-header">
-    <a href="index.html" class="nav-back">
-      <i class="bi bi-arrow-left"></i> Leaderboard
-    </a>
+    <a href="index.html" class="nav-back"><i class="bi bi-arrow-left"></i> Leaderboard</a>
     <div class="header-inner">
-      <img src="logo.png" alt="School Logo" class="school-logo-img" onerror="this.style.display='none'" />
+      <img src="logo.png" alt="Logo" class="school-logo-img" />
       <div class="school-name" id="schoolName">Greenway School</div>
-      <div class="school-sub"  id="academicYear">Academic Year 2025–2026</div>
-      <div class="page-badge"><i class="bi bi-file-earmark-bar-graph me-1"></i>Monthly Reports</div>
+      <div class="school-sub" id="academicYear">Academic Year 2025–2026</div>
+      <div class="page-badge"><i class="bi bi-file-earmark-bar-graph me-1"></i>Monthly Performance Reports</div>
     </div>
   </header>
 
-  <!-- ── MONTH NAVIGATION ── -->
-  <div class="month-nav" id="monthNav">
-    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Period:</span>
-  </div>
+  <!-- MONTH NAVIGATION -->
+  <nav class="month-nav" id="monthNav">
+    <span class="month-nav-label">Select Month:</span>
+    <!-- JS injected -->
+  </nav>
 
-  <!-- ── CLASS TABS ── -->
+  <!-- TABS -->
   <div class="tab-wrapper">
     <ul class="nav nav-tabs" id="classTabs" role="tablist"></ul>
   </div>
 
-  <!-- ── MAIN ── -->
+  <!-- MAIN -->
   <div class="main-content">
 
+    <!-- SEARCH & ACTIONS -->
+    <div class="search-bar-wrap d-none" id="actionBar">
+      <div class="search-input-group">
+        <i class="bi bi-search"></i>
+        <input type="text" class="search-input" id="studentSearch" placeholder="Search student name..." oninput="filterTable()">
+      </div>
+      <button class="btn-print" onclick="window.print()">
+        <i class="bi bi-printer"></i> Print Report
+      </button>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar d-none" id="statusBar">
+      <div class="live-dot" id="liveDot"></div>
+      <span id="statusText">Live data</span>
+      <span class="ms-auto">Updated: <strong id="lastUpdated">—</strong></span>
+      <button class="refresh-btn ms-2" id="refreshBtn" onclick="manualRefresh()" title="Refresh now">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+
     <div id="loadingBox" class="loading-box">
-      <div class="spinner-border mb-2" role="status" style="color:#388e3c"><span class="visually-hidden">Loading…</span></div>
-      <div class="fw-semibold" style="color:#388e3c">Loading report data…</div>
-      <div class="text-muted small mt-1">Fetching from Google Sheets</div>
+      <div class="spinner-border text-success" role="status"></div>
+      <div class="fw-semibold mt-2">Generating Report...</div>
     </div>
 
     <div id="errorBox" class="error-box d-none">
-      <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2rem"></i>
-      <div class="fw-semibold mt-2 text-danger">Failed to load report</div>
-      <div class="text-muted small mt-1" id="errorMsg"></div>
-      <button class="btn-refresh mt-3" onclick="manualRefresh()">
-        <i class="bi bi-arrow-clockwise"></i> Retry
-      </button>
+      <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+      <div class="fw-bold mt-2">Report Error</div>
+      <p class="text-muted small" id="errorMsg"></p>
+      <button class="btn btn-sm btn-outline-danger mt-2" onclick="loadAllData(true)">Try Again</button>
     </div>
 
-    <!-- Status bar -->
-    <div class="status-bar d-none" id="statusBar">
-      <span class="live-dot" id="liveDot"></span>
-      <span id="statusText">Live data</span>
-      <span style="color:#ccc">|</span>
-      <span>Last updated: <strong id="lastUpdated">—</strong></span>
-      <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">
-        <i class="bi bi-arrow-clockwise" id="refreshIcon"></i> Refresh
-      </button>
-    </div>
-
-    <!-- Tab content -->
     <div id="tabContent" class="tab-content d-none"></div>
 
   </div>
 
-  <!-- ── FOOTER ── -->
-  <footer class="site-footer">© 2026 Greenway School — Monthly Reports</footer>
+  <footer class="site-footer" id="siteFooter">
+    © 2026 Greenway School &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    /* ════════════════════════════════════════════════════════════════════
-       CONFIG — same MONTHS array as index.html
-       TO ADD A NEW MONTH: add one entry with the new spreadsheetId.
-    ════════════════════════════════════════════════════════════════════ */
+    // ─── CONFIG ──────────────────────────────────────────────────────────────
     const MONTHS = [
-      {
-        label:         'January 2026',
-        spreadsheetId: '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY',
-        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:     false
-      },
-      {
-        label:         'February 2026',
-        spreadsheetId: '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g',
-        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:     false
-      },
-      {
-        label:         'March 2026',
-        spreadsheetId: '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM',
-        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-        isCurrent:     true   // ← current live month
-      },
-      // ── NEXT MONTH TEMPLATE ──
-      // {
-      //   label:         'April 2026',
-      //   spreadsheetId: 'PASTE_NEW_ID_HERE',
-      //   sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
-      //   isCurrent:     true
-      // },
+      { label: 'March 2026', spreadsheetId: '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM', sheets: ['BA','BB','Grade 1','Grade 2','Grade 3','Grade 4'], isCurrent: true }
     ];
 
-    const CACHE_PREFIX = 'gws_report_cache_v1_';
-    const CURRENT_MONTH_IDX = MONTHS.findIndex(m => m.isCurrent);
-    let activeMonthIdx = CURRENT_MONTH_IDX >= 0 ? CURRENT_MONTH_IDX : MONTHS.length - 1;
-    let isFirstLoad = true;
+    let activeMonthIdx = 0;
+    let isFirstLoad    = true;
+    let allDataCache   = {}; // monthIdx -> data
 
-    /* ════════════════════════════════════════════════════════════════════
-       HELPERS
-    ════════════════════════════════════════════════════════════════════ */
-    function escHtml(s) {
-      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-    function fmtTime(d) {
-      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    function gradeClass(g) {
-      const map = { A:'grade-A', B:'grade-B', C:'grade-C', D:'grade-D', F:'grade-F' };
-      return map[(g||'').trim().toUpperCase()] || 'grade-F';
-    }
-    function rankClass(r) {
-      if (r === 1) return 'rank-1';
-      if (r === 2) return 'rank-2';
-      if (r === 3) return 'rank-3';
-      return 'rank-other';
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       CACHE
-    ════════════════════════════════════════════════════════════════════ */
-    function cacheKey(idx) { return CACHE_PREFIX + idx; }
-
+    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function fmtTime(d) { return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+    function rankClass(r) { if(r===1) return 'rank-1'; if(r===2) return 'rank-2'; if(r===3) return 'rank-3'; return 'rank-other'; }
+    function gradeClass(g) { return `grade-${(g||'F').toUpperCase()}`; }
+    function cacheKey(idx) { return `report_cache_${idx}`; }
+    function saveCache(idx, data) { try { localStorage.setItem(cacheKey(idx), JSON.stringify({ time: Date.now(), data })); } catch(e){} }
     function loadCache(idx) {
       try {
-        const raw = JSON.parse(localStorage.getItem(cacheKey(idx)) || '{}');
-        if (MONTHS[idx]?.isCurrent) {
-          const d = new Date();
-          const ck = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-          if (raw.calKey && raw.calKey !== ck) return null;
-        }
-        return raw.data || null;
-      } catch { return null; }
+        const raw = localStorage.getItem(cacheKey(idx));
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.time > 15 * 60 * 1000) return null; // 15 min cache
+        return parsed.data;
+      } catch(e) { return null; }
     }
 
-    function saveCache(idx, data) {
-      try {
-        const d = new Date();
-        const ck = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-        localStorage.setItem(cacheKey(idx), JSON.stringify({ calKey: ck, savedAt: new Date().toISOString(), data }));
-      } catch {}
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       FETCH & PARSE
-    ════════════════════════════════════════════════════════════════════ */
+    // ─── DATA FETCHING ───────────────────────────────────────────────────────
     async function fetchSheet(sheetName, spreadsheetId) {
-      const bust = Math.floor(Date.now() / 60000);
-      const url  = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
-      const res  = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status} for "${sheetName}"`);
-      const text  = await res.text();
-      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
-      if (!match) throw new Error(`Unexpected response for "${sheetName}"`);
-      const json = JSON.parse(match[1]);
-      if (json.status !== 'ok') throw new Error(`Sheet error: ${json.errors?.[0]?.message || 'unknown'}`);
-      return parseSheet(json, sheetName);
-    }
+      const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+      const res = await fetch(url);
+      const text = await res.text();
+      const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/)[1]);
+      if (json.status !== 'ok') throw new Error(json.errors[0].message);
 
-    function parseSheet(json, sheetName) {
-      const cols        = json.table.cols;
-      const rows        = json.table.rows;
-      const headerLabel = (cols[0]?.label || '').trim();
+      const cols = json.table.cols;
+      const rows = json.table.rows;
+      const headerLabel = cols[0]?.label || '';
 
-      let schoolName = 'Greenway School', period = '', academicYear = '', levelName = '', teacher = '', preparedBy = '';
+      // Parse metadata from header string
+      let schoolName = 'Greenway School', period = '', academicYear = '2025-2026', levelName = '';
+      const mLevel  = headerLabel.match(/Level:\s*(.+?)\s+N$/i); if (mLevel) levelName = mLevel[1].trim();
+      const mYear   = headerLabel.match(/Academic Year\s*:\s*(\S+)/i); if (mYear) academicYear = mYear[1];
+      const mPeriod = headerLabel.match(/Top 5 of (\w+)/i); if (mPeriod) period = mPeriod[1];
+      const mSchool = headerLabel.match(/^([A-Za-z ]+?)\s+Top 5/i); if (mSchool) schoolName = mSchool[1].trim();
 
-      const sm = headerLabel.match(/^(.+?)\s+(Top 5|Evaluation)/i);
-      if (sm) schoolName = sm[1].trim();
+      const students = [];
+      for (const r of rows) {
+        const c = r.c || [];
+        const name = (c[1]?.v || '').toString().trim();
+        if (!name || /date|seen|teacher|prepared/i.test(name)) continue;
 
-      // Period: "Top 5 of March" or "Evaluation for January"
-      const pm1 = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
-      const pm2 = headerLabel.match(/Top 5 of\s+(.+?)(?:\s+Level|\s*$)/i);
-      const pm3 = headerLabel.match(/Evaluation for\s+(.+?)\s+Academic Year/i);
-      const pm4 = headerLabel.match(/Evaluation for\s+(.+?)(?:\s+Level|\s*$)/i);
-      if (pm1) period = pm1[1].trim();
-      else if (pm2) period = pm2[1].trim();
-      else if (pm3) period = pm3[1].trim();
-      else if (pm4) period = pm4[1].trim();
-
-      const ym = headerLabel.match(/Academic Year\s*[:\-]?\s*(\d{4}[-–]\d{2,4})/i);
-      if (ym) academicYear = ym[1].trim();
-
-      const lm = headerLabel.match(/Level\s*[:\-]?\s*(.+?)(?:\s+Teacher|\s+Prepared|\s*$)/i);
-      if (lm) levelName = lm[1].trim();
-
-      const tm = headerLabel.match(/Teacher\s*[:\-]?\s*(.+?)(?:\s+Prepared|\s*$)/i);
-      if (tm) teacher = tm[1].trim();
-
-      const bm = headerLabel.match(/Prepared\s*[Bb]y\s*[:\-]?\s*(.+?)(?:\s*$)/i);
-      if (bm) preparedBy = bm[1].trim();
-
-      // Detect column indices from headers
-      const colIdx = { n:0, name:1, gender:2, avg:3, grade:4, rank:5, result:6, photo:7 };
-      if (rows.length > 0) {
-        const hrow = rows[0]?.c || [];
-        hrow.forEach((cell, i) => {
-          const lbl = (cell?.v || '').toString().toLowerCase().trim();
-          if (/^n$/.test(lbl)) colIdx.n = i;
-          else if (/student.*name|name/.test(lbl)) colIdx.name = i;
-          else if (/gender/.test(lbl)) colIdx.gender = i;
-          else if (/average|avg/.test(lbl)) colIdx.avg = i;
-          else if (/^grade$/.test(lbl)) colIdx.grade = i;
-          else if (/^rank$/.test(lbl)) colIdx.rank = i;
-          else if (/result/.test(lbl)) colIdx.result = i;
-          else if (/photo/.test(lbl)) colIdx.photo = i;
+        students.push({
+          num:    (c[0]?.v || '').toString().trim(),
+          name:   name,
+          gender: (c[2]?.v || '').toString().trim(),
+          avg:    parseFloat(c[3]?.v) || 0,
+          grade:  (c[4]?.v || 'F').toString().trim(),
+          rank:   parseInt(c[5]?.v) || (students.length + 1),
+          result: (c[6]?.v || 'Fail').toString().trim()
         });
       }
 
-      const getCell = (row, idx) => {
-        const c = row?.c?.[idx];
-        return c?.v != null ? String(c.v).trim() : '';
-      };
-
-      const students = [];
-      let teacherRow = '', preparedByRow = '';
-
-      rows.forEach((row, ri) => {
-        if (ri === 0) return; // skip header row
-        const name = getCell(row, colIdx.name);
-        if (!name) return;
-
-        // Detect footer rows
-        const n0 = getCell(row, 0).toLowerCase();
-        if (/teacher|prepared/i.test(n0)) {
-          if (/teacher/i.test(n0) && !teacherRow) teacherRow = getCell(row, 1) || getCell(row, 0).replace(/teacher\s*[:\-]?\s*/i,'').trim();
-          if (/prepared/i.test(n0) && !preparedByRow) preparedByRow = getCell(row, 1) || getCell(row, 0).replace(/prepared\s*by\s*[:\-]?\s*/i,'').trim();
-          return;
-        }
-
-        const avg    = parseFloat(getCell(row, colIdx.avg)) || 0;
-        const rank   = Math.round(parseFloat(getCell(row, colIdx.rank))) || 99;
-        const grade  = getCell(row, colIdx.grade);
-        const gender = getCell(row, colIdx.gender);
-        const result = getCell(row, colIdx.result);
-        const photo  = getCell(row, colIdx.photo);
-        const num    = getCell(row, colIdx.n);
-
-        students.push({ num, name, gender, avg, grade, rank, result, photo });
-      });
-
-      if (!teacher && teacherRow) teacher = teacherRow;
-      if (!preparedBy && preparedByRow) preparedBy = preparedByRow;
+      // Extract teacher/preparer from bottom rows if they exist
+      let teacher = '', preparedBy = '';
+      const lastRows = rows.slice(-5);
+      for (const r of lastRows) {
+        const txt = (r.c?.[1]?.v || '').toString();
+        const mt = txt.match(/Teacher:\s*(.+)/i); if (mt) teacher = mt[1].trim();
+        const mp = txt.match(/Prepared by:\s*(.+)/i); if (mp) preparedBy = mp[1].trim();
+      }
 
       return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       MONTH NAVIGATION
-    ════════════════════════════════════════════════════════════════════ */
+    // ─── UI BUILDERS ─────────────────────────────────────────────────────────
     function buildMonthNav() {
       const nav = document.getElementById('monthNav');
-      const label = nav.querySelector('.month-nav-label');
-      nav.innerHTML = '';
-      if (label) nav.appendChild(label);
+      nav.innerHTML = '<span class="month-nav-label">Select Month:</span>';
       MONTHS.forEach((m, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'month-btn' +
-          (idx === activeMonthIdx ? ' active' : '') +
-          (m.isCurrent ? ' current-month' : '');
-        btn.innerHTML = `<i class="bi bi-calendar-event" style="font-size:0.7rem"></i>${escHtml(m.label)}`;
+        btn.className = `month-btn ${idx === activeMonthIdx ? 'active' : ''} ${m.isCurrent ? 'current-month' : ''}`;
+        btn.innerHTML = `<i class="bi bi-calendar-event"></i> ${escHtml(m.label)}`;
         btn.onclick = () => switchMonth(idx);
         nav.appendChild(btn);
       });
     }
 
-    async function switchMonth(idx) {
+    function switchMonth(idx) {
       if (idx === activeMonthIdx && !isFirstLoad) return;
       activeMonthIdx = idx;
       isFirstLoad = true;
       buildMonthNav();
-      await loadAllData(false);
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       BUILD UI
-    ════════════════════════════════════════════════════════════════════ */
-    function levelDisplay(levelName, sheetName) {
-      if (levelName) return levelName;
-      const map = { 'BA':'Beginner A', 'BB':'Beginner B', 'Grade 1':'Grade 1', 'Grade 2':'Grade 2', 'Grade 3':'Grade 3', 'Grade 4':'Grade 4' };
-      return map[sheetName] || sheetName;
+      loadAllData();
     }
 
     function buildSummary(students) {
-      const total   = students.length;
-      const passed  = students.filter(s => /pass/i.test(s.result)).length;
-      const failed  = total - passed;
-      const avgs    = students.filter(s => s.avg > 0).map(s => s.avg);
-      const classAvg = avgs.length ? (avgs.reduce((a,b)=>a+b,0)/avgs.length).toFixed(2) : '—';
-      const top1    = students.find(s => s.rank === 1);
+      const total = students.length;
+      const passed = students.filter(s => /pass/i.test(s.result)).length;
+      const failed = total - passed;
+      const validAvgs = students.filter(s => s.avg > 0).map(s => s.avg);
+      const classAvg = validAvgs.length ? (validAvgs.reduce((a,b)=>a+b,0)/validAvgs.length).toFixed(2) : '0.00';
+
       return `
         <div class="summary-grid">
-          <div class="summary-card">
-            <div class="s-value">${total}</div>
-            <div class="s-label"><i class="bi bi-people-fill me-1"></i>Students</div>
-          </div>
-          <div class="summary-card">
-            <div class="s-value" style="color:#16a34a">${passed}</div>
-            <div class="s-label"><i class="bi bi-check-circle-fill me-1"></i>Passed</div>
-          </div>
-          <div class="summary-card">
-            <div class="s-value" style="color:#dc2626">${failed}</div>
-            <div class="s-label"><i class="bi bi-x-circle-fill me-1"></i>Failed</div>
-          </div>
-          <div class="summary-card">
-            <div class="s-value">${classAvg}</div>
-            <div class="s-label"><i class="bi bi-bar-chart-fill me-1"></i>Class Avg</div>
-          </div>
+          <div class="summary-card"><div class="s-value">${total}</div><div class="s-label">Students</div></div>
+          <div class="summary-card"><div class="s-value text-success">${passed}</div><div class="s-label">Passed</div></div>
+          <div class="summary-card"><div class="s-value text-danger">${failed}</div><div class="s-label">Failed</div></div>
+          <div class="summary-card"><div class="s-value text-primary">${classAvg}</div><div class="s-label">Avg Score</div></div>
         </div>`;
     }
 
     function buildTable(students) {
-      if (!students.length) {
-        return `<div class="empty-state"><i class="bi bi-inbox"></i>No student data available for this class.</div>`;
-      }
+      if (!students.length) return '<div class="empty-state"><i class="bi bi-inbox"></i>No data available</div>';
+
       const sorted = students.slice().sort((a,b) => a.rank - b.rank || b.avg - a.avg);
-      const top5ranks = [...new Set(sorted.map(s=>s.rank))].slice(0,5);
       const rows = sorted.map(s => {
-        const isTop5 = top5ranks.includes(s.rank);
-        const rankBadge = `<span class="rank-badge ${rankClass(s.rank)}">${s.rank}</span>`;
-        const genderIcon = /female|f/i.test(s.gender)
-          ? `<i class="bi bi-gender-female gender-f"></i>`
-          : `<i class="bi bi-gender-male gender-m"></i>`;
-        const gradePill  = `<span class="grade-pill ${gradeClass(s.grade)}">${escHtml(s.grade)}</span>`;
-        const resultSpan = /pass/i.test(s.result)
-          ? `<span class="result-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
-          : `<span class="result-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
-        const top5Star = isTop5 ? `<i class="bi bi-star-fill top5-star" title="Top 5"></i>` : '';
+        const isTop5 = s.rank <= 5;
+        const gIcon = /female|f/i.test(s.gender) ? '<i class="bi bi-gender-female gender-f"></i>' : '<i class="bi bi-gender-male gender-m"></i>';
         return `
-          <tr class="${isTop5 ? 'top5-row' : ''}">
-            <td style="text-align:center">${rankBadge}</td>
-            <td style="text-align:center;color:var(--c-muted);font-size:0.75rem">${escHtml(s.num)}</td>
-            <td><strong>${escHtml(s.name)}</strong>${top5Star}</td>
-            <td style="text-align:center">${genderIcon}</td>
-            <td style="text-align:center;font-weight:700;color:var(--c-green-dark)">${s.avg > 0 ? s.avg.toFixed(2) : '—'}</td>
-            <td style="text-align:center">${gradePill}</td>
-            <td>${resultSpan}</td>
+          <tr class="${isTop5 ? 'top5-row' : ''}" data-name="${escHtml(s.name).toLowerCase()}">
+            <td class="text-center"><span class="rank-badge ${rankClass(s.rank)}">${s.rank}</span></td>
+            <td class="text-center text-muted small">${escHtml(s.num)}</td>
+            <td><strong>${escHtml(s.name)}</strong>${isTop5 ? ' <i class="bi bi-star-fill top5-star"></i>' : ''}</td>
+            <td class="text-center">${gIcon}</td>
+            <td class="text-center fw-bold">${s.avg.toFixed(2)}</td>
+            <td class="text-center"><span class="grade-pill ${gradeClass(s.grade)}">${escHtml(s.grade)}</span></td>
+            <td>${/pass/i.test(s.result) ? '<span class="result-pass">Pass</span>' : '<span class="result-fail">Fail</span>'}</td>
           </tr>`;
       }).join('');
 
@@ -595,13 +490,13 @@
           <table class="report-table">
             <thead>
               <tr>
-                <th style="text-align:center;width:52px">Rank</th>
-                <th style="text-align:center;width:44px">No.</th>
+                <th class="text-center" style="width:60px">Rank</th>
+                <th class="text-center" style="width:50px">No.</th>
                 <th>Student Name</th>
-                <th style="text-align:center;width:60px">Gender</th>
-                <th style="text-align:center;width:72px">Average</th>
-                <th style="text-align:center;width:60px">Grade</th>
-                <th style="width:80px">Result</th>
+                <th class="text-center" style="width:70px">Gender</th>
+                <th class="text-center" style="width:80px">Average</th>
+                <th class="text-center" style="width:70px">Grade</th>
+                <th style="width:90px">Result</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -609,71 +504,62 @@
         </div>`;
     }
 
-    function buildTabPane(classData, index) {
-      const { sheetName, levelName, period, academicYear, schoolName, teacher, preparedBy, students } = classData;
-      const displayName = levelDisplay(levelName, sheetName);
-      const monthLabel  = MONTHS[activeMonthIdx]?.label || '';
-
-      const teacherLine    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
-      const preparedByLine = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
-      const footerLine = (teacherLine || preparedByLine) ? `<div class="class-footer">${teacherLine}${preparedByLine}</div>` : '';
-
-      return `
-        <div class="tab-pane fade ${index === 0 ? 'show active' : ''}" id="pane-${index}" role="tabpanel">
-          <div class="report-header">
-            <div class="report-header-left">
-              <h2><i class="bi bi-mortarboard-fill me-2" style="color:var(--c-green)"></i>${escHtml(displayName)}</h2>
-              <p>${escHtml(schoolName)} &nbsp;·&nbsp; ${escHtml(monthLabel)} &nbsp;·&nbsp; Academic Year ${escHtml(academicYear)}</p>
-            </div>
-            <div class="report-meta">
-              <span class="meta-pill"><i class="bi bi-people-fill me-1"></i>${students.length} Students</span>
-              <span class="meta-pill"><i class="bi bi-star-fill me-1"></i>Top 5 Highlighted</span>
-              ${period ? `<span class="meta-pill"><i class="bi bi-calendar3 me-1"></i>${escHtml(period)}</span>` : ''}
-            </div>
-          </div>
-          ${buildSummary(students)}
-          ${buildTable(students)}
-          ${footerLine}
-        </div>`;
-    }
-
     function buildUI(allClasses) {
-      const tabs    = document.getElementById('classTabs');
+      const tabs = document.getElementById('classTabs');
       const content = document.getElementById('tabContent');
 
-      // Update header from first class
+      // Update global header from first class
       const first = allClasses[0];
       if (first) {
-        document.getElementById('schoolName').textContent  = first.schoolName  || 'Greenway School';
-        document.getElementById('academicYear').textContent = first.academicYear ? `Academic Year ${first.academicYear}` : 'Academic Year 2025–2026';
+        document.getElementById('schoolName').textContent = first.schoolName;
+        document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
+        document.getElementById('siteFooter').innerHTML = `© ${new Date().getFullYear()} ${escHtml(first.schoolName)} &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>`;
       }
 
-      // Build tabs
-      tabs.innerHTML = allClasses.map((c, i) => {
-        const name = levelDisplay(c.levelName, c.sheetName);
-        return `
-          <li class="nav-item" role="presentation">
-            <button class="nav-link ${i===0?'active':''}" id="tab-${i}"
-              data-bs-toggle="tab" data-bs-target="#pane-${i}"
-              type="button" role="tab">${escHtml(name)}</button>
-          </li>`;
-      }).join('');
+      tabs.innerHTML = allClasses.map((c, i) => `
+        <li class="nav-item">
+          <button class="nav-link ${i===0?'active':''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">${escHtml(c.levelName || c.sheetName)}</button>
+        </li>`).join('');
 
-      // Build panes
-      content.innerHTML = allClasses.map((c, i) => buildTabPane(c, i)).join('');
+      content.innerHTML = allClasses.map((c, i) => `
+        <div class="tab-pane fade ${i===0?'show active':''}" id="pane-${i}" role="tabpanel">
+          <div class="report-header">
+            <div class="report-header-left">
+              <h2>${escHtml(c.levelName || c.sheetName)}</h2>
+              <p>${escHtml(c.schoolName)} · ${MONTHS[activeMonthIdx].label}</p>
+            </div>
+            <div class="report-meta">
+              <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
+              <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
+            </div>
+          </div>
+          ${buildSummary(c.students)}
+          ${buildTable(c.students)}
+          <div class="class-footer">
+            ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
+            ${c.preparedBy ? `<span>Prepared by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
+          </div>
+        </div>`).join('');
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       LOAD DATA
-    ════════════════════════════════════════════════════════════════════ */
-    async function loadAllData(isManual = false) {
-      const monthIdx = activeMonthIdx;
-      const monthCfg = MONTHS[monthIdx];
+    // ─── SEARCH FILTER ───────────────────────────────────────────────────────
+    function filterTable() {
+      const q = document.getElementById('studentSearch').value.toLowerCase();
+      const rows = document.querySelectorAll('.report-table tbody tr');
+      rows.forEach(row => {
+        const name = row.getAttribute('data-name');
+        row.style.display = name.includes(q) ? '' : 'none';
+      });
+    }
 
+    // ─── MAIN LOAD ───────────────────────────────────────────────────────────
+    async function loadAllData(isManual = false) {
+      const cfg = MONTHS[activeMonthIdx];
       const loadingBox = document.getElementById('loadingBox');
-      const errorBox   = document.getElementById('errorBox');
+      const errorBox = document.getElementById('errorBox');
       const tabContent = document.getElementById('tabContent');
-      const statusBar  = document.getElementById('statusBar');
+      const statusBar = document.getElementById('statusBar');
+      const actionBar = document.getElementById('actionBar');
       const refreshBtn = document.getElementById('refreshBtn');
 
       if (isFirstLoad || isManual) {
@@ -681,93 +567,51 @@
         errorBox.classList.add('d-none');
         tabContent.classList.add('d-none');
         statusBar.classList.add('d-none');
+        actionBar.classList.add('d-none');
       }
-      if (isManual) {
-        refreshBtn.classList.add('spinning');
-        try { localStorage.removeItem(cacheKey(monthIdx)); } catch {}
-      }
+      if (isManual) refreshBtn.classList.add('spinning');
 
       try {
-        let results;
-        const cached = !isManual && isFirstLoad ? loadCache(monthIdx) : null;
-
+        const cached = (!isManual && isFirstLoad) ? loadCache(activeMonthIdx) : null;
+        let data;
         if (cached) {
-          results = cached;
-          buildUI(results);
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          statusBar.classList.remove('d-none');
+          data = cached;
           setStatus('stale', 'Loaded from cache');
-          document.getElementById('lastUpdated').textContent = 'cached';
-          isFirstLoad = false;
-
-          // Background verify for live month
-          if (monthCfg.isCurrent) {
-            Promise.all(monthCfg.sheets.map(n => fetchSheet(n, monthCfg.spreadsheetId)))
-              .then(fresh => {
-                if (activeMonthIdx !== monthIdx) return;
-                saveCache(monthIdx, fresh);
-                buildUI(fresh);
-                setStatus('live', 'Live data');
-                document.getElementById('lastUpdated').textContent = fmtTime(new Date());
-              })
-              .catch(() => setStatus('stale', 'Using cached data'));
-          }
         } else {
-          results = await Promise.all(monthCfg.sheets.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
-          if (activeMonthIdx !== monthIdx) return;
-
-          saveCache(monthIdx, results);
-          buildUI(results);
-
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          statusBar.classList.remove('d-none');
-          setStatus('live', monthCfg.isCurrent ? 'Live data' : `Historical — ${monthCfg.label}`);
-          document.getElementById('lastUpdated').textContent = fmtTime(new Date());
-          isFirstLoad = false;
+          data = await Promise.all(cfg.sheets.map(s => fetchSheet(s, cfg.spreadsheetId)));
+          saveCache(activeMonthIdx, data);
+          setStatus('live', 'Live data');
         }
 
+        buildUI(data);
+        loadingBox.classList.add('d-none');
+        tabContent.classList.remove('d-none');
+        statusBar.classList.remove('d-none');
+        actionBar.classList.remove('d-none');
+        document.getElementById('lastUpdated').textContent = fmtTime(new Date());
+        isFirstLoad = false;
       } catch (err) {
         console.error(err);
         loadingBox.classList.add('d-none');
-        if (isFirstLoad) {
-          errorBox.classList.remove('d-none');
-          document.getElementById('errorMsg').textContent = err.message;
-        } else {
-          setStatus('error', 'Refresh failed — retrying soon');
-          statusBar.classList.remove('d-none');
-          tabContent.classList.remove('d-none');
-        }
+        errorBox.classList.remove('d-none');
+        document.getElementById('errorMsg').textContent = err.message;
       } finally {
-        if (isManual) refreshBtn.classList.remove('spinning');
+        refreshBtn.classList.remove('spinning');
       }
     }
 
     function setStatus(type, msg) {
-      const dot    = document.getElementById('liveDot');
-      const status = document.getElementById('statusText');
-      dot.className    = 'live-dot ' + (type === 'live' ? '' : type);
-      status.textContent = msg;
+      const dot = document.getElementById('liveDot');
+      const txt = document.getElementById('statusText');
+      dot.className = `live-dot ${type}`;
+      txt.textContent = msg;
     }
 
     function manualRefresh() { loadAllData(true); }
 
-    /* ════════════════════════════════════════════════════════════════════
-       INIT
-    ════════════════════════════════════════════════════════════════════ */
+    // INIT
     buildMonthNav();
     loadAllData();
-
-    // Auto-poll live month every 5 minutes
-    setInterval(() => {
-      if (MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
-    }, 5 * 60 * 1000);
-
-    // Visibility API
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
-    });
   </script>
 </body>
 </html>
