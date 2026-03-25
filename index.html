@@ -111,24 +111,17 @@
     .class-title p  { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
 
     /* ══════════════════════════════════════════
-       PYRAMID LAYOUT
+       GRID LAYOUT
     ══════════════════════════════════════════ */
-    .pyramid-grid {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.85rem;
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      justify-items: center;
     }
-    .pyramid-row {
-      display: flex;
-      justify-content: center;
-      gap: 1.1rem;
-    }
-    /* All cards share the same fixed width */
+    /* All cards fill their grid cell uniformly */
     .student-card {
-      width: 160px;
-      min-width: 160px;
-      max-width: 160px;
+      width: 100%;
     }
 
     /* ══════════════════════════════════════════
@@ -287,13 +280,15 @@
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
+      .cards-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 480px) {
       .school-name { font-size: 1.2rem; }
       .school-logo-img { width: 60px; height: 60px; }
       .card-avg { font-size: 1.1rem; }
       .card-name { font-size: 0.7rem; }
-      .student-card { width: 130px; min-width: 130px; max-width: 130px; }
-      .pyramid-row { gap: 0.7rem; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
     }
   </style>
 </head>
@@ -486,33 +481,11 @@
         </div>`;
     }
 
-    // ─── BUILD PYRAMID ────────────────────────────────────────────────────────
-    function buildPyramid(students) {
-      const byRank = {};
-      students.forEach(s => { if (!byRank[s.rank]) byRank[s.rank] = s; });
-
-      const ordered = students.slice(0, 5);
-      const get = (pos) => byRank[pos] || ordered[pos - 1] || null;
-
-      const r1 = get(1);
-      const r2 = get(2);
-      const r3 = get(3);
-      const r4 = get(4);
-      const r5 = get(5);
-
-      const row1 = r1 ? `<div class="pyramid-row pyramid-row-1">${renderCard(r1)}</div>` : '';
-      const row2 = (r2 || r3)
-        ? `<div class="pyramid-row pyramid-row-2">
-             ${r2 ? renderCard(r2) : ''}
-             ${r3 ? renderCard(r3) : ''}
-           </div>` : '';
-      const row3 = (r4 || r5)
-        ? `<div class="pyramid-row pyramid-row-3">
-             ${r4 ? renderCard(r4) : ''}
-             ${r5 ? renderCard(r5) : ''}
-           </div>` : '';
-
-      return `<div class="pyramid-grid">${row1}${row2}${row3}</div>`;
+    // ─── BUILD GRID ───────────────────────────────────────────────────────────
+    function buildGrid(students) {
+      const sorted = students.slice().sort((a, b) => a.rank - b.rank).slice(0, 5);
+      const cards  = sorted.map(s => renderCard(s)).join('');
+      return `<div class="cards-grid">${cards}</div>`;
     }
 
     // ─── BUILD TAB PANE ───────────────────────────────────────────────────────
@@ -535,7 +508,7 @@
             <p>Top 5 Outstanding Students</p>
             ${tieNote}
           </div>
-          ${buildPyramid(students)}
+          ${buildGrid(students)}
         </div>`;
     }
 
