@@ -314,16 +314,17 @@
 
       // Find all students (looking for rows that start with a number like '01', '02')
       const students = rows.map(r => {
+        if (!r || !r.c) return null;
         const idVal = String(r.c[0]?.v || '').trim();
-        // Check if first column is a numeric ID (like '01')
-        if (!/^\d+$/.test(idVal)) return null;
+        // Check if first column is a numeric ID (like '01' or '1')
+        if (!idVal || !/^\d+$/.test(idVal)) return null;
 
         const avg = r.c[3]?.v || 0;
         return {
           id:     idVal,
           name:   r.c[1]?.v || '',
           gender: r.c[2]?.v || '',
-          avg:    typeof avg === 'number' ? avg : parseFloat(avg),
+          avg:    typeof avg === 'number' ? avg : parseFloat(avg || 0),
           grade:  r.c[4]?.v || '',
           rank:   r.c[5]?.v || '',
           result: r.c[6]?.v || ''
