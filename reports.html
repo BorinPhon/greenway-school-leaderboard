@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greenway School – Monthly Reports</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────────────────── */
+    :root {
+      --c-bg:          #f2f6f2;
+      --c-surface:     #ffffff;
+      --c-border:      #3CD500;
+      --c-green-dark:  #1b5e20;
+      --c-green:       #2e7d32;
+      --c-green-mid:   #388e3c;
+      --c-green-light: #e8f5e9;
+      --c-text:        #1a2e1a;
+      --c-muted:       #5a7a5a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--c-bg); color: var(--c-text); min-height: 100vh; }
+
+    /* ── HEADER ─────────────────────────────────────────────────────────── */
+    .site-header {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
+      color: #fff; padding: 1.5rem 1rem 1.4rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .site-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+    .school-logo-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.5); background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+    .school-name { font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2); }
+    .school-sub  { font-size: 0.76rem; color: rgba(255,255,255,.78); }
+    .page-badge  {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.32);
+      color: #fff; font-size: 0.72rem; font-weight: 600;
+      padding: 0.2rem 0.9rem; border-radius: 50px; margin-top: 0.2rem;
+    }
+    .nav-back {
+      position: absolute; top: 1rem; left: 1rem; z-index: 2;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: #fff; font-size: 0.75rem; font-weight: 600;
+      padding: 0.3rem 0.8rem; border-radius: 50px; text-decoration: none;
+      transition: background .18s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,.28); color: #fff; }
+
+    /* ── MONTH NAV ───────────────────────────────────────────────────────── */
+    .month-nav {
+      background: var(--c-surface); border-bottom: 2px solid var(--c-border);
+      padding: 0.6rem 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .month-nav-label { font-size: 0.72rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 0.2rem; }
+    .month-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.9rem; border-radius: 50px;
+      border: 1.5px solid var(--c-border);
+      background: transparent; color: var(--c-muted);
+      font-size: 0.75rem; font-weight: 600; cursor: pointer;
+      transition: all .18s; white-space: nowrap;
+    }
+    .month-btn:hover  { background: var(--c-green-light); color: var(--c-green-dark); border-color: var(--c-green); }
+    .month-btn.active { background: var(--c-green); color: #fff; border-color: var(--c-green); }
+    .month-btn.current-month::after {
+      content: 'LIVE'; font-size: 0.55rem; font-weight: 800;
+      background: #22c55e; color: #fff; border-radius: 3px; padding: 0 3px;
+      letter-spacing: 0.4px; margin-left: 2px;
+    }
+
+    /* ── CLASS TABS ──────────────────────────────────────────────────────── */
+    .tab-wrapper {
+      background: var(--c-green); padding: 0 0.5rem;
+      border-bottom: 2px solid var(--c-green-mid);
+    }
+    .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tabs .nav-link {
+      color: rgba(255,255,255,.58); border: none;
+      border-bottom: 3px solid transparent; border-radius: 0;
+      padding: 0.7rem 1.1rem; font-size: 0.82rem; font-weight: 600;
+      white-space: nowrap; transition: color .2s, border-color .2s;
+    }
+    .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,.3); }
+    .nav-tabs .nav-link.active { color: #fff; background: transparent; border-bottom-color: #fff; }
+
+    /* ── MAIN ────────────────────────────────────────────────────────────── */
+    .main-content { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
+
+    /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
+    .loading-box {
+      text-align: center; padding: 3rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .error-box {
+      text-align: center; padding: 2.5rem 1rem;
+      background: #fff3f3; border: 1px solid #fca5a5;
+      border-radius: 12px; margin-top: 1.5rem;
+    }
+
+    /* ── REPORT SECTION HEADER ───────────────────────────────────────────── */
+    .report-header {
+      background: var(--c-surface); border-radius: 12px;
+      border: 1px solid var(--c-border);
+      padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .report-header-left h2 { font-size: 1.05rem; font-weight: 700; color: var(--c-text); margin-bottom: 0.1rem; }
+    .report-header-left p  { font-size: 0.75rem; color: var(--c-muted); margin: 0; }
+    .report-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .meta-pill {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      background: var(--c-green-light); color: var(--c-green-dark);
+      border-radius: 50px; padding: 0.2rem 0.7rem;
+      font-size: 0.7rem; font-weight: 600;
+    }
+
+    /* ── SUMMARY CARDS ───────────────────────────────────────────────────── */
+    .summary-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .summary-card {
+      background: var(--c-surface); border-radius: 10px;
+      border: 1px solid #e0ede0; padding: 0.85rem 1rem;
+      text-align: center;
+    }
+    .summary-card .s-value { font-size: 1.5rem; font-weight: 800; color: var(--c-green); line-height: 1; }
+    .summary-card .s-label { font-size: 0.68rem; color: var(--c-muted); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.4px; }
+
+    /* ── STUDENT TABLE ───────────────────────────────────────────────────── */
+    .table-wrap {
+      background: var(--c-surface); border-radius: 12px;
+      border: 1px solid #e0ede0; overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    .report-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .report-table thead th {
+      background: var(--c-green); color: #fff;
+      padding: 0.65rem 0.85rem; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap;
+    }
+    .report-table thead th:first-child { border-radius: 0; }
+    .report-table tbody tr { border-bottom: 1px solid #f0f4f0; transition: background .15s; }
+    .report-table tbody tr:last-child { border-bottom: none; }
+    .report-table tbody tr:hover { background: var(--c-green-light); }
+    .report-table tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
+    .report-table tbody tr.top5-row { background: #f0fdf4; }
+    .report-table tbody tr.top5-row:hover { background: #dcfce7; }
+
+    /* rank badge */
+    .rank-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 50%;
+      font-size: 0.7rem; font-weight: 700; color: #fff;
+    }
+    .rank-1 { background: #f59e0b; }
+    .rank-2 { background: #94a3b8; }
+    .rank-3 { background: #cd7c3a; }
+    .rank-other { background: var(--c-green-mid); }
+
+    /* grade badge */
+    .grade-pill {
+      display: inline-block; padding: 0.15rem 0.55rem; border-radius: 50px;
+      font-size: 0.68rem; font-weight: 700;
+    }
+    .grade-A { background: #dcfce7; color: #166534; }
+    .grade-B { background: #dbeafe; color: #1e40af; }
+    .grade-C { background: #fef9c3; color: #854d0e; }
+    .grade-D { background: #fee2e2; color: #991b1b; }
+    .grade-F { background: #f3f4f6; color: #374151; }
+
+    /* result badge */
+    .result-pass { color: #16a34a; font-weight: 600; font-size: 0.75rem; }
+    .result-fail { color: #dc2626; font-weight: 600; font-size: 0.75rem; }
+
+    /* gender icon */
+    .gender-m { color: #3b82f6; }
+    .gender-f { color: #ec4899; }
+
+    /* top5 star */
+    .top5-star { color: #f59e0b; font-size: 0.7rem; margin-left: 2px; }
+
+    /* ── TEACHER FOOTER ──────────────────────────────────────────────────── */
+    .class-footer {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      font-size: 0.73rem; color: var(--c-muted);
+      padding: 0.75rem 0 0.25rem;
+    }
+    .class-footer strong { color: var(--c-text); }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 2.5rem 1rem; color: var(--c-muted);
+      font-size: 0.85rem;
+    }
+    .empty-state i { font-size: 2.5rem; opacity: 0.35; display: block; margin-bottom: 0.5rem; }
+
+    /* ── STATUS BAR ──────────────────────────────────────────────────────── */
+    .status-bar {
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+      background: var(--c-surface); border: 1px solid #e0ede0;
+      border-radius: 10px; padding: 0.55rem 0.9rem;
+      font-size: 0.72rem; color: var(--c-muted); margin-bottom: 1.25rem;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; animation: pulse 2s infinite; }
+    .live-dot.stale { background: #f59e0b; animation: none; }
+    .live-dot.error { background: #ef4444; animation: none; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .btn-refresh {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--c-green); color: #fff; border: none; border-radius: 6px;
+      padding: 0.28rem 0.75rem; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      transition: background .18s; margin-left: auto;
+    }
+    .btn-refresh:hover { background: var(--c-green-dark); }
+    .btn-refresh.spinning i { animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
+    .site-footer {
+      text-align: center; padding: 1rem; font-size: 0.74rem; color: #aaa;
+      border-top: 1px solid var(--c-border); background: var(--c-surface);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .report-header { flex-direction: column; }
+      .report-table { font-size: 0.76rem; }
+      .report-table thead th, .report-table tbody td { padding: 0.5rem 0.6rem; }
+    }
+    @media (max-width: 480px) {
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .school-name { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <a href="index.html" class="nav-back">
+      <i class="bi bi-arrow-left"></i> Leaderboard
+    </a>
+    <div class="header-inner">
+      <img src="logo.png" alt="School Logo" class="school-logo-img" onerror="this.style.display='none'" />
+      <div class="school-name" id="schoolName">Greenway School</div>
+      <div class="school-sub"  id="academicYear">Academic Year 2025–2026</div>
+      <div class="page-badge"><i class="bi bi-file-earmark-bar-graph me-1"></i>Monthly Reports</div>
+    </div>
+  </header>
+
+  <!-- ── MONTH NAVIGATION ── -->
+  <div class="month-nav" id="monthNav">
+    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Period:</span>
+  </div>
+
+  <!-- ── CLASS TABS ── -->
+  <div class="tab-wrapper">
+    <ul class="nav nav-tabs" id="classTabs" role="tablist"></ul>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <div class="main-content">
+
+    <div id="loadingBox" class="loading-box">
+      <div class="spinner-border mb-2" role="status" style="color:#388e3c"><span class="visually-hidden">Loading…</span></div>
+      <div class="fw-semibold" style="color:#388e3c">Loading report data…</div>
+      <div class="text-muted small mt-1">Fetching from Google Sheets</div>
+    </div>
+
+    <div id="errorBox" class="error-box d-none">
+      <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2rem"></i>
+      <div class="fw-semibold mt-2 text-danger">Failed to load report</div>
+      <div class="text-muted small mt-1" id="errorMsg"></div>
+      <button class="btn-refresh mt-3" onclick="manualRefresh()">
+        <i class="bi bi-arrow-clockwise"></i> Retry
+      </button>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar d-none" id="statusBar">
+      <span class="live-dot" id="liveDot"></span>
+      <span id="statusText">Live data</span>
+      <span style="color:#ccc">|</span>
+      <span>Last updated: <strong id="lastUpdated">—</strong></span>
+      <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">
+        <i class="bi bi-arrow-clockwise" id="refreshIcon"></i> Refresh
+      </button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="tabContent" class="tab-content d-none"></div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">© 2026 Greenway School — Monthly Reports</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* ════════════════════════════════════════════════════════════════════
+       CONFIG — same MONTHS array as index.html
+       TO ADD A NEW MONTH: add one entry with the new spreadsheetId.
+    ════════════════════════════════════════════════════════════════════ */
+    const MONTHS = [
+      {
+        label:         'January 2026',
+        spreadsheetId: '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY',
+        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:     false
+      },
+      {
+        label:         'February 2026',
+        spreadsheetId: '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g',
+        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:     false
+      },
+      {
+        label:         'March 2026',
+        spreadsheetId: '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM',
+        sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:     true   // ← current live month
+      },
+      // ── NEXT MONTH TEMPLATE ──
+      // {
+      //   label:         'April 2026',
+      //   spreadsheetId: 'PASTE_NEW_ID_HERE',
+      //   sheets:        ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+      //   isCurrent:     true
+      // },
+    ];
+
+    const CACHE_PREFIX = 'gws_report_cache_v1_';
+    const CURRENT_MONTH_IDX = MONTHS.findIndex(m => m.isCurrent);
+    let activeMonthIdx = CURRENT_MONTH_IDX >= 0 ? CURRENT_MONTH_IDX : MONTHS.length - 1;
+    let isFirstLoad = true;
+
+    /* ════════════════════════════════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════════════════════════════════ */
+    function escHtml(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function fmtTime(d) {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    function gradeClass(g) {
+      const map = { A:'grade-A', B:'grade-B', C:'grade-C', D:'grade-D', F:'grade-F' };
+      return map[(g||'').trim().toUpperCase()] || 'grade-F';
+    }
+    function rankClass(r) {
+      if (r === 1) return 'rank-1';
+      if (r === 2) return 'rank-2';
+      if (r === 3) return 'rank-3';
+      return 'rank-other';
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CACHE
+    ════════════════════════════════════════════════════════════════════ */
+    function cacheKey(idx) { return CACHE_PREFIX + idx; }
+
+    function loadCache(idx) {
+      try {
+        const raw = JSON.parse(localStorage.getItem(cacheKey(idx)) || '{}');
+        if (MONTHS[idx]?.isCurrent) {
+          const d = new Date();
+          const ck = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+          if (raw.calKey && raw.calKey !== ck) return null;
+        }
+        return raw.data || null;
+      } catch { return null; }
+    }
+
+    function saveCache(idx, data) {
+      try {
+        const d = new Date();
+        const ck = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        localStorage.setItem(cacheKey(idx), JSON.stringify({ calKey: ck, savedAt: new Date().toISOString(), data }));
+      } catch {}
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       FETCH & PARSE
+    ════════════════════════════════════════════════════════════════════ */
+    async function fetchSheet(sheetName, spreadsheetId) {
+      const bust = Math.floor(Date.now() / 60000);
+      const url  = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
+      const res  = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status} for "${sheetName}"`);
+      const text  = await res.text();
+      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
+      if (!match) throw new Error(`Unexpected response for "${sheetName}"`);
+      const json = JSON.parse(match[1]);
+      if (json.status !== 'ok') throw new Error(`Sheet error: ${json.errors?.[0]?.message || 'unknown'}`);
+      return parseSheet(json, sheetName);
+    }
+
+    function parseSheet(json, sheetName) {
+      const cols        = json.table.cols;
+      const rows        = json.table.rows;
+      const headerLabel = (cols[0]?.label || '').trim();
+
+      let schoolName = 'Greenway School', period = '', academicYear = '', levelName = '', teacher = '', preparedBy = '';
+
+      const sm = headerLabel.match(/^(.+?)\s+(Top 5|Evaluation)/i);
+      if (sm) schoolName = sm[1].trim();
+
+      // Period: "Top 5 of March" or "Evaluation for January"
+      const pm1 = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
+      const pm2 = headerLabel.match(/Top 5 of\s+(.+?)(?:\s+Level|\s*$)/i);
+      const pm3 = headerLabel.match(/Evaluation for\s+(.+?)\s+Academic Year/i);
+      const pm4 = headerLabel.match(/Evaluation for\s+(.+?)(?:\s+Level|\s*$)/i);
+      if (pm1) period = pm1[1].trim();
+      else if (pm2) period = pm2[1].trim();
+      else if (pm3) period = pm3[1].trim();
+      else if (pm4) period = pm4[1].trim();
+
+      const ym = headerLabel.match(/Academic Year\s*[:\-]?\s*(\d{4}[-–]\d{2,4})/i);
+      if (ym) academicYear = ym[1].trim();
+
+      const lm = headerLabel.match(/Level\s*[:\-]?\s*(.+?)(?:\s+Teacher|\s+Prepared|\s*$)/i);
+      if (lm) levelName = lm[1].trim();
+
+      const tm = headerLabel.match(/Teacher\s*[:\-]?\s*(.+?)(?:\s+Prepared|\s*$)/i);
+      if (tm) teacher = tm[1].trim();
+
+      const bm = headerLabel.match(/Prepared\s*[Bb]y\s*[:\-]?\s*(.+?)(?:\s*$)/i);
+      if (bm) preparedBy = bm[1].trim();
+
+      // Detect column indices from headers
+      const colIdx = { n:0, name:1, gender:2, avg:3, grade:4, rank:5, result:6, photo:7 };
+      if (rows.length > 0) {
+        const hrow = rows[0]?.c || [];
+        hrow.forEach((cell, i) => {
+          const lbl = (cell?.v || '').toString().toLowerCase().trim();
+          if (/^n$/.test(lbl)) colIdx.n = i;
+          else if (/student.*name|name/.test(lbl)) colIdx.name = i;
+          else if (/gender/.test(lbl)) colIdx.gender = i;
+          else if (/average|avg/.test(lbl)) colIdx.avg = i;
+          else if (/^grade$/.test(lbl)) colIdx.grade = i;
+          else if (/^rank$/.test(lbl)) colIdx.rank = i;
+          else if (/result/.test(lbl)) colIdx.result = i;
+          else if (/photo/.test(lbl)) colIdx.photo = i;
+        });
+      }
+
+      const getCell = (row, idx) => {
+        const c = row?.c?.[idx];
+        return c?.v != null ? String(c.v).trim() : '';
+      };
+
+      const students = [];
+      let teacherRow = '', preparedByRow = '';
+
+      rows.forEach((row, ri) => {
+        if (ri === 0) return; // skip header row
+        const name = getCell(row, colIdx.name);
+        if (!name) return;
+
+        // Detect footer rows
+        const n0 = getCell(row, 0).toLowerCase();
+        if (/teacher|prepared/i.test(n0)) {
+          if (/teacher/i.test(n0) && !teacherRow) teacherRow = getCell(row, 1) || getCell(row, 0).replace(/teacher\s*[:\-]?\s*/i,'').trim();
+          if (/prepared/i.test(n0) && !preparedByRow) preparedByRow = getCell(row, 1) || getCell(row, 0).replace(/prepared\s*by\s*[:\-]?\s*/i,'').trim();
+          return;
+        }
+
+        const avg    = parseFloat(getCell(row, colIdx.avg)) || 0;
+        const rank   = Math.round(parseFloat(getCell(row, colIdx.rank))) || 99;
+        const grade  = getCell(row, colIdx.grade);
+        const gender = getCell(row, colIdx.gender);
+        const result = getCell(row, colIdx.result);
+        const photo  = getCell(row, colIdx.photo);
+        const num    = getCell(row, colIdx.n);
+
+        students.push({ num, name, gender, avg, grade, rank, result, photo });
+      });
+
+      if (!teacher && teacherRow) teacher = teacherRow;
+      if (!preparedBy && preparedByRow) preparedBy = preparedByRow;
+
+      return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       MONTH NAVIGATION
+    ════════════════════════════════════════════════════════════════════ */
+    function buildMonthNav() {
+      const nav = document.getElementById('monthNav');
+      const label = nav.querySelector('.month-nav-label');
+      nav.innerHTML = '';
+      if (label) nav.appendChild(label);
+      MONTHS.forEach((m, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'month-btn' +
+          (idx === activeMonthIdx ? ' active' : '') +
+          (m.isCurrent ? ' current-month' : '');
+        btn.innerHTML = `<i class="bi bi-calendar-event" style="font-size:0.7rem"></i>${escHtml(m.label)}`;
+        btn.onclick = () => switchMonth(idx);
+        nav.appendChild(btn);
+      });
+    }
+
+    async function switchMonth(idx) {
+      if (idx === activeMonthIdx && !isFirstLoad) return;
+      activeMonthIdx = idx;
+      isFirstLoad = true;
+      buildMonthNav();
+      await loadAllData(false);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       BUILD UI
+    ════════════════════════════════════════════════════════════════════ */
+    function levelDisplay(levelName, sheetName) {
+      if (levelName) return levelName;
+      const map = { 'BA':'Beginner A', 'BB':'Beginner B', 'Grade 1':'Grade 1', 'Grade 2':'Grade 2', 'Grade 3':'Grade 3', 'Grade 4':'Grade 4' };
+      return map[sheetName] || sheetName;
+    }
+
+    function buildSummary(students) {
+      const total   = students.length;
+      const passed  = students.filter(s => /pass/i.test(s.result)).length;
+      const failed  = total - passed;
+      const avgs    = students.filter(s => s.avg > 0).map(s => s.avg);
+      const classAvg = avgs.length ? (avgs.reduce((a,b)=>a+b,0)/avgs.length).toFixed(2) : '—';
+      const top1    = students.find(s => s.rank === 1);
+      return `
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="s-value">${total}</div>
+            <div class="s-label"><i class="bi bi-people-fill me-1"></i>Students</div>
+          </div>
+          <div class="summary-card">
+            <div class="s-value" style="color:#16a34a">${passed}</div>
+            <div class="s-label"><i class="bi bi-check-circle-fill me-1"></i>Passed</div>
+          </div>
+          <div class="summary-card">
+            <div class="s-value" style="color:#dc2626">${failed}</div>
+            <div class="s-label"><i class="bi bi-x-circle-fill me-1"></i>Failed</div>
+          </div>
+          <div class="summary-card">
+            <div class="s-value">${classAvg}</div>
+            <div class="s-label"><i class="bi bi-bar-chart-fill me-1"></i>Class Avg</div>
+          </div>
+        </div>`;
+    }
+
+    function buildTable(students) {
+      if (!students.length) {
+        return `<div class="empty-state"><i class="bi bi-inbox"></i>No student data available for this class.</div>`;
+      }
+      const sorted = students.slice().sort((a,b) => a.rank - b.rank || b.avg - a.avg);
+      const top5ranks = [...new Set(sorted.map(s=>s.rank))].slice(0,5);
+      const rows = sorted.map(s => {
+        const isTop5 = top5ranks.includes(s.rank);
+        const rankBadge = `<span class="rank-badge ${rankClass(s.rank)}">${s.rank}</span>`;
+        const genderIcon = /female|f/i.test(s.gender)
+          ? `<i class="bi bi-gender-female gender-f"></i>`
+          : `<i class="bi bi-gender-male gender-m"></i>`;
+        const gradePill  = `<span class="grade-pill ${gradeClass(s.grade)}">${escHtml(s.grade)}</span>`;
+        const resultSpan = /pass/i.test(s.result)
+          ? `<span class="result-pass"><i class="bi bi-check-circle-fill me-1"></i>Pass</span>`
+          : `<span class="result-fail"><i class="bi bi-x-circle-fill me-1"></i>Fail</span>`;
+        const top5Star = isTop5 ? `<i class="bi bi-star-fill top5-star" title="Top 5"></i>` : '';
+        return `
+          <tr class="${isTop5 ? 'top5-row' : ''}">
+            <td style="text-align:center">${rankBadge}</td>
+            <td style="text-align:center;color:var(--c-muted);font-size:0.75rem">${escHtml(s.num)}</td>
+            <td><strong>${escHtml(s.name)}</strong>${top5Star}</td>
+            <td style="text-align:center">${genderIcon}</td>
+            <td style="text-align:center;font-weight:700;color:var(--c-green-dark)">${s.avg > 0 ? s.avg.toFixed(2) : '—'}</td>
+            <td style="text-align:center">${gradePill}</td>
+            <td>${resultSpan}</td>
+          </tr>`;
+      }).join('');
+
+      return `
+        <div class="table-wrap">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th style="text-align:center;width:52px">Rank</th>
+                <th style="text-align:center;width:44px">No.</th>
+                <th>Student Name</th>
+                <th style="text-align:center;width:60px">Gender</th>
+                <th style="text-align:center;width:72px">Average</th>
+                <th style="text-align:center;width:60px">Grade</th>
+                <th style="width:80px">Result</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function buildTabPane(classData, index) {
+      const { sheetName, levelName, period, academicYear, schoolName, teacher, preparedBy, students } = classData;
+      const displayName = levelDisplay(levelName, sheetName);
+      const monthLabel  = MONTHS[activeMonthIdx]?.label || '';
+
+      const teacherLine    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
+      const preparedByLine = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
+      const footerLine = (teacherLine || preparedByLine) ? `<div class="class-footer">${teacherLine}${preparedByLine}</div>` : '';
+
+      return `
+        <div class="tab-pane fade ${index === 0 ? 'show active' : ''}" id="pane-${index}" role="tabpanel">
+          <div class="report-header">
+            <div class="report-header-left">
+              <h2><i class="bi bi-mortarboard-fill me-2" style="color:var(--c-green)"></i>${escHtml(displayName)}</h2>
+              <p>${escHtml(schoolName)} &nbsp;·&nbsp; ${escHtml(monthLabel)} &nbsp;·&nbsp; Academic Year ${escHtml(academicYear)}</p>
+            </div>
+            <div class="report-meta">
+              <span class="meta-pill"><i class="bi bi-people-fill me-1"></i>${students.length} Students</span>
+              <span class="meta-pill"><i class="bi bi-star-fill me-1"></i>Top 5 Highlighted</span>
+              ${period ? `<span class="meta-pill"><i class="bi bi-calendar3 me-1"></i>${escHtml(period)}</span>` : ''}
+            </div>
+          </div>
+          ${buildSummary(students)}
+          ${buildTable(students)}
+          ${footerLine}
+        </div>`;
+    }
+
+    function buildUI(allClasses) {
+      const tabs    = document.getElementById('classTabs');
+      const content = document.getElementById('tabContent');
+
+      // Update header from first class
+      const first = allClasses[0];
+      if (first) {
+        document.getElementById('schoolName').textContent  = first.schoolName  || 'Greenway School';
+        document.getElementById('academicYear').textContent = first.academicYear ? `Academic Year ${first.academicYear}` : 'Academic Year 2025–2026';
+      }
+
+      // Build tabs
+      tabs.innerHTML = allClasses.map((c, i) => {
+        const name = levelDisplay(c.levelName, c.sheetName);
+        return `
+          <li class="nav-item" role="presentation">
+            <button class="nav-link ${i===0?'active':''}" id="tab-${i}"
+              data-bs-toggle="tab" data-bs-target="#pane-${i}"
+              type="button" role="tab">${escHtml(name)}</button>
+          </li>`;
+      }).join('');
+
+      // Build panes
+      content.innerHTML = allClasses.map((c, i) => buildTabPane(c, i)).join('');
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       LOAD DATA
+    ════════════════════════════════════════════════════════════════════ */
+    async function loadAllData(isManual = false) {
+      const monthIdx = activeMonthIdx;
+      const monthCfg = MONTHS[monthIdx];
+
+      const loadingBox = document.getElementById('loadingBox');
+      const errorBox   = document.getElementById('errorBox');
+      const tabContent = document.getElementById('tabContent');
+      const statusBar  = document.getElementById('statusBar');
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      if (isFirstLoad || isManual) {
+        loadingBox.classList.remove('d-none');
+        errorBox.classList.add('d-none');
+        tabContent.classList.add('d-none');
+        statusBar.classList.add('d-none');
+      }
+      if (isManual) {
+        refreshBtn.classList.add('spinning');
+        try { localStorage.removeItem(cacheKey(monthIdx)); } catch {}
+      }
+
+      try {
+        let results;
+        const cached = !isManual && isFirstLoad ? loadCache(monthIdx) : null;
+
+        if (cached) {
+          results = cached;
+          buildUI(results);
+          loadingBox.classList.add('d-none');
+          tabContent.classList.remove('d-none');
+          statusBar.classList.remove('d-none');
+          setStatus('stale', 'Loaded from cache');
+          document.getElementById('lastUpdated').textContent = 'cached';
+          isFirstLoad = false;
+
+          // Background verify for live month
+          if (monthCfg.isCurrent) {
+            Promise.all(monthCfg.sheets.map(n => fetchSheet(n, monthCfg.spreadsheetId)))
+              .then(fresh => {
+                if (activeMonthIdx !== monthIdx) return;
+                saveCache(monthIdx, fresh);
+                buildUI(fresh);
+                setStatus('live', 'Live data');
+                document.getElementById('lastUpdated').textContent = fmtTime(new Date());
+              })
+              .catch(() => setStatus('stale', 'Using cached data'));
+          }
+        } else {
+          results = await Promise.all(monthCfg.sheets.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
+          if (activeMonthIdx !== monthIdx) return;
+
+          saveCache(monthIdx, results);
+          buildUI(results);
+
+          loadingBox.classList.add('d-none');
+          tabContent.classList.remove('d-none');
+          statusBar.classList.remove('d-none');
+          setStatus('live', monthCfg.isCurrent ? 'Live data' : `Historical — ${monthCfg.label}`);
+          document.getElementById('lastUpdated').textContent = fmtTime(new Date());
+          isFirstLoad = false;
+        }
+
+      } catch (err) {
+        console.error(err);
+        loadingBox.classList.add('d-none');
+        if (isFirstLoad) {
+          errorBox.classList.remove('d-none');
+          document.getElementById('errorMsg').textContent = err.message;
+        } else {
+          setStatus('error', 'Refresh failed — retrying soon');
+          statusBar.classList.remove('d-none');
+          tabContent.classList.remove('d-none');
+        }
+      } finally {
+        if (isManual) refreshBtn.classList.remove('spinning');
+      }
+    }
+
+    function setStatus(type, msg) {
+      const dot    = document.getElementById('liveDot');
+      const status = document.getElementById('statusText');
+      dot.className    = 'live-dot ' + (type === 'live' ? '' : type);
+      status.textContent = msg;
+    }
+
+    function manualRefresh() { loadAllData(true); }
+
+    /* ════════════════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════════════════ */
+    buildMonthNav();
+    loadAllData();
+
+    // Auto-poll live month every 5 minutes
+    setInterval(() => {
+      if (MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
+    }, 5 * 60 * 1000);
+
+    // Visibility API
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
+    });
+  </script>
+</body>
+</html>

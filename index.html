@@ -41,6 +41,16 @@
       position: relative;
       overflow: hidden;
     }
+    .nav-reports-btn {
+      position: absolute; top: 1rem; right: 1rem; z-index: 2;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: #fff; font-size: 0.75rem; font-weight: 600;
+      padding: 0.3rem 0.8rem; border-radius: 50px; text-decoration: none;
+      transition: background .18s;
+    }
+    .nav-reports-btn:hover { background: rgba(255,255,255,.28); color: #fff; }
+
     .site-header::before {
       content: '';
       position: absolute; inset: 0;
@@ -479,6 +489,9 @@
 
   <!-- ── HEADER ── -->
   <header class="site-header">
+    <a href="reports.html" class="nav-reports-btn">
+      <i class="bi bi-file-earmark-bar-graph"></i> Monthly Reports
+    </a>
     <div class="header-inner">
       <img src="logo.png" alt="School Logo" class="school-logo-img"
            onerror="this.style.display='none'" />
