@@ -277,7 +277,7 @@
       <img src="logo.png" alt="School Logo" class="school-logo-img" onerror="this.style.display='none'" />
       <div class="school-name" id="schoolName">Greenway School</div>
       <div class="school-sub" id="academicYear">Academic Year 2025–2026</div>
-      <div class="page-badge"><i class="bi bi-file-earmark-bar-graph me-1"></i>Monthly Performance Reports</div>
+      <div class="page-badge" id="periodBadge">⭐ Top 5 of March</div>
     </div>
   </header>
 
@@ -527,6 +527,7 @@
       if (first) {
         document.getElementById('schoolName').textContent = first.schoolName;
         document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
+        document.getElementById('periodBadge').textContent = `⭐ Top 5 of ${MONTHS[activeMonthIdx].label}`;
         document.getElementById('siteFooter').innerHTML = `© ${new Date().getFullYear()} ${escHtml(first.schoolName)} &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>`;
       }
 
