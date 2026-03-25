@@ -298,7 +298,13 @@
       const rows = json.table.rows;
 
       // Header info (from top of sheet)
-      const levelName = rows[3]?.c[0]?.v || sheetName;
+      // Level name is usually in row 3, but let's fall back to sheet name if it's a student row
+      let levelName = sheetName;
+      if (rows[3] && rows[3].c && rows[3].c[0] && rows[3].c[0].v) {
+        const val = String(rows[3].c[0].v).trim();
+        if (!/^\d+$/.test(val)) levelName = val;
+      }
+      
       const academicYear = rows[2]?.c[0]?.v || '';
 
       // Find all students (looking for rows that start with a number like '01', '02')
