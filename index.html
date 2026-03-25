@@ -408,6 +408,51 @@
     .history-dot.same    { background: #94a3b8; }
     .history-dot.error   { background: #ef4444; }
 
+    /* ── MONTH NAVIGATION BAR ──────────────────────────────────────────────── */
+    .month-nav {
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-border);
+      padding: 0.55rem 1rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.5rem; flex-wrap: wrap;
+    }
+    .month-nav-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-right: 0.3rem;
+    }
+    .month-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.28rem 0.85rem; border-radius: 50px;
+      border: 1.5px solid var(--c-border);
+      background: transparent; color: var(--c-muted);
+      font-size: 0.75rem; font-weight: 600; cursor: pointer;
+      transition: all .18s; white-space: nowrap;
+    }
+    .month-btn:hover {
+      background: var(--c-green-light); color: var(--c-green-dark);
+      border-color: var(--c-green);
+    }
+    .month-btn.active {
+      background: var(--c-green); color: #fff;
+      border-color: var(--c-green);
+    }
+    .month-btn .month-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; opacity: 0.6;
+    }
+    .month-btn.current-month::after {
+      content: 'LIVE';
+      font-size: 0.55rem; font-weight: 800;
+      background: #22c55e; color: #fff;
+      border-radius: 3px; padding: 0 3px;
+      letter-spacing: 0.4px; margin-left: 2px;
+    }
+    .month-loading {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; color: var(--c-muted);
+    }
+
     /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
     .site-footer {
       text-align: center; padding: 1rem;
@@ -442,6 +487,12 @@
       <div class="badge-period" id="periodBadge">⭐ Top 5</div>
     </div>
   </header>
+
+  <!-- ── MONTH NAVIGATION ── -->
+  <div class="month-nav" id="monthNav">
+    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Period:</span>
+    <!-- Month buttons injected by JS -->
+  </div>
 
   <!-- ── TABS ── -->
   <div class="tab-wrapper">
@@ -526,13 +577,12 @@
     /* ════════════════════════════════════════════════════════════════════
        CONFIG
        ─ SPREADSHEET_ID : your Google Sheets document ID
-       ─ SHEET_NAMES    : list of sheet tab names to display
+       ─ MONTHS         : array of monthly periods with sheet tab names
        ─ REFRESH_MS     : how often to poll for changes (default: 5 min)
        ─ MONTHLY_CACHE  : cache data per calendar month; auto-invalidates
                           at the start of each new month
     ════════════════════════════════════════════════════════════════════ */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
-    const SHEET_NAMES    = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
     const REFRESH_MS     = 5 * 60 * 1000;   // 5 minutes between polls
     const PHOTO_STORE    = 'gws_student_photos_v2';
 
@@ -540,6 +590,31 @@
     // Paste your Google Apps Script Web App URL here after deploying Code.gs.
     // Leave as empty string '' to disable Drive upload (local-only mode).
     const SCRIPT_URL = '';  // e.g. 'https://script.google.com/macros/s/AKfy.../exec'
+
+    // ── MULTI-MONTH CONFIG ──────────────────────────────────────────────────
+    // Each entry = one month of data.
+    // • label     : shown on the month navigation button
+    // • sheets    : the 6 sheet tab names for that month
+    // • isCurrent : true = this month auto-refreshes every 5 min (LIVE badge)
+    //
+    // TO ADD A NEW MONTH: duplicate the last entry, update label/sheets/isCurrent.
+    const MONTHS = [
+      {
+        label:     'March 2026',
+        sheets:    ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent: false
+      },
+      {
+        label:     'April 2026',
+        sheets:    ['Apr - BA', 'Apr - BB', 'Apr - Grade 1', 'Apr - Grade 2', 'Apr - Grade 3', 'Apr - Grade 4'],
+        isCurrent: true   // ← set this month as the live/current one
+      },
+    ];
+
+    // Derived: the index of the current (live) month
+    const CURRENT_MONTH_IDX = MONTHS.findIndex(m => m.isCurrent);
+    // Active month index (changes when user clicks a month button)
+    let activeMonthIdx = CURRENT_MONTH_IDX >= 0 ? CURRENT_MONTH_IDX : MONTHS.length - 1;
     const CACHE_KEY      = 'gws_data_cache_v2';
     const HISTORY_KEY    = 'gws_update_history';
     const MAX_HISTORY    = 10;
@@ -550,35 +625,40 @@
        the freshest data for the current month, and automatically
        discards data from previous months.
     ════════════════════════════════════════════════════════════════════ */
-    function currentMonthKey() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    function cacheKeyForMonth(monthIdx) {
+      return `gws_cache_month_${monthIdx}_v3`;
     }
 
-    function loadCache() {
+    function loadCache(monthIdx) {
       try {
-        const raw = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-        // Discard any entry that is not from the current month
-        if (raw.monthKey && raw.monthKey !== currentMonthKey()) {
-          console.info('[AutoUpdate] New month detected — cache invalidated.');
-          return null;
+        const raw = JSON.parse(localStorage.getItem(cacheKeyForMonth(monthIdx)) || '{}');
+        // For the current (live) month, invalidate cache if it's from a previous calendar month
+        if (MONTHS[monthIdx] && MONTHS[monthIdx].isCurrent) {
+          const d = new Date();
+          const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+          if (raw.calKey && raw.calKey !== calKey) {
+            console.info('[AutoUpdate] New calendar month — cache invalidated.');
+            return null;
+          }
         }
         return raw.data || null;
       } catch { return null; }
     }
 
-    function saveCache(data) {
+    function saveCache(monthIdx, data) {
       try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          monthKey:  currentMonthKey(),
-          savedAt:   new Date().toISOString(),
+        const d = new Date();
+        const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        localStorage.setItem(cacheKeyForMonth(monthIdx), JSON.stringify({
+          calKey,
+          savedAt: new Date().toISOString(),
           data
         }));
       } catch (e) { console.warn('Cache save failed:', e); }
     }
 
-    function clearCache() {
-      try { localStorage.removeItem(CACHE_KEY); } catch {}
+    function clearCache(monthIdx) {
+      try { localStorage.removeItem(cacheKeyForMonth(monthIdx)); } catch {}
     }
 
     /* ════════════════════════════════════════════════════════════════════
@@ -1052,6 +1132,41 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
+       MONTH NAVIGATION
+    ════════════════════════════════════════════════════════════════════ */
+    function buildMonthNav() {
+      const nav = document.getElementById('monthNav');
+      // Keep the label, rebuild the buttons
+      const label = nav.querySelector('.month-nav-label');
+      nav.innerHTML = '';
+      if (label) nav.appendChild(label);
+      else {
+        const lbl = document.createElement('span');
+        lbl.className = 'month-nav-label';
+        lbl.innerHTML = '<i class="bi bi-calendar3 me-1"></i>Period:';
+        nav.appendChild(lbl);
+      }
+      MONTHS.forEach((m, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'month-btn' +
+          (idx === activeMonthIdx ? ' active' : '') +
+          (m.isCurrent ? ' current-month' : '');
+        btn.innerHTML = `<span class="month-dot"></span>${escHtml(m.label)}`;
+        btn.onclick = () => switchMonth(idx);
+        nav.appendChild(btn);
+      });
+    }
+
+    async function switchMonth(idx) {
+      if (idx === activeMonthIdx) return;
+      activeMonthIdx = idx;
+      buildMonthNav();
+      // Stop live polling if switching to a historical month
+      // (polling restarts automatically if user switches back to current month)
+      await loadAllData(false);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
        BUILD UI
     ════════════════════════════════════════════════════════════════════ */
     function buildGrid(students, sheetName) {
@@ -1173,21 +1288,26 @@
 
     /* ════════════════════════════════════════════════════════════════════
        MAIN LOAD FUNCTION
-       ─ On first load: tries cache first, then fetches fresh data
-       ─ On subsequent polls: always fetches fresh, compares fingerprint
-       ─ On new month: cache is auto-invalidated, fresh fetch is forced
+       ─ Loads data for the currently selected month (activeMonthIdx)
+       ─ Historical months: served from cache, no background polling
+       ─ Current (live) month: 5-min polling + change detection
     ════════════════════════════════════════════════════════════════════ */
     let isFirstLoad = true;
 
     async function loadAllData(isManual = false) {
+      const monthIdx   = activeMonthIdx;
+      const monthCfg   = MONTHS[monthIdx];
+      const sheetNames = monthCfg.sheets;
+      const isLive     = monthCfg.isCurrent;
+
       const loadingBox  = document.getElementById('loadingBox');
       const errorBox    = document.getElementById('errorBox');
       const tabContent  = document.getElementById('tabContent');
       const updateBar   = document.getElementById('updateBar');
       const refreshBtn  = document.getElementById('refreshBtn');
-      const refreshIcon = document.getElementById('refreshIcon');
+      const countdownWrap = document.getElementById('countdownWrap');
 
-      // Show spinner on first load only; silent refresh on subsequent polls
+      // Show spinner on first load or manual refresh or month switch
       if (isFirstLoad || isManual) {
         loadingBox.classList.remove('d-none');
         errorBox.classList.add('d-none');
@@ -1197,79 +1317,86 @@
 
       if (isManual) {
         refreshBtn.classList.add('spinning');
-        clearCache();
+        clearCache(monthIdx);
       }
+
+      // Hide countdown ring for historical months (no polling)
+      if (countdownWrap) countdownWrap.style.display = isLive ? '' : 'none';
 
       try {
         let results;
-        const cached = !isManual && isFirstLoad ? loadCache() : null;
+        const cached = !isManual && isFirstLoad ? loadCache(monthIdx) : null;
 
         if (cached) {
-          // Serve from cache instantly, then silently verify in background
           results = cached;
           buildUI(results);
           lastFingerprint = fingerprint(results);
           loadingBox.classList.add('d-none');
           tabContent.classList.remove('d-none');
           updateBar.classList.remove('d-none');
-          setStatus('stale', 'Loaded from cache — verifying…');
+          setStatus(isLive ? 'stale' : 'live', isLive ? 'Loaded from cache — verifying…' : `Historical data — ${monthCfg.label}`);
           document.getElementById('lastUpdated').textContent = 'cached';
           isFirstLoad = false;
 
-          // Background verification
-          Promise.all(SHEET_NAMES.map(fetchSheet)).then(fresh => {
-            const newFp = fingerprint(fresh);
-            if (newFp !== lastFingerprint) {
-              lastFingerprint = newFp;
-              saveCache(fresh);
-              buildUI(fresh);
-              const now = new Date();
-              document.getElementById('lastUpdated').textContent = fmtTime(now);
-              setStatus('live', 'Live data');
-              showToast('Sheet updated — page refreshed with latest data!');
-              pushHistory({ type: 'changed', time: fmtDateTime(now), msg: 'New data detected from Google Sheets.' });
-            } else {
-              setStatus('live', 'Live data');
-              const now = new Date();
-              document.getElementById('lastUpdated').textContent = fmtTime(now);
-              pushHistory({ type: 'same', time: fmtDateTime(now), msg: 'No changes detected.' });
-            }
-          }).catch(err => {
-            setStatus('stale', 'Using cached data');
-            console.warn('Background verify failed:', err);
-          });
+          // Background verification only for the live month
+          if (isLive) {
+            Promise.all(sheetNames.map(fetchSheet)).then(fresh => {
+              if (activeMonthIdx !== monthIdx) return; // user switched month
+              const newFp = fingerprint(fresh);
+              if (newFp !== lastFingerprint) {
+                lastFingerprint = newFp;
+                saveCache(monthIdx, fresh);
+                buildUI(fresh);
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = fmtTime(now);
+                setStatus('live', 'Live data');
+                showToast('Sheet updated — page refreshed with latest data!');
+                pushHistory({ type: 'changed', time: fmtDateTime(now), msg: `New data detected for ${monthCfg.label}.` });
+              } else {
+                setStatus('live', 'Live data');
+                document.getElementById('lastUpdated').textContent = fmtTime(new Date());
+                pushHistory({ type: 'same', time: fmtDateTime(new Date()), msg: 'No changes detected.' });
+              }
+            }).catch(err => {
+              setStatus('stale', 'Using cached data');
+              console.warn('Background verify failed:', err);
+            });
+          }
 
         } else {
           // Full fresh fetch
-          results = await Promise.all(SHEET_NAMES.map(fetchSheet));
-          const newFp = fingerprint(results);
+          results = await Promise.all(sheetNames.map(fetchSheet));
+          if (activeMonthIdx !== monthIdx) return; // user switched month mid-fetch
+
+          const newFp  = fingerprint(results);
           const changed = lastFingerprint !== null && newFp !== lastFingerprint;
 
-          if (changed) {
-            showToast('New data detected — page updated with latest results!');
-          }
+          if (changed && isLive) showToast('New data detected — page updated with latest results!');
 
           lastFingerprint = newFp;
-          saveCache(results);
+          saveCache(monthIdx, results);
           buildUI(results);
 
           const now = new Date();
           loadingBox.classList.add('d-none');
           tabContent.classList.remove('d-none');
           updateBar.classList.remove('d-none');
-          setStatus('live', 'Live data');
+          setStatus('live', isLive ? 'Live data' : `Historical — ${monthCfg.label}`);
           document.getElementById('lastUpdated').textContent = fmtTime(now);
 
-          pushHistory({
-            type: changed ? 'changed' : 'same',
-            time: fmtDateTime(now),
-            msg:  changed ? 'Data changed — page updated.' : 'No changes detected.',
-          });
+          if (isLive) {
+            pushHistory({
+              type: changed ? 'changed' : 'same',
+              time: fmtDateTime(now),
+              msg:  changed ? `Data changed for ${monthCfg.label}.` : 'No changes detected.',
+            });
+          }
 
           isFirstLoad = false;
         }
 
-        startCountdown();
+        // Only run countdown for the live month
+        if (isLive) startCountdown();
 
       } catch (err) {
         console.error(err);
@@ -1278,7 +1405,6 @@
           errorBox.classList.remove('d-none');
           document.getElementById('errorMsg').textContent = err.message;
         } else {
-          // Silent failure on background poll — keep showing existing data
           setStatus('error', 'Refresh failed — retrying soon');
           updateBar.classList.remove('d-none');
           tabContent.classList.remove('d-none');
@@ -1300,7 +1426,7 @@
        VISIBILITY API — resume polling when tab becomes visible again
     ════════════════════════════════════════════════════════════════════ */
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
+      if (!document.hidden && MONTHS[activeMonthIdx]?.isCurrent) {
         const stale = nextRefreshAt && Date.now() > nextRefreshAt;
         if (stale) loadAllData(false);
       }
@@ -1309,8 +1435,12 @@
     /* ════════════════════════════════════════════════════════════════════
        INIT
     ════════════════════════════════════════════════════════════════════ */
+    buildMonthNav();
     loadAllData();
-    setInterval(() => loadAllData(false), REFRESH_MS);
+    // Auto-poll only for the live/current month
+    setInterval(() => {
+      if (MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
+    }, REFRESH_MS);
 
     // Restore history on page load
     renderHistory(loadHistory());
