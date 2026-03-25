@@ -28,11 +28,22 @@
     /* ── HEADER ─────────────────────────────────────────────────────────── */
     .site-header {
       background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
-      color: #fff;
-      padding: 1.75rem 1rem 1.6rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      color: #fff; padding: 1.5rem 1rem 1.4rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .site-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+    .school-logo-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.5); background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+    .school-name { font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2); }
+    .school-sub  { font-size: 0.76rem; color: rgba(255,255,255,.78); }
+    .page-badge  {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.32);
+      color: #fff; font-size: 0.72rem; font-weight: 600;
+      padding: 0.2rem 0.9rem; border-radius: 50px; margin-top: 0.2rem;
     }
     .nav-back {
       position: absolute; top: 1rem; left: 1rem; z-index: 2;
@@ -43,37 +54,6 @@
       transition: background .18s;
     }
     .nav-back:hover { background: rgba(255,255,255,.28); color: #fff; }
-
-    .site-header::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    .header-inner {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-    }
-    .school-logo-img {
-      width: 70px; height: 70px; border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.5);
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,.2);
-    }
-    .school-name {
-      font-size: 1.5rem; font-weight: 800; letter-spacing: 0.2px;
-      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2);
-    }
-    .school-sub  { font-size: 0.78rem; color: rgba(255,255,255,.78); }
-    .badge-period {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.32);
-      color: #fff; font-size: 0.72rem; font-weight: 600;
-      padding: 0.2rem 0.9rem; border-radius: 50px;
-      letter-spacing: 0.3px; margin-top: 0.1rem;
-    }
 
     /* ── MONTH NAV ───────────────────────────────────────────────────────── */
     .month-nav {
@@ -374,9 +354,24 @@
   <script>
     /* ── CONFIG ─────────────────────────────────────────────────────────── */
     const MONTHS = [
-      { label: 'January 2026',  spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: false },
-      { label: 'February 2026', spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: false },
-      { label: 'March 2026',    spreadsheetId: '1-0Y7mK-6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6X8f_6', sheets: ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'], isCurrent: true }
+      {
+        label:          'January 2026',
+        spreadsheetId:  '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      false
+      },
+      {
+        label:          'February 2026',
+        spreadsheetId:  '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      false
+      },
+      {
+        label:          'March 2026',
+        spreadsheetId:  '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM',
+        sheets:         ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'],
+        isCurrent:      true
+      }
     ];
 
     let activeMonthIdx = MONTHS.findIndex(m => m.isCurrent);
@@ -418,80 +413,36 @@
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
       m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      m = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      m = url.match(/uc\?.*[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
-      return null;
+      return url;
     }
 
     // ─── DATA FETCHING ───────────────────────────────────────────────────────
     async function fetchSheet(sheetName, spreadsheetId) {
-      const bust = Math.floor(Date.now() / 60000);
-      const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const text = await res.text();
-      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
-      if (!match) throw new Error("Invalid response");
-      const json = JSON.parse(match[1]);
-      if (json.status !== 'ok') throw new Error(json.errors?.[0]?.message || "Sheet error");
+      const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+      const resp = await fetch(url);
+      const text = await resp.text();
+      const json = JSON.parse(text.substring(47, text.length - 2));
+      const rows = json.table.rows;
 
-      const cols        = json.table.cols;
-      const rows        = json.table.rows;
-      const headerLabel = (cols[0]?.label || '').trim();
+      const schoolName   = rows[0]?.c[0]?.v || '';
+      const period       = rows[1]?.c[0]?.v || '';
+      const academicYear = rows[2]?.c[0]?.v || '';
+      const levelName    = rows[3]?.c[0]?.v || '';
+      const teacher      = rows[10]?.c[1]?.v || '';
+      const preparedBy   = rows[10]?.c[6]?.v || '';
 
-      let schoolName   = 'Greenway School';
-      let period       = '';
-      let academicYear = '';
-      let levelName    = '';
-      let teacher      = '';
-      let preparedBy   = '';
-
-      const schoolMatch = headerLabel.match(/^(.+?)\s+Top 5/i);
-      if (schoolMatch) schoolName = schoolMatch[1].trim();
-
-      const periodMatch = headerLabel.match(/Top 5 of\s+(.+?)\s+Academic Year/i);
-      if (periodMatch) period = periodMatch[1].trim();
-      else {
-        const pm2 = headerLabel.match(/Top 5 of\s+(.+?)(?:\s+Level|\s*$)/i);
-        if (pm2) period = pm2[1].trim();
-      }
-
-      const yearMatch = headerLabel.match(/Academic Year\s*[:\-]\s*(\S+)/i);
-      if (yearMatch) academicYear = yearMatch[1].trim();
-
-      const levelMatch = headerLabel.match(/Level:\s*(.+?)\s+N\s*$/i);
-      if (levelMatch) levelName = levelMatch[1].trim();
-      else {
-        const lm2 = headerLabel.match(/Level:\s*(.+?)(?:\s+N)?$/i);
-        if (lm2) levelName = lm2[1].trim();
-      }
-
-      const students = [];
-      for (const row of rows) {
-        const cells = row.c || [];
-        const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
-        const name = String(cv(1)).trim();
-        if (!name) continue;
-        if (/^(date|seen|teacher|prepared)/i.test(name)) {
-          const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
-          if (teacherMatch) teacher = teacherMatch[1].trim();
-          const prepCol = String(cv(4) || cv(6) || '').trim();
-          if (prepCol && !/^(pass|fail)$/i.test(prepCol)) preparedBy = prepCol;
-          continue;
-        }
-        students.push({
-          num:    String(cv(0)).trim(),
-          name,
-          gender: String(cv(2)).trim(),
-          avg:    parseFloat(cv(3)) || 0,
-          grade:  String(cv(4) || 'F').trim(),
-          rank:   parseInt(cv(5)) || (students.length + 1),
-          result: String(cv(6) || 'Fail').trim()
-        });
-      }
+      const students = rows.slice(5, 10).map(r => {
+        const avg = r.c[3]?.v || 0;
+        return {
+          rank:   parseInt(r.c[0]?.v || 0),
+          name:   r.c[1]?.v || 'Unknown',
+          gender: r.c[2]?.v || '',
+          avg:    typeof avg === 'number' ? avg : parseFloat(avg),
+          grade:  r.c[4]?.v || '',
+          result: r.c[6]?.v || '',
+          photo:  driveUrlToDirectImg(r.c[7]?.v)
+        };
+      }).filter(s => s.name !== 'Unknown');
 
       return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
     }
@@ -517,7 +468,7 @@
     function switchMonth(idx) {
       if (idx === activeMonthIdx && !isFirstLoad) return;
       activeMonthIdx = idx;
-      isFirstLoad = false;
+      isFirstLoad = true;
       buildMonthNav();
       loadAllData();
     }
@@ -539,152 +490,153 @@
     }
 
     function buildTable(students) {
-      if (!students.length) return '<div class="empty-state"><i class="bi bi-inbox"></i>No data available</div>';
-
-      const sorted = students.slice().sort((a,b) => a.rank - b.rank || b.avg - a.avg);
-      const rows = sorted.map(s => {
-        const isTop5 = s.rank <= 5;
-        const gIcon = /female|f/i.test(s.gender) ? '<i class="bi bi-gender-female gender-f"></i>' : '<i class="bi bi-gender-male gender-m"></i>';
-        return `
-          <tr class="${isTop5 ? 'top5-row' : ''}" data-name="${escHtml(s.name).toLowerCase()}">
-            <td class="text-center"><span class="rank-badge ${rankClass(s.rank)}">${s.rank}</span></td>
-            <td class="text-center text-muted small">${escHtml(s.num)}</td>
-            <td><strong>${escHtml(s.name)}</strong>${isTop5 ? ' <i class="bi bi-star-fill top5-star"></i>' : ''}</td>
-            <td class="text-center">${gIcon}</td>
-            <td class="text-center fw-bold">${s.avg.toFixed(2)}</td>
-            <td class="text-center"><span class="grade-pill ${gradeClass(s.grade)}">${escHtml(s.grade)}</span></td>
-            <td>${/pass/i.test(s.result) ? '<span class="result-pass">Pass</span>' : '<span class="result-fail">Fail</span>'}</td>
-          </tr>`;
-      }).join('');
-
+      if (!students.length) return `<div class="p-4 text-center text-muted">No student data found for this class.</div>`;
+      
       return `
         <div class="table-wrap">
           <table class="report-table">
             <thead>
               <tr>
-                <th class="text-center" style="width:60px">Rank</th>
-                <th class="text-center" style="width:50px">No.</th>
+                <th style="width:50px">Rank</th>
                 <th>Student Name</th>
-                <th class="text-center" style="width:70px">Gender</th>
-                <th class="text-center" style="width:80px">Average</th>
-                <th class="text-center" style="width:70px">Grade</th>
-                <th style="width:90px">Result</th>
+                <th style="width:80px">Gender</th>
+                <th style="width:80px">Average</th>
+                <th style="width:80px">Grade</th>
+                <th style="width:100px">Result</th>
               </tr>
             </thead>
-            <tbody>${rows}</tbody>
+            <tbody>
+              ${students.map(s => `
+                <tr class="${s.rank <= 5 ? 'top5-row' : ''}">
+                  <td>
+                    <span class="rank-badge ${rankClass(s.rank)}">
+                      ${s.rank}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      ${s.photo ? `<img src="${s.photo}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">` : ''}
+                      <span class="fw-semibold">${escHtml(s.name)}</span>
+                      ${s.rank <= 5 ? '<i class="bi bi-star-fill top5-star"></i>' : ''}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="bi bi-gender-${s.gender.toLowerCase() === 'female' ? 'female gender-f' : 'male gender-m'}"></i>
+                  </td>
+                  <td class="fw-bold text-center">${s.avg.toFixed(2)}</td>
+                  <td class="text-center">
+                    <span class="grade-pill ${gradeClass(s.grade)}">${s.grade || 'N/A'}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="${/pass/i.test(s.result) ? 'result-pass' : 'result-fail'}">
+                      ${/pass/i.test(s.result) ? '<i class="bi bi-check-circle-fill me-1"></i>Pass' : '<i class="bi bi-x-circle-fill me-1"></i>Fail'}
+                    </span>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
           </table>
         </div>`;
     }
 
-    function buildUI(allClasses) {
-      const tabs = document.getElementById('classTabs');
-      const content = document.getElementById('tabContent');
-      const FIXED_CLASS_NAMES = ['Beginner A', 'Beginner B', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
-
-      const first = allClasses[0];
-      if (first) {
-        document.getElementById('schoolName').textContent = first.schoolName;
-        document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
-        document.getElementById('periodBadge').textContent = `⭐ Top 5 of ${MONTHS[activeMonthIdx].label}`;
-        document.getElementById('siteFooter').innerHTML = `© ${new Date().getFullYear()} ${escHtml(first.schoolName)} &nbsp;·&nbsp; Developed by <strong>Phoun Borin</strong>`;
-      }
-
-      tabs.innerHTML = allClasses.map((c, i) => `
-        <li class="nav-item">
-          <button class="nav-link ${i===0?'active':''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">${escHtml(FIXED_CLASS_NAMES[i])}</button>
-        </li>`).join('');
-
-      content.innerHTML = allClasses.map((c, i) => `
-        <div class="tab-pane fade ${i===0?'show active':''}" id="pane-${i}" role="tabpanel">
+    function buildTabPane(data, idx) {
+      const footerTeacher = data.teacher ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(data.teacher)}</strong></span>` : '';
+      const footerPrepared = data.preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Prepared by: <strong>${escHtml(data.preparedBy)}</strong></span>` : '';
+      
+      return `
+        <div class="tab-pane fade ${idx === 0 ? 'show active' : ''}" id="pane-${idx}" role="tabpanel">
           <div class="report-header">
             <div class="report-header-left">
-              <h2>${escHtml(FIXED_CLASS_NAMES[i])}</h2>
-              <p>${escHtml(c.schoolName)} · ${MONTHS[activeMonthIdx].label}</p>
+              <h2>${escHtml(data.levelName || data.sheetName)}</h2>
+              <p>Monthly Performance Report</p>
             </div>
             <div class="report-meta">
-              <span class="meta-pill"><i class="bi bi-people"></i> ${c.students.length} Students</span>
-              <span class="meta-pill"><i class="bi bi-calendar"></i> ${escHtml(c.period || 'Monthly')}</span>
+              <span class="meta-pill"><i class="bi bi-calendar3"></i> ${escHtml(data.period)}</span>
+              <span class="meta-pill"><i class="bi bi-mortarboard"></i> ${escHtml(data.academicYear)}</span>
             </div>
           </div>
-          ${buildSummary(c.students)}
-          ${buildTable(c.students)}
-          <div class="class-footer">
-            ${c.teacher ? `<span>Teacher: <strong>${escHtml(c.teacher)}</strong></span>` : ''}
-            ${c.preparedBy ? `<span>Checked by: <strong>${escHtml(c.preparedBy)}</strong></span>` : ''}
-          </div>
-        </div>`).join('');
+          ${buildSummary(data.students)}
+          ${buildTable(data.students)}
+          <div class="class-footer">${footerTeacher}${footerPrepared}</div>
+        </div>`;
+    }
+
+    async function loadAllData() {
+      const cfg = MONTHS[activeMonthIdx];
+      const loading = document.getElementById('loadingBox');
+      const error   = document.getElementById('errorBox');
+      const content = document.getElementById('tabContent');
+      const action  = document.getElementById('actionBar');
+      const status  = document.getElementById('statusBar');
+      
+      loading.classList.remove('d-none');
+      error.classList.add('d-none');
+      content.classList.add('d-none');
+      action.classList.add('d-none');
+      status.classList.add('d-none');
+
+      try {
+        const cached = loadCache(activeMonthIdx);
+        let results;
+        
+        if (cached && !isFirstLoad) {
+          results = cached;
+        } else {
+          results = await Promise.all(cfg.sheets.map(s => fetchSheet(s, cfg.spreadsheetId)));
+          saveCache(activeMonthIdx, results);
+        }
+
+        const tabsEl = document.getElementById('classTabs');
+        tabsEl.innerHTML = results.map((d, i) => `
+          <li class="nav-item">
+            <button class="nav-link ${i === 0 ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#pane-${i}" type="button">
+              ${escHtml(d.levelName || d.sheetName)}
+            </button>
+          </li>
+        `).join('');
+
+        content.innerHTML = results.map((d, i) => buildTabPane(d, i)).join('');
+        
+        if (results[0]) {
+          document.getElementById('schoolName').textContent = results[0].schoolName;
+          document.getElementById('academicYear').textContent = `Academic Year ${results[0].academicYear}`;
+          document.getElementById('periodBadge').textContent = `⭐ Top 5 of ${results[0].period}`;
+          document.getElementById('lastUpdated').textContent = fmtTime(new Date());
+        }
+
+        loading.classList.add('d-none');
+        content.classList.remove('d-none');
+        action.classList.remove('d-none');
+        status.classList.remove('d-none');
+        document.getElementById('statusText').textContent = cfg.isCurrent ? 'Live data' : 'Historical data';
+        document.getElementById('liveDot').className = 'live-dot ' + (cfg.isCurrent ? 'live' : 'stale');
+        
+        isFirstLoad = false;
+      } catch (err) {
+        console.error(err);
+        loading.classList.add('d-none');
+        error.classList.remove('d-none');
+        document.getElementById('errorMsg').textContent = err.message;
+      }
+    }
+
+    function manualRefresh() {
+      isFirstLoad = true;
+      loadAllData();
     }
 
     function filterTable() {
       const q = document.getElementById('studentSearch').value.toLowerCase();
       const rows = document.querySelectorAll('.report-table tbody tr');
-      rows.forEach(row => {
-        const name = row.getAttribute('data-name');
-        row.style.display = name.includes(q) ? '' : 'none';
+      rows.forEach(r => {
+        const name = r.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        r.style.display = name.includes(q) ? '' : 'none';
       });
     }
 
-    async function loadAllData(isManual = false) {
-      const cfg = MONTHS[activeMonthIdx];
-      const loadingBox = document.getElementById('loadingBox');
-      const errorBox = document.getElementById('errorBox');
-      const tabContent = document.getElementById('tabContent');
-      const statusBar = document.getElementById('statusBar');
-      const actionBar = document.getElementById('actionBar');
-      const refreshBtn = document.getElementById('refreshBtn');
-
-      if (isFirstLoad || isManual) {
-        loadingBox.classList.remove('d-none');
-        errorBox.classList.add('d-none');
-        tabContent.classList.add('d-none');
-        statusBar.classList.add('d-none');
-        actionBar.classList.add('d-none');
-      }
-      if (isManual) refreshBtn.classList.add('spinning');
-
-      try {
-        const cached = !isManual ? loadCache(activeMonthIdx) : null;
-        let data;
-        if (cached) {
-          data = cached;
-          setStatus('stale', 'Loaded from cache');
-        } else {
-          data = await Promise.all(cfg.sheets.map(s => fetchSheet(s, cfg.spreadsheetId)));
-          saveCache(activeMonthIdx, data);
-          setStatus('live', 'Live data');
-        }
-
-        buildUI(data);
-        loadingBox.classList.add('d-none');
-        tabContent.classList.remove('d-none');
-        statusBar.classList.remove('d-none');
-        actionBar.classList.remove('d-none');
-        document.getElementById('lastUpdated').textContent = fmtTime(new Date());
-        isFirstLoad = false;
-      } catch (err) {
-        console.error(err);
-        loadingBox.classList.add('d-none');
-        errorBox.classList.remove('d-none');
-        document.getElementById('errorMsg').textContent = err.message;
-      } finally {
-        refreshBtn.classList.remove('spinning');
-      }
-    }
-
-    function setStatus(type, msg) {
-      const dot = document.getElementById('liveDot');
-      const txt = document.getElementById('statusText');
-      dot.className = `live-dot ${type}`;
-      txt.textContent = msg;
-    }
-
-    function manualRefresh() { loadAllData(true); }
-
-    // INIT
-    document.addEventListener('DOMContentLoaded', () => {
-      buildMonthNav();
-      loadAllData();
-    });
+    // Init
+    buildMonthNav();
+    loadAllData();
   </script>
 </body>
 </html>
