@@ -246,10 +246,6 @@
         </button>
       </div>
 
-      <div class="summary-grid" id="summaryGrid">
-        <!-- JS injected -->
-      </div>
-
       <div class="tab-content" id="tabPanes">
         <!-- JS injected -->
       </div>
@@ -408,25 +404,16 @@
         allClassData.forEach((_, i) => {
           const btn = document.getElementById(`tab-btn-${i}`);
           if (btn) {
-            btn.addEventListener('click', (e) => {
-              // Manual tab switching to be 100% sure
-              const tabs = document.querySelectorAll('.nav-link');
-              tabs.forEach(t => t.classList.remove('active'));
-              btn.classList.add('active');
-              
-              const panes = document.querySelectorAll('.tab-pane');
-              panes.forEach(p => p.classList.remove('show', 'active'));
-              document.getElementById(`pane-${i}`).classList.add('show', 'active');
-              
-              updateSummary(i);
-              e.preventDefault();
-            });
+            btn.addEventListener('click', () => onTabSwitch());
           }
         });
 
         const panesEl = document.getElementById('tabPanes');
         panesEl.innerHTML = allClassData.map((d, i) => `
           <div class="tab-pane fade ${i === 0 ? 'show active' : ''}" id="pane-${i}" role="tabpanel">
+            <div class="summary-grid">
+              ${buildSummary(d.students)}
+            </div>
             <div class="report-card">
               <div class="report-header">
                 <div>
@@ -443,8 +430,6 @@
               </div>
             </div>
           </div>`).join('');
-
-        updateSummary(0);
         loading.classList.add('d-none');
         content.classList.remove('d-none');
       } catch (err) {
@@ -455,19 +440,9 @@
       }
     }
 
-    function updateSummary(idx) {
-      const data = allClassData[idx];
-      if (data && data.students) {
-        // Clear search first
-        const searchInput = document.getElementById('studentSearch');
-        if (searchInput) searchInput.value = '';
-        
-        // Re-calculate and update the summary specifically for this tab's data
-        const summaryGrid = document.getElementById('summaryGrid');
-        if (summaryGrid) {
-          summaryGrid.innerHTML = buildSummary(data.students);
-        }
-      }
+    function onTabSwitch() {
+      const searchInput = document.getElementById('studentSearch');
+      if (searchInput) searchInput.value = '';
     }
 
     function filterTable() {
