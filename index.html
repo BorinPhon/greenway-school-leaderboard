@@ -122,18 +122,19 @@
     .pyramid-row {
       display: flex;
       justify-content: center;
-      gap: 1.25rem;
-      width: 100%;
+      gap: 1.1rem;
     }
-    .pyramid-row-1 { max-width: 220px; }
-    .pyramid-row-2,
-    .pyramid-row-3 { max-width: 100%; justify-content: space-between; }
+    /* All cards share the same fixed width */
+    .student-card {
+      width: 160px;
+      min-width: 160px;
+      max-width: 160px;
+    }
 
     /* ══════════════════════════════════════════
        STUDENT CARD — Modern Compact Design
     ══════════════════════════════════════════ */
     .student-card {
-      flex: 1;
       background: var(--white);
       border-radius: var(--radius-card);
       border: 1px solid var(--green-border);
@@ -286,14 +287,13 @@
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 576px) {
+    @media (max-width: 600px) {
       .school-name { font-size: 1.2rem; }
       .school-logo-img { width: 60px; height: 60px; }
       .card-avg { font-size: 1.1rem; }
-      .card-name { font-size: 0.72rem; }
-      .pyramid-row-1 { max-width: 170px; }
-      .pyramid-row-2,
-      .pyramid-row-3 { max-width: 100%; }
+      .card-name { font-size: 0.7rem; }
+      .student-card { width: 130px; min-width: 130px; max-width: 130px; }
+      .pyramid-row { gap: 0.7rem; }
     }
   </style>
 </head>
