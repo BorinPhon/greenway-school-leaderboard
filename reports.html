@@ -438,9 +438,24 @@
     function updateSummary(idx) {
       const data = allClassData[idx];
       if (data && data.students) {
-        document.getElementById('summaryGrid').innerHTML = buildSummary(data.students);
+        // Force immediate update of the summary grid
+        const summaryHtml = buildSummary(data.students);
+        document.getElementById('summaryGrid').innerHTML = summaryHtml;
       }
-      document.getElementById('studentSearch').value = '';
+      
+      // Reset search
+      const searchInput = document.getElementById('studentSearch');
+      if (searchInput) searchInput.value = '';
+      
+      // Ensure the correct tab-pane is showing (Bootstrap should handle this, but let's be safe)
+      const allPanes = document.querySelectorAll('.tab-pane');
+      allPanes.forEach((p, i) => {
+        if (i === idx) {
+          p.classList.add('show', 'active');
+        } else {
+          p.classList.remove('show', 'active');
+        }
+      });
     }
 
     function filterTable() {
