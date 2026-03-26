@@ -7,13 +7,16 @@
 // ⚙️ CONFIGURATION - UPDATE THESE VALUES
 // ════════════════════════════════════════════════════════════════════
 
-// Your Google Sheet ID (from the URL)
-const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
+// BOTH are needed and correct:
+const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';  // ← Google Sheet (student data)
+const PHOTOS_FOLDER_ID = '1264mplK0-VWhByY1a7W0mX9wsv3e5yLB';           // ← Google Drive folder (photo storage)
+
+
 
 // Your Google Drive Folder ID (where photos will be stored)
 // You'll get this after creating the folder structure
 // For now, use empty string and we'll update it after creating the folder
-const PHOTOS_FOLDER_ID = '';  // ← UPDATE THIS AFTER CREATING GOOGLE DRIVE FOLDER
+
 
 // Sheet names (must match exactly)
 const SHEET_NAMES = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
