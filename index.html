@@ -592,18 +592,18 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  
   <script>
     /* ════════════════════════════════════════════════════════════════════
        CONFIG
        ─ SPREADSHEET_ID : your Google Sheets document ID
        ─ MONTHS         : array of monthly periods with sheet tab names
-       ─ REFRESH_MS     : how often to poll for changes (default: 5 min)
+       ─ REFRESH_MS     : how often to poll for changes (default: 1 min)  ← UPDATED
        ─ MONTHLY_CACHE  : cache data per calendar month; auto-invalidates
                           at the start of each new month
     ════════════════════════════════════════════════════════════════════ */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
-    const REFRESH_MS     = 5 * 60 * 1000;   // 5 minutes between polls
+    const REFRESH_MS     = 1 * 60 * 1000;   // 1 minute between polls  ← CHANGED FROM 5 * 60 * 1000
     const PHOTO_STORE    = 'gws_student_photos_v2';
 
     // ── PHOTO UPLOAD CONFIG ──────────────────────────────────────────────────
@@ -615,9 +615,10 @@
     // Each entry = one month of data.
     // • label         : shown on the month navigation button
     // • spreadsheetId : the Google Spreadsheet ID for that month
-    //                    (use the ID from the URL of the month's spreadsheet)
+    //                    (use the ID from the URL of the month's spreadsheet )
     // • sheets        : the 6 sheet tab names (always the same: BA, BB, Grade 1–4)
     // • isCurrent     : true = this month auto-refreshes every 5 min (LIVE badge)
+
     //
     // TO ADD A NEW MONTH:
     //   1. Create your new monthly folder + spreadsheet in Google Drive as usual
