@@ -1120,15 +1120,17 @@
         setCardUploading(uploadId, true);
 
         try {
+          // Use FormData to avoid CORS preflight issues
+          const formData = new FormData();
+          formData.append('sheetName', sheetName);
+          formData.append('studentName', studentName);
+          formData.append('imageData', dataUrl);
+          formData.append('fileName', file.name);
+          
           const resp = await fetch(SCRIPT_URL, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              sheetName,
-              studentName,
-              imageData: dataUrl,
-              fileName:  file.name
-            })
+            body: formData
+            // Note: Don't set Content-Type header - browser will set it automatically with boundary
           });
 
           const result = await resp.json();
