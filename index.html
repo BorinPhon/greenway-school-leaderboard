@@ -1,630 +1,672 @@
-<!DOCTYPE html>
+<!-- 
+  GREENWAY SCHOOL - LEADERBOARD WITH PHOTO UPLOAD
+  
+  IMPORTANT: Before using this file, you MUST:
+  1. Deploy the Google Apps Script (see DEPLOYMENT_INSTRUCTIONS.md)
+  2. Copy the deployment URL
+  3. Replace [YOUR_SCRIPT_URL_HERE] with the actual URL
+  
+  Example:
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/exec';
+-->
+
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Greenway School – Top 5 Outstanding Students</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
+  <title>Greenway School - Top 5 Leaderboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
   <style>
-    /* ── DESIGN TOKENS ─────────────────────────────────────────────────── */
     :root {
-      --c-bg:          #f2f6f2;
-      --c-surface:     #ffffff;
-      --c-green-dark:  #1b5e20;
-      --c-green:       #2e7d32;
-      --c-green-mid:   #388e3c;
-      --c-green-light: #e8f5e9;
-      --c-text:        #1a2e1a;
-      --c-muted:       #5a7a5a;
-      --r-card:        14px;
-      --shadow-hover:  0 6px 12px rgba(0,0,0,.09), 0 16px 32px rgba(0,0,0,.10);
+      --c-primary: #2563eb;
+      --c-success: #16a34a;
+      --c-danger: #dc2626;
+      --c-warning: #ea580c;
+      --c-info: #0891b2;
+      --c-light: #f3f4f6;
+      --c-dark: #1f2937;
+      --c-text: #374151;
+      --c-border: #e5e7eb;
+      --c-shadow: rgba(0, 0, 0, 0.1);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--c-bg);
-      color: var(--c-text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      padding: 20px;
+      color: var(--c-text);
     }
 
-    /* ── HEADER ─────────────────────────────────────────────────────────── */
-    .site-header {
-      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
-      color: #fff;
-      padding: 1.75rem 1rem 1.6rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .nav-reports-btn {
-      position: absolute; top: 1rem; right: 1rem; z-index: 2;
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
-      color: #fff; font-size: 0.75rem; font-weight: 600;
-      padding: 0.3rem 0.8rem; border-radius: 50px; text-decoration: none;
-      transition: background .18s;
-    }
-    .nav-reports-btn:hover { background: rgba(255,255,255,.28); color: #fff; }
-
-    .site-header::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    .header-inner {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-    }
-    .school-logo-img {
-      width: 70px; height: 70px; border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.5);
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,.2);
-    }
-    .school-name {
-      font-size: 1.5rem; font-weight: 800; letter-spacing: 0.2px;
-      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.2);
-    }
-    .school-sub  { font-size: 0.78rem; color: rgba(255,255,255,.78); }
-    .badge-period {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.32);
-      color: #fff; font-size: 0.72rem; font-weight: 600;
-      padding: 0.2rem 0.9rem; border-radius: 50px;
-      letter-spacing: 0.3px; margin-top: 0.1rem;
-    }
-
-    /* ── STICKY TABS ─────────────────────────────────────────────────────── */
-    .tab-wrapper {
-      background: var(--c-green);
-      padding: 0 0.5rem;
-      border-bottom: 2px solid var(--c-green-mid);
-    }
-    .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-    .nav-tabs .nav-link {
-      color: rgba(255,255,255,0.65); border: none;
-      border-bottom: 3px solid transparent; border-radius: 0;
-      padding: 0.75rem 1.1rem; font-size: 0.82rem; font-weight: 600;
-      white-space: nowrap; transition: color .2s, border-color .2s;
-      background: transparent !important;
-    }
-    .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.3); background: transparent !important; }
-    .nav-tabs .nav-link.active { color: #fff; border-bottom-color: #fff; background: transparent !important; }
-
-    /* ── MAIN ────────────────────────────────────────────────────────────── */
-    .main-content {
-      max-width: 900px;
-      margin: 1.75rem auto;
-      padding: 0 1rem 3rem;
-    }
-
-    /* ── SECTION TITLE ───────────────────────────────────────────────────── */
-    .class-title { text-align: center; margin-bottom: 1.5rem; }
-    .class-title h2 { font-size: 1.15rem; font-weight: 700; color: var(--c-text); margin-bottom: 0.15rem; }
-    .class-title p  { font-size: 0.77rem; color: var(--c-muted); }
-
-    /* ── GRID ────────────────────────────────────────────────────────────── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
-    }
-
-    /* ══════════════════════════════════════════════════════════════════════
-       PROFESSIONAL STUDENT CARD
-    ══════════════════════════════════════════════════════════════════════ */
-    .student-card {
-      background: var(--c-surface);
-      border-radius: var(--r-card);
-      border: 1px solid var(--c-border);
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform .2s ease, box-shadow .2s ease;
-      position: relative;
-    }
-    .student-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    /* Top accent bar */
-    .card-accent { height: 4px; width: 100%; flex-shrink: 0; }
-    .rank-1 .card-accent { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
-    .rank-2 .card-accent { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
-    .rank-3 .card-accent { background: linear-gradient(90deg, #b45309, #d97706); }
-    .rank-4 .card-accent,
-    .rank-5 .card-accent { background: linear-gradient(90deg, #43a047, #81c784); }
-
-    /* ── PHOTO ZONE ──────────────────────────────────────────────────────── */
-    .card-photo-wrap {
-      position: relative;
-      width: 100%; aspect-ratio: 1 / 1;
-      background: var(--c-green-light);
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .card-photo {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top center;
-      display: block;
-      transition: transform .3s ease;
-    }
-    .student-card:hover .card-photo { transform: scale(1.04); }
-
-    /* Placeholder */
-    .card-photo-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 0.3rem;
-      background: linear-gradient(160deg, #e8f5e9 0%, #c8e6c9 100%);
-    }
-    .card-photo-placeholder .ph-icon { font-size: 2.4rem; color: #81c784; opacity: .7; }
-    .card-photo-placeholder .ph-label {
-      font-size: 0.58rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.5px; color: var(--c-muted);
-    }
-
-    /* Upload overlay */
-    .upload-overlay {
-      position: absolute; inset: 0;
-      background: rgba(27,94,32,.55);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 0.3rem;
-      opacity: 0; transition: opacity .22s ease; cursor: pointer;
-    }
-    .card-photo-wrap:hover .upload-overlay { opacity: 1; }
-    .upload-overlay i    { font-size: 1.5rem; color: #fff; }
-    .upload-overlay span { font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: 0.5px; }
-    .upload-input { display: none; }
-
-    /* Upload progress spinner overlay */
-    .upload-spinner {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,.55);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 0.4rem;
-      border-radius: var(--r-card) var(--r-card) 0 0;
-      z-index: 10; color: #fff; font-size: 0.62rem; font-weight: 600;
-      letter-spacing: 0.4px; text-transform: uppercase;
-    }
-    .spinner-ring {
-      width: 28px; height: 28px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Google Drive photo badge — bottom-left corner of photo */
-    .drive-badge {
-      position: absolute; bottom: 5px; left: 6px;
-      background: rgba(255,255,255,.92);
-      border-radius: 50%;
-      width: 20px; height: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.62rem; color: #4285F4;
-      box-shadow: 0 1px 4px rgba(0,0,0,.18);
-      z-index: 2; pointer-events: none;
-    }
-
-    /* Rank badge — top-right of photo */
-    .rank-badge {
-      position: absolute; top: 8px; right: 8px;
-      width: 28px; height: 28px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 1px 5px rgba(0,0,0,.15);
-      border: 1.5px solid rgba(255,255,255,.7);
-    }
-    .rank-1 .rank-badge { border-color: #f59e0b; }
-    .rank-2 .rank-badge { border-color: #94a3b8; }
-    .rank-3 .rank-badge { border-color: #d97706; }
-    .rank-4 .rank-badge,
-    .rank-5 .rank-badge { border-color: #66bb6a; }
-    .rank-num {
-      font-size: 0.62rem; font-weight: 800; color: #555; line-height: 1;
-    }
-
-    /* ── CARD BODY ───────────────────────────────────────────────────────── */
-    .card-body-inner {
-      padding: 0.65rem 0.65rem 0.75rem;
-      display: flex; flex-direction: column; gap: 0.4rem; flex: 1;
-    }
-    .card-name {
-      font-size: 0.76rem; font-weight: 700;
-      color: var(--c-text); line-height: 1.3;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      text-align: center;
-    }
-    .card-divider { height: 1px; background: var(--c-border); margin: 0 -0.65rem; }
-    .card-score-row {
-      display: flex; align-items: baseline; justify-content: center; gap: 3px;
-    }
-    .card-avg {
-      font-size: 1.3rem; font-weight: 800;
-      color: var(--c-green); line-height: 1; letter-spacing: -0.5px;
-    }
-    .card-avg-label {
-      font-size: 0.57rem; font-weight: 600;
-      color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.4px;
-    }
-    .card-gender {
-      font-size: 0.64rem; color: var(--c-muted);
-      text-align: center; display: flex; align-items: center; justify-content: center; gap: 3px;
-    }
-    .card-badges {
-      display: flex; justify-content: center; gap: 0.28rem; flex-wrap: wrap;
-    }
-    .badge-pill {
-      font-size: 0.59rem; font-weight: 700;
-      padding: 0.15em 0.55em; border-radius: 50px; letter-spacing: 0.2px;
-    }
-    .badge-pass { background: #dcfce7; color: #15803d; }
-    .badge-fail { background: #fee2e2; color: #b91c1c; }
-    .grade-a    { background: #dcfce7; color: #14532d; }
-    .grade-b    { background: #d1fae5; color: #065f46; }
-    .grade-c    { background: #ecfccb; color: #365314; }
-    .grade-d    { background: #fef9c3; color: #713f12; }
-    .grade-f    { background: #fee2e2; color: #991b1b; }
-
-    /* ── TIE NOTICE ──────────────────────────────────────────────────────── */
-    .tie-notice { font-size: 0.7rem; color: #aaa; margin-top: 0.3rem; font-style: italic; text-align: center; }
-
-    /* ── TEACHER FOOTER ──────────────────────────────────────────────────── */
-    .class-footer {
-      margin-top: 1.25rem;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.65rem 1rem;
-      background: var(--c-surface);
-      border: 1px solid var(--c-border);
-      border-radius: 10px;
-      font-size: 0.74rem; color: var(--c-muted);
-    }
-    .class-footer span { display: flex; align-items: center; gap: 0.3rem; }
-
-    /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
-    .loading-box { text-align: center; padding: 4rem 1rem; color: #888; }
-    .spinner-border { width: 2.5rem; height: 2.5rem; color: var(--c-green-mid) !important; }
-    .error-box { text-align: center; padding: 3rem 1rem; }
-
-    /* ══════════════════════════════════════════════════════════════════════
-       AUTO-UPDATE STATUS BAR
-    ══════════════════════════════════════════════════════════════════════ */
-    .update-bar {
-      background: var(--c-surface);
-      border: 1px solid var(--c-border);
+    .container-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
       border-radius: 12px;
-      padding: 0.7rem 1rem;
-      margin-top: 1.75rem;
+      box-shadow: 0 20px 60px var(--c-shadow);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--c-primary) 0%, #1e40af 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      margin: 5px 0;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .live-indicator {
+      background: #ef4444;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    /* Navigation */
+    .navbar-custom {
+      background: var(--c-light);
+      border-bottom: 2px solid var(--c-border);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .month-dropdown {
+      position: relative;
+    }
+
+    .dropdown-btn {
+      background: var(--c-primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      font-size: 0.74rem;
-      color: var(--c-muted);
-    }
-    .update-bar-left  { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
-    .update-bar-right { display: flex; align-items: center; gap: 0.5rem; }
-
-    /* Live dot */
-    .live-dot {
-      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-      background: #22c55e; flex-shrink: 0;
-      box-shadow: 0 0 0 0 rgba(34,197,94,.4);
-      animation: livePulse 2s infinite;
-    }
-    .live-dot.stale { background: #f59e0b; box-shadow: 0 0 0 0 rgba(245,158,11,.4); }
-    .live-dot.error { background: #ef4444; animation: none; }
-    @keyframes livePulse {
-      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.4); }
-      70%  { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
-      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+      gap: 8px;
     }
 
-    /* Countdown ring */
-    .countdown-wrap {
-      display: flex; align-items: center; gap: 0.35rem;
-      font-size: 0.72rem; color: var(--c-muted);
-    }
-    .countdown-ring {
-      position: relative; width: 28px; height: 28px;
-    }
-    .countdown-ring svg { transform: rotate(-90deg); }
-    .countdown-ring .ring-bg   { fill: none; stroke: #e2e8f0; stroke-width: 3; }
-    .countdown-ring .ring-fill { fill: none; stroke: #43a047; stroke-width: 3;
-                                  stroke-linecap: round; transition: stroke-dashoffset .9s linear; }
-    .countdown-ring .ring-text {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.55rem; font-weight: 700; color: var(--c-green);
+    .dropdown-btn:hover {
+      background: #1d4ed8;
     }
 
-    /* Monthly badge */
-    .monthly-badge {
-      display: inline-flex; align-items: center; gap: 0.25rem;
-      background: #e8f5e9; color: #2e7d32;
-      border: 1px solid #c8e6c9;
-      font-size: 0.68rem; font-weight: 600;
-      padding: 0.15rem 0.6rem; border-radius: 50px;
-    }
-
-    /* Change detected toast */
-    .change-toast {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
-      background: #1b5e20; color: #fff;
-      padding: 0.75rem 1.1rem; border-radius: 10px;
-      font-size: 0.8rem; font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0,0,0,.2);
-      display: flex; align-items: center; gap: 0.5rem;
-      transform: translateY(80px); opacity: 0;
-      transition: transform .35s ease, opacity .35s ease;
-      max-width: 320px;
-    }
-    .change-toast.show { transform: translateY(0); opacity: 1; }
-    .change-toast .btn-close-toast {
-      background: none; border: none; color: rgba(255,255,255,.7);
-      cursor: pointer; margin-left: auto; font-size: 1rem; line-height: 1;
-    }
-
-    /* Refresh button */
-    .btn-refresh {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: var(--c-green-light); color: var(--c-green);
-      border: 1.5px solid #c8e6c9; border-radius: 8px;
-      font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.75rem;
-      cursor: pointer; transition: background .15s, border-color .15s;
-      white-space: nowrap;
-    }
-    .btn-refresh:hover { background: #c8e6c9; border-color: #a5d6a7; }
-    .btn-refresh.spinning i { animation: spin .7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Update history panel */
-    .history-panel {
-      background: var(--c-surface);
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
       border: 1px solid var(--c-border);
-      border-radius: 12px;
-      padding: 0.85rem 1rem;
-      margin-top: 0.75rem;
-      font-size: 0.73rem; color: var(--c-muted);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px var(--c-shadow);
+      min-width: 200px;
+      z-index: 1000;
+      display: none;
     }
-    .history-panel h6 {
-      font-size: 0.74rem; font-weight: 700;
-      color: var(--c-text); margin-bottom: 0.5rem;
-      display: flex; align-items: center; gap: 0.35rem;
-    }
-    .history-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
-    .history-list li {
-      display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.25rem 0; border-bottom: 1px solid #f0f4f0;
-    }
-    .history-list li:last-child { border-bottom: none; }
-    .history-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .history-dot.changed { background: #22c55e; }
-    .history-dot.same    { background: #94a3b8; }
-    .history-dot.error   { background: #ef4444; }
 
-    /* ── MONTH NAVIGATION BAR ──────────────────────────────────────────────── */
-    .month-nav {
-      background: var(--c-surface);
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--c-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-item:hover {
+      background: var(--c-light);
+    }
+
+    .dropdown-item.active {
+      background: var(--c-primary);
+      color: white;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #16a34a;
+      animation: pulse 2s infinite;
+    }
+
+    .live-dot.stale {
+      background: #f59e0b;
+      animation: none;
+    }
+
+    .live-dot.error {
+      background: #dc2626;
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Tabs */
+    .nav-tabs {
       border-bottom: 2px solid var(--c-border);
-      padding: 0.75rem 1rem;
+      padding: 0 20px;
+    }
+
+    .nav-link {
+      color: var(--c-text);
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--c-primary);
+      border-bottom-color: var(--c-primary);
+    }
+
+    .nav-link.active {
+      color: var(--c-primary);
+      border-bottom-color: var(--c-primary);
+    }
+
+    /* Content */
+    .tab-content {
+      padding: 40px 20px;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .class-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .class-title h2 {
+      font-size: 2rem;
+      color: var(--c-primary);
+      margin-bottom: 5px;
+    }
+
+    .class-title p {
+      font-size: 1.1rem;
+      color: var(--c-text);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .student-card {
+      background: white;
+      border: 2px solid var(--c-border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .student-card:hover {
+      box-shadow: 0 10px 30px var(--c-shadow);
+      transform: translateY(-5px);
+      border-color: var(--c-primary);
+    }
+
+    .card-accent {
+      height: 4px;
+      background: linear-gradient(90deg, var(--c-primary), var(--c-info));
+    }
+
+    .card-photo-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      background: var(--c-light);
+      overflow: hidden;
+    }
+
+    .card-photo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-photo-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--c-light);
+      color: var(--c-text);
+    }
+
+    .ph-icon {
+      font-size: 3rem;
+      opacity: 0.3;
+      margin-bottom: 10px;
+    }
+
+    .ph-label {
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .upload-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-photo-wrap:hover .upload-overlay {
+      opacity: 1;
+    }
+
+    .upload-overlay i {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .upload-overlay span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .upload-input {
+      display: none;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
-      position: sticky;
+      font-size: 1.8rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px var(--c-shadow);
+    }
+
+    .rank-num {
+      color: var(--c-primary);
+      font-size: 1.2rem;
+    }
+
+    .drive-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px var(--c-shadow);
+      color: #4285f4;
+      font-size: 1.2rem;
+    }
+
+    .upload-spinner {
+      position: absolute;
       top: 0;
-      z-index: 1000;
+      left: 0;
       width: 100%;
-      text-align: center;
-    }
-    .month-nav-label { font-size: 0.72rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    .month-dropdown .btn-dropdown {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.4rem 1.2rem; border-radius: 50px;
-      border: 1.5px solid var(--c-border);
-      background: var(--c-surface); color: var(--c-green-dark);
-      font-size: 0.8rem; font-weight: 600;
-      transition: all .2s;
-    }
-    .month-dropdown .btn-dropdown:hover { background: var(--c-green-light); }
-    .month-dropdown .dropdown-menu {
-      border-radius: 12px; border: 1px solid var(--c-border);
-      box-shadow: 0 4px 12px rgba(0,0,0,.1); padding: 0.4rem;
-    }
-    .month-dropdown .dropdown-item {
-      border-radius: 8px; font-size: 0.8rem; font-weight: 500;
-      padding: 0.5rem 1rem; color: var(--c-muted);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .month-dropdown .dropdown-item:hover { background: var(--c-green-light); color: var(--c-green-dark); }
-    .month-dropdown .dropdown-item.active { background: var(--c-green); color: #fff; }
-    .month-dropdown .live-indicator {
-      font-size: 0.55rem; font-weight: 800; background: #22c55e; color: #fff;
-      padding: 1px 4px; border-radius: 4px; margin-left: 8px;
-    }ing {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.72rem; color: var(--c-muted);
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 10;
     }
 
-    /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
-    .site-footer {
-      text-align: center; padding: 1rem;
-      font-size: 0.74rem; color: #aaa;
+    .spinner-ring {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .card-body-inner {
+      padding: 15px;
+    }
+
+    .card-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--c-dark);
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-divider {
+      height: 1px;
+      background: var(--c-border);
+      margin-bottom: 10px;
+    }
+
+    .card-score-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .card-avg {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--c-primary);
+    }
+
+    .card-avg-label {
+      font-size: 0.85rem;
+      color: var(--c-text);
+      opacity: 0.7;
+    }
+
+    .card-gender {
+      font-size: 0.9rem;
+      color: var(--c-text);
+      margin-bottom: 10px;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .grade-a {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .grade-b {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .grade-c {
+      background: #fed7aa;
+      color: #92400e;
+    }
+
+    .grade-d {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .grade-f {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .badge-pass {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-fail {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* Footer */
+    .class-footer {
       border-top: 1px solid var(--c-border);
-      background: var(--c-surface);
+      padding-top: 20px;
+      margin-top: 30px;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: var(--c-text);
     }
 
-    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
-    @media (max-width: 760px) {
-      .cards-grid { grid-template-columns: repeat(3, 1fr); }
-      .class-footer { flex-direction: column; gap: 0.3rem; text-align: center; }
-      .update-bar { flex-direction: column; align-items: flex-start; }
+    .class-footer span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    @media (max-width: 500px) {
-      .school-name { font-size: 1.2rem; }
-      .school-logo-img { width: 58px; height: 58px; }
-      .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
-      .card-avg { font-size: 1.1rem; }
+
+    /* Loading & Error */
+    .loading-box {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      border: 4px solid var(--c-light);
+      border-top: 4px solid var(--c-primary);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    .error-box {
+      background: #fee2e2;
+      border: 2px solid #fecaca;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px;
+      color: #991b1b;
+    }
+
+    .error-box h3 {
+      margin-bottom: 10px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      border-left: 4px solid var(--c-success);
+      padding: 16px 20px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px var(--c-shadow);
+      z-index: 2000;
+      opacity: 0;
+      transform: translateX(400px);
+      transition: all 0.3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar-custom {
+        flex-direction: column;
+      }
+
+      .class-footer {
+        flex-direction: column;
+        gap: 15px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- ── HEADER ── -->
-  <header class="site-header">
-    <a href="reports.html" class="nav-reports-btn">
-      <i class="bi bi-file-earmark-bar-graph"></i> Monthly Reports
-    </a>
-    <div class="header-inner">
-      <img src="logo.png" alt="School Logo" class="school-logo-img"
-           onerror="this.style.display='none'" />
-      <div class="school-name" id="schoolName">Greenway School</div>
-      <div class="school-sub"  id="academicYear">Academic Year 2025–2026</div>
-      <div class="badge-period" id="periodBadge">⭐ Top 5</div>
-    </div>
-  </header>
-
-  <!-- MONTH NAVIGATION -->
-  <nav class="month-nav">
-    <span class="month-nav-label"><i class="bi bi-calendar3 me-1"></i>Select Period:</span>
-    <div class="dropdown month-dropdown" id="monthDropdownWrap">
-      <button class="btn-dropdown dropdown-toggle" type="button" id="monthDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
-        Loading...
-      </button>
-      <ul class="dropdown-menu" id="monthDropdownMenu" aria-labelledby="monthDropdownBtn">
-        <!-- JS injected -->
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ── TABS ── -->
-  <div class="tab-wrapper">
-    <ul class="nav nav-tabs" id="classTabs" role="tablist"></ul>
-  </div>
-
-  <!-- ── MAIN ── -->
-  <div class="main-content">
-
-    <!-- Loading -->
-    <div id="loadingBox" class="loading-box">
-      <div class="spinner-border mb-3" role="status"><span class="visually-hidden">Loading…</span></div>
-      <div class="fw-semibold" style="color:#388e3c">Loading student data…</div>
-      <div class="text-muted small mt-1">Fetching live data from Google Sheets</div>
+  <div class="container-main">
+    <!-- Header -->
+    <div class="header">
+      <h1 id="schoolName">Greenway School</h1>
+      <p id="periodBadge">⭐ Top 5 of March</p>
+      <p id="academicYear">Academic Year 2025-2026</p>
     </div>
 
-    <!-- Error -->
-    <div id="errorBox" class="error-box d-none">
-      <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:2.5rem"></i>
-      <div class="fw-semibold mt-2 text-danger">Failed to load data</div>
-      <div class="text-muted small mt-1" id="errorMsg"></div>
-      <button class="btn-refresh mt-3" onclick="manualRefresh()">
-        <i class="bi bi-arrow-clockwise"></i> Retry
-      </button>
-    </div>
-
-    <!-- Tab content -->
-    <div id="tabContent" class="tab-content d-none"></div>
-
-    <!-- ── AUTO-UPDATE STATUS BAR ── -->
-    <div class="update-bar d-none" id="updateBar">
-      <div class="update-bar-left">
-        <span class="live-dot" id="liveDot"></span>
-        <span id="updateStatus">Live data</span>
-        <span class="monthly-badge" id="monthlyBadge">
-          <i class="bi bi-calendar-check"></i>
-          <span id="currentPeriodLabel">—</span>
-        </span>
-        <span id="lastUpdatedLabel" style="color:#aaa">Last updated: <strong id="lastUpdated">—</strong></span>
-      </div>
-      <div class="update-bar-right">
-        <div class="countdown-wrap" id="countdownWrap" title="Next auto-refresh">
-          <div class="countdown-ring">
-            <svg viewBox="0 0 28 28" width="28" height="28">
-              <circle class="ring-bg"   cx="14" cy="14" r="11"/>
-              <circle class="ring-fill" id="ringFill" cx="14" cy="14" r="11"
-                      stroke-dasharray="69.1" stroke-dashoffset="0"/>
-            </svg>
-            <div class="ring-text" id="countdownText">1m</div>
-          </div>
-          <span style="font-size:0.68rem">next refresh</span>
-        </div>
-        <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">
-          <i class="bi bi-arrow-clockwise" id="refreshIcon"></i> Refresh
+    <!-- Navigation -->
+    <div class="navbar-custom">
+      <div class="month-dropdown">
+        <button class="dropdown-btn" id="monthDropdownBtn" onclick="toggleDropdown()">
+          <i class="bi bi-calendar-event"></i>
+          <span>March</span>
         </button>
+        <div class="dropdown-menu" id="monthDropdownMenu"></div>
+      </div>
+
+      <div class="status-bar">
+        <div class="live-dot" id="liveDot"></div>
+        <span id="updateStatus">Loading…</span>
+        <span id="lastUpdated" style="font-size: 0.85rem; opacity: 0.7;"></span>
       </div>
     </div>
 
-    <!-- ── UPDATE HISTORY ── -->
-    <div class="history-panel d-none" id="historyPanel">
-      <h6><i class="bi bi-clock-history"></i> Update History (this session)</h6>
-      <ul class="history-list" id="historyList"></ul>
+    <!-- Tabs -->
+    <ul class="nav-tabs" id="classTabs" role="tablist"></ul>
+
+    <!-- Content -->
+    <div class="tab-content" id="tabContent"></div>
+
+    <!-- Loading Box -->
+    <div class="loading-box d-none" id="loadingBox">
+      <div class="spinner"></div>
+      <p>Loading leaderboard data…</p>
     </div>
 
-  </div><!-- /main-content -->
-
-  <!-- ── CHANGE DETECTED TOAST ── -->
-  <div class="change-toast" id="changeToast">
-    <i class="bi bi-arrow-repeat"></i>
-    <span id="changeToastMsg">New data detected — page updated!</span>
-    <button class="btn-close-toast" onclick="hideToast()" aria-label="Close">×</button>
+    <!-- Error Box -->
+    <div class="error-box d-none" id="errorBox">
+      <h3><i class="bi bi-exclamation-triangle"></i> Error Loading Data</h3>
+      <p id="errorMsg"></p>
+    </div>
   </div>
 
-  <!-- ── FOOTER ── -->
-  <footer class="site-footer" id="siteFooter">
-    © 2026 Greenway School
-  </footer>
+  <!-- Toast -->
+  <div class="toast" id="changeToast">
+    <span id="changeToastMsg"></span>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
   <script>
     /* ════════════════════════════════════════════════════════════════════
-       CONFIG
-       ─ SPREADSHEET_ID : your Google Sheets document ID
-       ─ MONTHS         : array of monthly periods with sheet tab names
-       ─ REFRESH_MS     : how often to poll for changes (default: 1 min)  ← UPDATED
-       ─ MONTHLY_CACHE  : cache data per calendar month; auto-invalidates
-                          at the start of each new month
+       CONFIG - UPDATE THESE VALUES
     ════════════════════════════════════════════════════════════════════ */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
-    const REFRESH_MS     = 1 * 60 * 1000;   // 1 minute between polls  ← CHANGED FROM 5 * 60 * 1000
+    const REFRESH_MS     = 1 * 60 * 1000;   // 1 minute between polls
     const PHOTO_STORE    = 'gws_student_photos_v2';
 
     // ── PHOTO UPLOAD CONFIG ──────────────────────────────────────────────────
-    // Paste your Google Apps Script Web App URL here after deploying Code.gs.
-    // Leave as empty string '' to disable Drive upload (local-only mode).
-    const SCRIPT_URL = '';  // e.g. 'https://script.google.com/macros/s/AKfy.../exec'
+    // IMPORTANT: Replace [YOUR_SCRIPT_URL_HERE] with your Google Apps Script URL
+    // After deploying the script, copy the deployment URL and paste it here
+    // Example: const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/exec';
+    const SCRIPT_URL = '[YOUR_SCRIPT_URL_HERE]';
 
     // ── MULTI-MONTH CONFIG ──────────────────────────────────────────────────
-    // Each entry = one month of data.
-    // • label         : shown on the month navigation button
-    // • spreadsheetId : the Google Spreadsheet ID for that month
-    //                    (use the ID from the URL of the month's spreadsheet )
-    // • sheets        : the 6 sheet tab names (always the same: BA, BB, Grade 1–4)
-    // • isCurrent     : true = this month auto-refreshes every 5 min (LIVE badge)
-
-    //
-    // TO ADD A NEW MONTH:
-    //   1. Create your new monthly folder + spreadsheet in Google Drive as usual
-    //   2. Copy the spreadsheet ID from its URL
-    //   3. Set isCurrent: false on the previous month
-    //   4. Add a new entry below with the new ID and isCurrent: true
     const MONTHS = [
       {
         label:          'January',
@@ -652,99 +694,21 @@
       },
     ];
 
-    // Derived: the index of the current (live) month
-    const CURRENT_MONTH_IDX = MONTHS.findIndex(m => m.isCurrent);
-    // Active month index (changes when user clicks a month button)
-    let activeMonthIdx = CURRENT_MONTH_IDX >= 0 ? CURRENT_MONTH_IDX : MONTHS.length - 1;
-    const CACHE_KEY      = 'gws_data_cache_v2';
-    const HISTORY_KEY    = 'gws_update_history';
-    const MAX_HISTORY    = 10;
+    let activeMonthIdx = 2; // Start with March (index 2)
 
     /* ════════════════════════════════════════════════════════════════════
-       MONTHLY CACHE
-       Stores fetched data keyed by "YYYY-MM" so the page always shows
-       the freshest data for the current month, and automatically
-       discards data from previous months.
+       DROPDOWN TOGGLE
     ════════════════════════════════════════════════════════════════════ */
-    function cacheKeyForMonth(monthIdx) {
-      return `gws_cache_month_${monthIdx}_v3`;
+    function toggleDropdown() {
+      const menu = document.getElementById('monthDropdownMenu');
+      menu.classList.toggle('show');
     }
 
-    function loadCache(monthIdx) {
-      try {
-        const raw = JSON.parse(localStorage.getItem(cacheKeyForMonth(monthIdx)) || '{}');
-        // For the current (live) month, invalidate cache if it's from a previous calendar month
-        if (MONTHS[monthIdx] && MONTHS[monthIdx].isCurrent) {
-          const d = new Date();
-          const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-          if (raw.calKey && raw.calKey !== calKey) {
-            console.info('[AutoUpdate] New calendar month — cache invalidated.');
-            return null;
-          }
-        }
-        return raw.data || null;
-      } catch { return null; }
-    }
-
-    function saveCache(monthIdx, data) {
-      try {
-        const d = new Date();
-        const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-        localStorage.setItem(cacheKeyForMonth(monthIdx), JSON.stringify({
-          calKey,
-          savedAt: new Date().toISOString(),
-          data
-        }));
-      } catch (e) { console.warn('Cache save failed:', e); }
-    }
-
-    function clearCache(monthIdx) {
-      try { localStorage.removeItem(cacheKeyForMonth(monthIdx)); } catch {}
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       UPDATE HISTORY  (persisted in localStorage, max 10 entries)
-    ════════════════════════════════════════════════════════════════════ */
-    function loadHistory() {
-      try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
-      catch { return []; }
-    }
-    function saveHistory(list) {
-      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY))); }
-      catch {}
-    }
-    function pushHistory(entry) {
-      const list = loadHistory();
-      list.unshift(entry);
-      saveHistory(list);
-      renderHistory(list);
-    }
-    function renderHistory(list) {
-      if (!list || list.length === 0) return;
-      const panel = document.getElementById('historyPanel');
-      const ul    = document.getElementById('historyList');
-      panel.classList.remove('d-none');
-      ul.innerHTML = list.map(e => `
-        <li>
-          <span class="history-dot ${e.type}"></span>
-          <span style="color:var(--c-text);font-weight:600">${e.time}</span>
-          <span>${e.msg}</span>
-        </li>`).join('');
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       CHANGE DETECTION
-       Computes a lightweight fingerprint of the fetched data to detect
-       whether the Google Sheet has been updated since the last fetch.
-    ════════════════════════════════════════════════════════════════════ */
-    function fingerprint(allClasses) {
-      return allClasses.map(c =>
-        c.students.map(s => `${s.name}|${s.avg}|${s.rank}|${s.grade}|${s.result}`).join(';')
-        + `|period:${c.period}`
-      ).join('||');
-    }
-
-    let lastFingerprint = null;
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.month-dropdown')) {
+        document.getElementById('monthDropdownMenu').classList.remove('show');
+      }
+    });
 
     /* ════════════════════════════════════════════════════════════════════
        LOCAL PHOTO STORAGE
@@ -763,27 +727,21 @@
 
     /* ════════════════════════════════════════════════════════════════════
        GOOGLE DRIVE PHOTO HELPER
-       Converts any Google Drive share link into a direct embeddable URL.
-       Priority chain: Drive URL → local upload → placeholder.
     ════════════════════════════════════════════════════════════════════ */
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
       if (!url.startsWith('http')) return null;
-      // Format 1: /file/d/{fileId}/view  or  /file/d/{fileId}
       let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      // Format 2: ?id={fileId}  (older Drive share links)
       m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      // Format 3: /open?id={fileId}
       m = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      // Format 4: uc?export=view&id={fileId}
       m = url.match(/uc\?.*[?&]id=([a-zA-Z0-9_-]+)/);
       if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-      // Format 5: direct image URL (jpg/png/webp etc.)
       if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
+      if (url.includes('lh3.googleusercontent.com')) return url;
       return null;
     }
 
@@ -791,7 +749,6 @@
        FETCH & PARSE A SHEET
     ════════════════════════════════════════════════════════════════════ */
     async function fetchSheet(sheetName, spreadsheetId) {
-      // Cache-bust with a per-minute timestamp so browsers don't serve stale responses
       const bust = Math.floor(Date.now() / 60000);
       const sid  = spreadsheetId || SPREADSHEET_ID;
       const url  = `https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
@@ -806,10 +763,7 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
-       DYNAMIC PARSER
-       All metadata (school name, period, academic year, level) is
-       extracted from col[0].label of the gviz response. Column positions
-       are detected from column labels with known-position fallbacks.
+       PARSE GVIZ RESPONSE
     ════════════════════════════════════════════════════════════════════ */
     function parseGviz(json, sheetName) {
       const cols        = json.table.cols;
@@ -843,7 +797,6 @@
         if (lm2) levelName = lm2[1].trim();
       }
 
-      // Detect column positions from labels
       const colIndex = {};
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
@@ -854,7 +807,6 @@
         else if (lbl === 'rank')        colIndex.rank   = i;
         else if (lbl === 'result')      colIndex.result = i;
       });
-      // Also detect Photo URL column by label
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
         if (lbl === 'photourl' || lbl === 'photo' || lbl === 'photolink') colIndex.photo = i;
@@ -899,7 +851,6 @@
         });
       }
 
-      // Second pass for teacher / prepared-by in footer
       for (const row of rows) {
         const cells = row.c || [];
         const cv = (i) => { const c = cells[i]; return c ? String(c.v ?? '').trim() : ''; };
@@ -978,7 +929,6 @@
       const phId     = `ph_${safeKey}`;
       const uploadId = `up_${safeKey}`;
 
-      // Priority: local upload > Drive URL > placeholder
       const isDrivePhoto = !localPhoto && !!s.photoUrl;
       const photoContent = displayUrl
         ? `<img class="card-photo" id="${imgId}"
@@ -1036,16 +986,7 @@
 
     /* ════════════════════════════════════════════════════════════════════
        HANDLE PHOTO UPLOAD
-       Flow:
-         1. Read file as base64 data URL (instant preview)
-         2. Show local preview immediately so user sees the photo right away
-         3. If SCRIPT_URL is configured: POST to Google Apps Script
-            → Script saves to Google Drive + writes URL to Sheet col H
-            → On success: replace local preview with Drive URL (visible to all)
-         4. If SCRIPT_URL is empty: save to localStorage only (local-only mode)
     ════════════════════════════════════════════════════════════════════ */
-
-    // Show/hide the uploading spinner overlay on a card photo wrap
     function setCardUploading(uploadId, uploading) {
       const input = document.getElementById(uploadId);
       if (!input) return;
@@ -1065,7 +1006,6 @@
       }
     }
 
-    // Apply a photo URL to the card image element
     function applyPhotoToCard(imgId, phId, url) {
       const imgEl = document.getElementById(imgId);
       const phEl  = document.getElementById(phId);
@@ -1094,7 +1034,6 @@
       const phId     = input.dataset.phid;
       const uploadId = input.id;
 
-      // Parse sheetName and studentName from key (format: "SheetName||StudentName")
       const parts       = key.split('||');
       const sheetName   = parts[0]  || '';
       const studentName = parts.slice(1).join('||') || '';
@@ -1103,16 +1042,13 @@
       reader.onload = async function(e) {
         const dataUrl = e.target.result;
 
-        // ── Step 1: Instant local preview ──────────────────────────────────
         applyPhotoToCard(imgId, phId, dataUrl);
 
-        // Always save locally as fallback
         const store = loadPhotoStore();
         store[key] = dataUrl;
         savePhotoStore(store);
 
-        // ── Step 2: Upload to Google Drive via Apps Script ──────────────────
-        if (!SCRIPT_URL) {
+        if (!SCRIPT_URL || SCRIPT_URL === '[YOUR_SCRIPT_URL_HERE]') {
           showToast('✅ Photo saved locally on this device.');
           return;
         }
@@ -1134,14 +1070,11 @@
           const result = await resp.json();
 
           if (result.success && result.photoUrl) {
-            // Replace local preview with the permanent Drive URL
             applyPhotoToCard(imgId, phId, result.photoUrl);
 
-            // Update local store with Drive URL (so it persists across refreshes)
             store[key] = result.photoUrl;
             savePhotoStore(store);
 
-            // Add the Google Drive badge to the photo wrap
             const imgEl = document.getElementById(imgId);
             if (imgEl) {
               const wrap = imgEl.closest('.card-photo-wrap');
@@ -1181,15 +1114,13 @@
       const menu = document.getElementById('monthDropdownMenu');
       const current = MONTHS[activeMonthIdx];
       
-      btn.innerHTML = `<i class="bi bi-calendar-event me-1"></i> ${escHtml(current.label)} ${current.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}`;
+      btn.innerHTML = `<i class="bi bi-calendar-event"></i> ${escHtml(current.label)} ${current.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}`;
       
       menu.innerHTML = MONTHS.map((m, idx) => `
-        <li>
-          <a class="dropdown-item ${idx === activeMonthIdx ? 'active' : ''}" href="#" onclick="switchMonth(${idx}); return false;">
-            <span>${escHtml(m.label)}</span>
-            ${m.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}
-          </a>
-        </li>
+        <div class="dropdown-item ${idx === activeMonthIdx ? 'active' : ''}" onclick="switchMonth(${idx}); return false;">
+          <span>${escHtml(m.label)}</span>
+          ${m.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}
+        </div>
       `).join('');
     }
 
@@ -1197,8 +1128,7 @@
       if (idx === activeMonthIdx) return;
       activeMonthIdx = idx;
       buildMonthNav();
-      // Stop live polling if switching to a historical month
-      // (polling restarts automatically if user switches back to current month)
+      document.getElementById('monthDropdownMenu').classList.remove('show');
       await loadAllData(false);
     }
 
@@ -1213,20 +1143,16 @@
     function buildTabPane(classData, index) {
       const { sheetName, levelName, students, teacher, preparedBy } = classData;
       const displayName = levelDisplay(levelName, sheetName);
-      const hasTie = students.length > 1 && students.every(s => s.rank === students[0].rank);
-      const tieNote = hasTie
-        ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>` : '';
       const footerTeacher    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
       const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Checked by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
       const classFooter = (footerTeacher || footerPreparedBy)
         ? `<div class="class-footer">${footerTeacher}${footerPreparedBy}</div>` : '';
       return `
-        <div class="tab-pane fade ${index === 0 ? 'show active' : ''}"
+        <div class="tab-pane ${index === 0 ? 'active' : ''}"
              id="tab-pane-${index}" role="tabpanel" aria-labelledby="tab-btn-${index}">
           <div class="class-title">
             <h2>${escHtml(displayName)}</h2>
             <p>Top 5 Outstanding Students</p>
-            ${tieNote}
           </div>
           ${buildGrid(students, sheetName)}
           ${classFooter}
@@ -1244,13 +1170,6 @@
         if (first.schoolName)   document.getElementById('schoolName').textContent   = first.schoolName;
         if (first.academicYear) document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
         if (first.period)       document.getElementById('periodBadge').textContent  = `⭐ Top 5 of ${first.period}`;
-        if (first.period)       document.getElementById('currentPeriodLabel').textContent = first.period;
-
-        const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
-        const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
-        const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
-        if (preparedBy) footerParts.push(`Developed by <strong>${escHtml('Phoun Borin')}</strong>`);
-        document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
       }
 
       allClasses.forEach((data, i) => {
@@ -1267,33 +1186,6 @@
         tabsEl.appendChild(li);
         contentEl.insertAdjacentHTML('beforeend', buildTabPane(data, i));
       });
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       COUNTDOWN RING
-    ════════════════════════════════════════════════════════════════════ */
-    let countdownInterval = null;
-    let nextRefreshAt     = null;
-    const RING_CIRCUMFERENCE = 69.1; // 2π × r (r=11)
-
-    function startCountdown() {
-      nextRefreshAt = Date.now() + REFRESH_MS;
-      if (countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(tickCountdown, 1000);
-      tickCountdown();
-    }
-
-    function tickCountdown() {
-      const remaining = Math.max(0, nextRefreshAt - Date.now());
-      const mins      = Math.floor(remaining / 60000);
-      const secs      = Math.floor((remaining % 60000) / 1000);
-      const fraction  = remaining / REFRESH_MS;
-      const offset    = RING_CIRCUMFERENCE * (1 - fraction);
-
-      const ringFill = document.getElementById('ringFill');
-      const countdownText = document.getElementById('countdownText');
-      if (ringFill)      ringFill.style.strokeDashoffset = offset;
-      if (countdownText) countdownText.textContent = mins > 0 ? `${mins}m` : `${secs}s`;
     }
 
     /* ════════════════════════════════════════════════════════════════════
@@ -1323,9 +1215,6 @@
 
     /* ════════════════════════════════════════════════════════════════════
        MAIN LOAD FUNCTION
-       ─ Loads data for the currently selected month (activeMonthIdx)
-       ─ Historical months: served from cache, no background polling
-       ─ Current (live) month: 5-min polling + change detection
     ════════════════════════════════════════════════════════════════════ */
     let isFirstLoad = true;
 
@@ -1333,105 +1222,29 @@
       const monthIdx   = activeMonthIdx;
       const monthCfg   = MONTHS[monthIdx];
       const sheetNames = monthCfg.sheets;
-      const isLive     = monthCfg.isCurrent;
 
       const loadingBox  = document.getElementById('loadingBox');
       const errorBox    = document.getElementById('errorBox');
       const tabContent  = document.getElementById('tabContent');
-      const updateBar   = document.getElementById('updateBar');
-      const refreshBtn  = document.getElementById('refreshBtn');
-      const countdownWrap = document.getElementById('countdownWrap');
 
-      // Show spinner on first load or manual refresh or month switch
       if (isFirstLoad || isManual) {
         loadingBox.classList.remove('d-none');
         errorBox.classList.add('d-none');
         tabContent.classList.add('d-none');
-        updateBar.classList.add('d-none');
       }
-
-      if (isManual) {
-        refreshBtn.classList.add('spinning');
-        clearCache(monthIdx);
-      }
-
-      // Hide countdown ring for historical months (no polling)
-      if (countdownWrap) countdownWrap.style.display = isLive ? '' : 'none';
 
       try {
-        let results;
-        const cached = !isManual && isFirstLoad ? loadCache(monthIdx) : null;
+        const results = await Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
+        if (activeMonthIdx !== monthIdx) return;
 
-        if (cached) {
-          results = cached;
-          buildUI(results);
-          lastFingerprint = fingerprint(results);
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          updateBar.classList.remove('d-none');
-          setStatus(isLive ? 'stale' : 'live', isLive ? 'Loaded from cache — verifying…' : `Historical data — ${monthCfg.label}`);
-          document.getElementById('lastUpdated').textContent = 'cached';
-          isFirstLoad = false;
+        buildUI(results);
 
-          // Background verification only for the live month
-          if (isLive) {
-            Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId))).then(fresh => {
-              if (activeMonthIdx !== monthIdx) return; // user switched month
-              const newFp = fingerprint(fresh);
-              if (newFp !== lastFingerprint) {
-                lastFingerprint = newFp;
-                saveCache(monthIdx, fresh);
-                buildUI(fresh);
-                const now = new Date();
-                document.getElementById('lastUpdated').textContent = fmtTime(now);
-                setStatus('live', 'Live data');
-                showToast('Sheet updated — page refreshed with latest data!');
-                pushHistory({ type: 'changed', time: fmtDateTime(now), msg: `New data detected for ${monthCfg.label}.` });
-              } else {
-                setStatus('live', 'Live data');
-                document.getElementById('lastUpdated').textContent = fmtTime(new Date());
-                pushHistory({ type: 'same', time: fmtDateTime(new Date()), msg: 'No changes detected.' });
-              }
-            }).catch(err => {
-              setStatus('stale', 'Using cached data');
-              console.warn('Background verify failed:', err);
-            });
-          }
+        loadingBox.classList.add('d-none');
+        tabContent.classList.remove('d-none');
+        setStatus('live', 'Live data');
+        document.getElementById('lastUpdated').textContent = fmtTime(new Date());
 
-        } else {
-          // Full fresh fetch
-          results = await Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
-          if (activeMonthIdx !== monthIdx) return; // user switched month mid-fetch
-
-          const newFp  = fingerprint(results);
-          const changed = lastFingerprint !== null && newFp !== lastFingerprint;
-
-          if (changed && isLive) showToast('New data detected — page updated with latest results!');
-
-          lastFingerprint = newFp;
-          saveCache(monthIdx, results);
-          buildUI(results);
-
-          const now = new Date();
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          updateBar.classList.remove('d-none');
-          setStatus('live', isLive ? 'Live data' : `Historical — ${monthCfg.label}`);
-          document.getElementById('lastUpdated').textContent = fmtTime(now);
-
-          if (isLive) {
-            pushHistory({
-              type: changed ? 'changed' : 'same',
-              time: fmtDateTime(now),
-              msg:  changed ? `Data changed for ${monthCfg.label}.` : 'No changes detected.',
-            });
-          }
-
-          isFirstLoad = false;
-        }
-
-        // Only run countdown for the live month
-        if (isLive) startCountdown();
+        isFirstLoad = false;
 
       } catch (err) {
         console.error(err);
@@ -1441,44 +1254,19 @@
           document.getElementById('errorMsg').textContent = err.message;
         } else {
           setStatus('error', 'Refresh failed — retrying soon');
-          updateBar.classList.remove('d-none');
           tabContent.classList.remove('d-none');
-          pushHistory({ type: 'error', time: fmtDateTime(new Date()), msg: `Fetch failed: ${err.message}` });
         }
-      } finally {
-        if (isManual) refreshBtn.classList.remove('spinning');
       }
     }
-
-    /* ════════════════════════════════════════════════════════════════════
-       MANUAL REFRESH
-    ════════════════════════════════════════════════════════════════════ */
-    function manualRefresh() {
-      loadAllData(true);
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       VISIBILITY API — resume polling when tab becomes visible again
-    ════════════════════════════════════════════════════════════════════ */
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && MONTHS[activeMonthIdx]?.isCurrent) {
-        const stale = nextRefreshAt && Date.now() > nextRefreshAt;
-        if (stale) loadAllData(false);
-      }
-    });
 
     /* ════════════════════════════════════════════════════════════════════
        INIT
     ════════════════════════════════════════════════════════════════════ */
     buildMonthNav();
     loadAllData();
-    // Auto-poll only for the live/current month
     setInterval(() => {
       if (MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
     }, REFRESH_MS);
-
-    // Restore history on page load
-    renderHistory(loadHistory());
   </script>
 </body>
 </html>
