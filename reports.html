@@ -262,10 +262,10 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUQrySwGngLHEFNPmcNCR4ZaUZktzOaotfskuyi3QMVDzxMTL81t5HmK2WQXhgilaK/exec';
     
     const MONTHS = [
-      { label: 'January 2026', spreadsheetId: '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY', sheets: ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
-      { label: 'February 2026', spreadsheetId: '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g', sheets: ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
-      { label: 'March 2026', spreadsheetId: '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM', sheets: ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
-      { label: 'April 2026', spreadsheetId: '1967wzuDDk4gX5_oSl8R3eI1SeMEgVUWI-YirOpPm88M', sheets: ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: true }
+      { label: 'January 2026', spreadsheetId: '1jeOXFdhK9vZiq6xng-z8m6yUpk9HA354BttDnFvAwFY', sheets: ['Beginner A', 'Beginner B', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
+      { label: 'February 2026', spreadsheetId: '1VdWhQX5JXZFf4bmvIfLkKUJK8Ul68exAmDATMO_1S8g', sheets: ['Beginner A', 'Beginner B', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
+      { label: 'March 2026', spreadsheetId: '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM', sheets: ['Beginner A', 'Beginner B', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: false },
+      { label: 'April 2026', spreadsheetId: '1967wzuDDk4gX5_oSl8R3eI1SeMEgVUWI-YirOpPm88M', sheets: ['Beginner A', 'Beginner B', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'], isCurrent: true }
     ];
 
     let activeMonthIdx = MONTHS.findIndex(m => m.isCurrent);
@@ -442,7 +442,7 @@
             <div class="report-card">
               <div class="report-header">
                 <div>
-                  <h2>Grade : ${escHtml(d.levelName)}</h2>
+                  <h2>${escHtml(d.levelName)}</h2>
                   <p>Monthly Performance Report</p>
                 </div>
                 <div class="d-flex gap-2">
