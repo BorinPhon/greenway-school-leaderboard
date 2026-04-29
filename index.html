@@ -952,11 +952,11 @@
     function levelDisplay(levelName, sheetName) {
       if (sheetName === 'BA') return 'Beginner A';
       if (sheetName === 'BB') return 'Beginner B';
-      if (!levelName) return /^\d+$/.test(sheetName) ? `Grade ${sheetName}` : sheetName;
+      if (!levelName) return /^\d+$/.test(sheetName) ? `Level ${sheetName}` : sheetName;
       const l = levelName.toLowerCase();
       if (l.startsWith('beginner')) return levelName;
       if (l.startsWith('grade')) return levelName;
-      if (/^\d+$/.test(levelName)) return `Grade ${levelName}`;
+      if (/^\d+$/.test(levelName)) return `Level ${levelName}`;
       return `Level ${levelName}`;
     }
     function fmtTime(d) {
