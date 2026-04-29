@@ -879,23 +879,26 @@
           const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (teacherMatch) teacher = teacherMatch[1].trim();
           
-          // Look for the name in the current row across all columns
-          for (let i = 1; i < cells.length; i++) {
-            const val = String(cv(i)).trim();
-            if (val && !/^(pass|fail|grade|result|prepared by|seen and checked|date)/i.test(val)) {
-              preparedBy = val;
-              break;
-            }
-          }
-          
-          // If not found in the current row, check the NEXT row (common in some layouts)
-          const nextRow = rows[rows.indexOf(row) + 1];
-          if (!preparedBy && nextRow && nextRow.c) {
-            for (let i = 1; i < nextRow.c.length; i++) {
-              const val = String(nextRow.c[i]?.v || '').trim();
+          // Only look for "Prepared By" if the row is NOT just a Teacher row
+          if (!/teacher/i.test(name)) {
+            // Look for the name in the current row across all columns
+            for (let i = 1; i < cells.length; i++) {
+              const val = String(cv(i)).trim();
               if (val && !/^(pass|fail|grade|result|prepared by|seen and checked|date|teacher)/i.test(val)) {
                 preparedBy = val;
                 break;
+              }
+            }
+            
+            // If not found in the current row, check the NEXT row
+            const nextRow = rows[rows.indexOf(row) + 1];
+            if (!preparedBy && nextRow && nextRow.c) {
+              for (let i = 1; i < nextRow.c.length; i++) {
+                const val = String(nextRow.c[i]?.v || '').trim();
+                if (val && !/^(pass|fail|grade|result|prepared by|seen and checked|date|teacher)/i.test(val)) {
+                  preparedBy = val;
+                  break;
+                }
               }
             }
           }
