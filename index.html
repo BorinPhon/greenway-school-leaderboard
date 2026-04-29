@@ -876,7 +876,7 @@
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
         // Detect signature/footer rows
-        const isFooterRow = /^(date|seen|teacher|prepared|checked)/i.test(name);
+        const isFooterRow = /^(date|seen|teacher|prepared|checked|check)/i.test(name);
         if (isFooterRow) {
           // 1. Look for Teacher Name
           const tm = name.match(/Teacher\s*[:\-]\s*(.+)/i);
@@ -898,7 +898,7 @@
           for (let i = 1; i < cells.length; i++) {
             const val = String(cv(i)).trim();
             // It's a name if it's not a label and not the teacher name we just found
-            if (val && !/^(pass|fail|grade|result|prepared|seen|checked|date|teacher)/i.test(val)) {
+            if (val && !/^(pass|fail|grade|result|prepared|seen|checked|check|date|teacher)/i.test(val)) {
               if (val !== teacher) {
                 preparedBy = val;
                 break;
@@ -932,12 +932,12 @@
         const col1 = cv(1);
         if (/Teacher\s*[:\-]/i.test(col1)) {
           teacher = col1.replace(/Teacher\s*[:\-]\s*/i, '').trim();
-          const pb = cv(4);
-          if (pb && !/^(pass|fail|result)$/i.test(pb)) preparedBy = pb;
+          const pb = cv(4) || cv(5) || cv(6);
+          if (pb && !/^(pass|fail|result|grade|avg|average)$/i.test(pb)) preparedBy = pb;
         }
-        if (/Prepared by/i.test(col1) || /Prepared by/i.test(cv(4))) {
-          const pb = cv(4) || cv(1);
-          if (pb && !/Prepared by/i.test(pb)) preparedBy = pb;
+        if (/(Prepared|Checked|Check)\s*by/i.test(col1) || /(Prepared|Checked|Check)\s*by/i.test(cv(4))) {
+          const pb = cv(4) || cv(5) || cv(6) || col1;
+          if (pb && !/(Prepared|Checked|Check)\s*by/i.test(pb)) preparedBy = pb;
         }
       }
 
@@ -982,6 +982,8 @@
       if (l.startsWith('beginner')) return levelName;
       if (l.startsWith('grade')) return levelName;
       if (/^\d+$/.test(levelName)) return `Level ${levelName}`;
+      // If it's already a descriptive name like "Beginner A", just return it
+      if (/[a-zA-Z]/.test(levelName)) return levelName;
       return `Level ${levelName}`;
     }
     function fmtTime(d) {
