@@ -875,22 +875,34 @@
         const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
-        if (/^(date|seen|teacher|prepared|checked)/i.test(name)) {
-          // 1. Extract Teacher name
+        // Detect signature/footer rows
+        const isFooterRow = /^(date|seen|teacher|prepared|checked)/i.test(name);
+        if (isFooterRow) {
+          // 1. Look for Teacher Name
           const tm = name.match(/Teacher\s*[:\-]\s*(.+)/i);
-          if (tm) teacher = tm[1].trim();
-          else if (/teacher/i.test(name)) {
-            const val = String(cv(1)).trim();
-            if (val) teacher = val;
+          if (tm) {
+            teacher = tm[1].trim();
+          } else {
+            // Check current row columns for Teacher
+            for (let i = 1; i < cells.length; i++) {
+              const val = String(cv(i)).trim();
+              if (/teacher\s*[:\-]\s*(.+)/i.test(val)) {
+                teacher = val.match(/teacher\s*[:\-]\s*(.+)/i)[1].trim();
+                break;
+              }
+            }
           }
-          
-          // 2. Extract Prepared By name (Search Column E, F, or G)
-          // We look for any value in these columns that isn't a status or a label
-          for (let i = 4; i <= 6; i++) {
+
+          // 2. Look for Prepared By / Checked By name
+          // Check current row for the name (usually in col 4, 5, or 6)
+          for (let i = 1; i < cells.length; i++) {
             const val = String(cv(i)).trim();
+            // It's a name if it's not a label and not the teacher name we just found
             if (val && !/^(pass|fail|grade|result|prepared|seen|checked|date|teacher)/i.test(val)) {
-              preparedBy = val;
-              break;
+              if (val !== teacher) {
+                preparedBy = val;
+                break;
+              }
             }
           }
           continue;
