@@ -879,10 +879,25 @@
           const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (teacherMatch) teacher = teacherMatch[1].trim();
           
-          // Try to find the prepared name in several possible columns (E, F, or G)
-          const prepCol = String(cv(4) || cv(5) || cv(6) || '').trim();
-          if (prepCol && !/^(pass|fail|grade|result)$/i.test(prepCol) && !/prepared by/i.test(prepCol)) {
-            preparedBy = prepCol;
+          // Look for the name in the current row across all columns
+          for (let i = 1; i < cells.length; i++) {
+            const val = String(cv(i)).trim();
+            if (val && !/^(pass|fail|grade|result|prepared by|seen and checked|date)/i.test(val)) {
+              preparedBy = val;
+              break;
+            }
+          }
+          
+          // If not found in the current row, check the NEXT row (common in some layouts)
+          const nextRow = rows[rows.indexOf(row) + 1];
+          if (!preparedBy && nextRow && nextRow.c) {
+            for (let i = 1; i < nextRow.c.length; i++) {
+              const val = String(nextRow.c[i]?.v || '').trim();
+              if (val && !/^(pass|fail|grade|result|prepared by|seen and checked|date|teacher)/i.test(val)) {
+                preparedBy = val;
+                break;
+              }
+            }
           }
           continue;
         }
