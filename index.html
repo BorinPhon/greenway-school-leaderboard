@@ -858,7 +858,7 @@
       // Also detect Photo URL column by label
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
-        if (lbl === 'photourl' || lbl === 'photo' || lbl === 'photolink') colIndex.photo = i;
+        if (lbl === 'photourl' || lbl === 'photo' || lbl === 'photolink' || lbl === 'photo-url') colIndex.photo = i;
       });
       if (colIndex.name   === undefined) colIndex.name   = 1;
       if (colIndex.gender === undefined) colIndex.gender = 2;
@@ -866,7 +866,7 @@
       if (colIndex.grade  === undefined) colIndex.grade  = 4;
       if (colIndex.rank   === undefined) colIndex.rank   = 5;
       if (colIndex.result === undefined) colIndex.result = 6;
-      if (colIndex.photo  === undefined) colIndex.photo  = 7;
+      if (colIndex.photo  === undefined) colIndex.photo  = 7; // Column H is index 7
       colIndex.n = 0;
 
       const students = [];
@@ -979,18 +979,19 @@
       const phId     = `ph_${safeKey}`;
       const uploadId = `up_${safeKey}`;
 
-      // Priority: local upload > Drive URL > placeholder
-      const isDrivePhoto = !localPhoto && !!s.photoUrl;
-      const photoContent = displayUrl
+      // Priority: Google Sheet URL > local upload > placeholder
+      const finalUrl     = s.photoUrl || localPhoto;
+      const isSheetPhoto = !!s.photoUrl;
+      const photoContent = finalUrl
         ? `<img class="card-photo" id="${imgId}"
-               src="${escHtml(displayUrl)}"
+               src="${escHtml(finalUrl)}"
                alt="${escHtml(s.name)}"
                onerror="this.style.display='none';var p=document.getElementById('${phId}');if(p)p.style.display='flex'" />
            <div class="card-photo-placeholder" id="${phId}" style="display:none">
              <i class="bi bi-person-fill ph-icon"></i>
              <span class="ph-label">No Photo</span>
            </div>
-           ${isDrivePhoto ? '<div class="drive-badge" title="Photo from Google Drive"><i class="bi bi-google"></i></div>' : ''}`
+           ${isSheetPhoto ? '<div class="drive-badge" title="Photo from Google Drive"><i class="bi bi-google"></i></div>' : ''}`
         : `<div class="card-photo-placeholder" id="${phId}">
              <i class="bi bi-person-fill ph-icon"></i>
              <span class="ph-label">Upload Photo</span>
