@@ -875,11 +875,15 @@
         const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
-        if (/^(date|seen|teacher|prepared)/i.test(name)) {
+        if (/^(date|seen|teacher|prepared|checked)/i.test(name)) {
           const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (teacherMatch) teacher = teacherMatch[1].trim();
-          const prepCol = String(cv(4) || cv(colIndex.result) || '').trim();
-          if (prepCol && !/^(pass|fail)$/i.test(prepCol) && !/prepared by/i.test(prepCol)) preparedBy = prepCol;
+          
+          // Try to find the prepared name in several possible columns (E, F, or G)
+          const prepCol = String(cv(4) || cv(5) || cv(6) || '').trim();
+          if (prepCol && !/^(pass|fail|grade|result)$/i.test(prepCol) && !/prepared by/i.test(prepCol)) {
+            preparedBy = prepCol;
+          }
           continue;
         }
         const avgRaw  = cv(colIndex.avg);
