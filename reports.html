@@ -278,15 +278,15 @@
       if (sheetName === 'BA') return 'Beginner A';
       if (sheetName === 'BB') return 'Beginner B';
       
-      // If levelName exists and contains "Grade" or "Beginner", use it
-      if (levelName && (levelName.includes('Grade') || levelName.includes('Beginner'))) {
+      // If levelName exists and contains "Level" or "Beginner", use it
+      if (levelName && (levelName.includes('Level') || levelName.includes('Beginner'))) {
         return levelName;
       }
       
-      // If sheetName is a number or levelName is a number, prefix with Grade
+      // If sheetName is a number or levelName is a number, prefix with Level
       const target = levelName || sheetName;
       if (/^\d+$/.test(target)) {
-        return 'Grade ' + target;
+        return 'Level ' + target;
       }
       
       return target;
