@@ -879,7 +879,7 @@
           const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (teacherMatch) teacher = teacherMatch[1].trim();
           const prepCol = String(cv(4) || cv(colIndex.result) || '').trim();
-          if (prepCol && !/^(pass|fail)$/i.test(prepCol)) preparedBy = prepCol;
+          if (prepCol && !/^(pass|fail)$/i.test(prepCol) && !/prepared by/i.test(prepCol)) preparedBy = prepCol;
           continue;
         }
         const avgRaw  = cv(colIndex.avg);
@@ -950,9 +950,13 @@
         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
     function levelDisplay(levelName, sheetName) {
-      if (!levelName) return sheetName;
+      if (sheetName === 'BA') return 'Beginner A';
+      if (sheetName === 'BB') return 'Beginner B';
+      if (!levelName) return /^\d+$/.test(sheetName) ? `Grade ${sheetName}` : sheetName;
       const l = levelName.toLowerCase();
       if (l.startsWith('beginner')) return levelName;
+      if (l.startsWith('grade')) return levelName;
+      if (/^\d+$/.test(levelName)) return `Grade ${levelName}`;
       return `Level ${levelName}`;
     }
     function fmtTime(d) {
@@ -967,7 +971,7 @@
        RENDER CARD
     ════════════════════════════════════════════════════════════════════ */
     function renderCard(s, sheetName) {
-      const rankClass  = `rank-${Math.min(s.rank, 5)}`;
+      const rankClass  = `rank-${Math.min(parseInt(s.rank) || 0, 5)}`;
       const emoji      = rankEmoji[s.rank];
       const key        = photoKey(sheetName, s.name);
       const store      = loadPhotoStore();
