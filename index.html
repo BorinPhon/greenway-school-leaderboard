@@ -935,9 +935,15 @@
           const pb = cv(4) || cv(5) || cv(6);
           if (pb && !/^(pass|fail|result|grade|avg|average)$/i.test(pb)) preparedBy = pb;
         }
-        if (/(Prepared|Checked|Check)\s*by/i.test(col1) || /(Prepared|Checked|Check)\s*by/i.test(cv(4))) {
-          const pb = cv(4) || cv(5) || cv(6) || col1;
-          if (pb && !/(Prepared|Checked|Check)\s*by/i.test(pb)) preparedBy = pb;
+        // Look for Prepared by / Checked by / Seen and checked
+        if (/(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?/i.test(col1) || /(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?/i.test(cv(4))) {
+          let pb = cv(4) || cv(5) || cv(6) || col1;
+          // If the cell contains the label itself, try to extract the name
+          if (pb && /(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?\s*[:\-]\s*(.+)/i.test(pb)) {
+            preparedBy = pb.match(/(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?\s*[:\-]\s*(.+)/i)[4].trim();
+          } else if (pb && !/(Prepared|Checked|Check|Seen)/i.test(pb)) {
+            preparedBy = pb;
+          }
         }
       }
 
