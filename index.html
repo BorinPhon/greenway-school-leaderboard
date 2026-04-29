@@ -876,42 +876,21 @@
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
         if (/^(date|seen|teacher|prepared|checked)/i.test(name)) {
-          // 1. Check for Teacher Name (usually in Column B or part of the label itself)
-          const teacherMatch = name.match(/Teacher\s*[:\-]\s*(.+)/i);
-          if (teacherMatch) {
-            teacher = teacherMatch[1].trim();
-          } else if (/teacher/i.test(name)) {
-             // If the label is just "Teacher", check the next column
-             const nextColVal = String(cv(1)).trim();
-             if (nextColVal) teacher = nextColVal;
+          // 1. Extract Teacher name
+          const tm = name.match(/Teacher\s*[:\-]\s*(.+)/i);
+          if (tm) teacher = tm[1].trim();
+          else if (/teacher/i.test(name)) {
+            const val = String(cv(1)).trim();
+            if (val) teacher = val;
           }
           
-          // 2. Check for "Prepared By / Checked By" name
-          // We only do this if the current row label is "Prepared" or "Checked"
-          if (/^(prepared|checked|seen)/i.test(name)) {
-            // Look in current row across all columns
-            for (let i = 1; i < cells.length; i++) {
-              const val = String(cv(i)).trim();
-              // Must not be a label, must not contain "Teacher"
-              if (val && !/^(pass|fail|grade|result|prepared|seen|checked|date|teacher)/i.test(val)) {
-                preparedBy = val;
-                break;
-              }
-            }
-            
-            // If still not found, check the NEXT row (but only if it's not another label row)
-            if (!preparedBy) {
-              const nextRow = rows[rows.indexOf(row) + 1];
-              const nextRowLabel = nextRow ? String(nextRow.c?.[0]?.v || '').trim() : '';
-              if (nextRow && nextRow.c && !/^(date|seen|teacher|prepared|checked)/i.test(nextRowLabel)) {
-                for (let i = 1; i < nextRow.c.length; i++) {
-                  const val = String(nextRow.c[i]?.v || '').trim();
-                  if (val && !/^(pass|fail|grade|result|prepared|seen|checked|date|teacher)/i.test(val)) {
-                    preparedBy = val;
-                    break;
-                  }
-                }
-              }
+          // 2. Extract Prepared By name (Search Column E, F, or G)
+          // We look for any value in these columns that isn't a status or a label
+          for (let i = 4; i <= 6; i++) {
+            const val = String(cv(i)).trim();
+            if (val && !/^(pass|fail|grade|result|prepared|seen|checked|date|teacher)/i.test(val)) {
+              preparedBy = val;
+              break;
             }
           }
           continue;
