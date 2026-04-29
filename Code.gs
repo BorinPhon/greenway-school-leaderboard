@@ -27,9 +27,29 @@ const SHEET_NAMES = ['BA', 'BB', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
 
 function doPost(e) {
   try {
-    // Parse incoming data from leaderboard
-    const data = JSON.parse(e.postData.contents);
-    const { sheetName, studentName, imageData, fileName } = data;
+    // Handle incoming data (support both JSON and FormData)
+    let sheetName, studentName, imageData, fileName;
+    
+    if (e.postData && e.postData.contents) {
+      try {
+        const data = JSON.parse(e.postData.contents);
+        sheetName = data.sheetName;
+        studentName = data.studentName;
+        imageData = data.imageData;
+        fileName = data.fileName;
+      } catch (err) {
+        // Fallback to parameters if JSON parsing fails
+        sheetName = e.parameter.sheetName;
+        studentName = e.parameter.studentName;
+        imageData = e.parameter.imageData;
+        fileName = e.parameter.fileName;
+      }
+    } else {
+      sheetName = e.parameter.sheetName;
+      studentName = e.parameter.studentName;
+      imageData = e.parameter.imageData;
+      fileName = e.parameter.fileName;
+    }
 
     // Validate that all required fields are present
     if (!sheetName || !studentName || !imageData) {
@@ -193,7 +213,7 @@ function getShareablePhotoUrl(file) {
     const fileId = file.getId();
     
     // Create a direct view URL
-    const photoUrl = `https://lh3.googleusercontent.com/d/${fileId}`;
+    const photoUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
     
     Logger.log(`Generated photo URL: ${photoUrl}`);
     return photoUrl;
