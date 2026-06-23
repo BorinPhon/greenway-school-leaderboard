@@ -33,7 +33,7 @@
       min-height: 100vh;
     }
 
-    /* ── HEADER ─────────────────────────────────────────────────────────── */
+    /* ── HEADER ──────────────────────────────────────────────────────────�[...] */
     .site-header {
       background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
       color: #fff;
@@ -55,7 +55,7 @@
     .site-header::before {
       content: '';
       position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-o[...]");
       pointer-events: none;
     }
     .header-inner {
@@ -101,7 +101,7 @@
     .nav-tabs .nav-link:hover  { color: #fff; border-bottom-color: rgba(255,255,255,0.3); background: transparent !important; }
     .nav-tabs .nav-link.active { color: #fff; border-bottom-color: #fff; background: transparent !important; }
 
-    /* ── MAIN ────────────────────────────────────────────────────────────── */
+    /* ── MAIN ──────────────────────────────────────────────────────────�[...] */
     .main-content {
       max-width: 900px;
       margin: 1.75rem auto;
@@ -113,16 +113,14 @@
     .class-title h2 { font-size: 1.15rem; font-weight: 700; color: var(--c-text); margin-bottom: 0.15rem; }
     .class-title p  { font-size: 0.77rem; color: var(--c-muted); }
 
-    /* ── GRID ────────────────────────────────────────────────────────────── */
+    /* ── GRID ──────────────────────────────────────────────────────────�[...] */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
     }
 
-    /* ══════════════════════════════════════════════════════════════════════
-       PROFESSIONAL STUDENT CARD
-    ══════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     .student-card {
       background: var(--c-surface);
       border-radius: var(--r-card);
@@ -301,9 +299,7 @@
     .spinner-border { width: 2.5rem; height: 2.5rem; color: var(--c-green-mid) !important; }
     .error-box { text-align: center; padding: 3rem 1rem; }
 
-    /* ══════════════════════════════════════════════════════════════════════
-       AUTO-UPDATE STATUS BAR
-    ══════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     .update-bar {
       background: var(--c-surface);
       border: 1px solid var(--c-border);
@@ -391,8 +387,8 @@
       white-space: nowrap;
     }
     .btn-refresh:hover { background: #c8e6c9; border-color: #a5d6a7; }
-    .btn-refresh.spinning i { animation: spin .7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-refresh.spinning i { animation: spin-rotate .7s linear infinite; }
+    @keyframes spin-rotate { to { transform: rotate(360deg); } }
 
     /* Update history panel */
     .history-panel {
@@ -459,9 +455,6 @@
     .month-dropdown .live-indicator {
       font-size: 0.55rem; font-weight: 800; background: #22c55e; color: #fff;
       padding: 1px 4px; border-radius: 4px; margin-left: 8px;
-    }ing {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.72rem; color: var(--c-muted);
     }
 
     /* ── SITE FOOTER ─────────────────────────────────────────────────────── */
@@ -595,14 +588,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    /* ════════════════════════════════════════════════════════════════════
-       CONFIG
-       ─ SPREADSHEET_ID : your Google Sheets document ID
-       ─ MONTHS         : array of monthly periods with sheet tab names
-       ─ REFRESH_MS     : how often to poll for changes (default: 1 min)  ← UPDATED
-       ─ MONTHLY_CACHE  : cache data per calendar month; auto-invalidates
-                          at the start of each new month
-    ════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     const SPREADSHEET_ID = '1SK7kWxD_mYWKqMJN_P2L5-8RGRwUylzX9SUXOiRevwM';
     const REFRESH_MS     = 1 * 60 * 1000;   // 1 minute between polls  ← CHANGED FROM 5 * 60 * 1000
     const PHOTO_STORE    = 'gws_student_photos_v2';
@@ -614,19 +600,6 @@
 
 
     // ── MULTI-MONTH CONFIG ──────────────────────────────────────────────────
-    // Each entry = one month of data.
-    // • label         : shown on the month navigation button
-    // • spreadsheetId : the Google Spreadsheet ID for that month
-    //                    (use the ID from the URL of the month's spreadsheet )
-    // • sheets        : the 6 sheet tab names (always the same: BA, BB, Grade 1–4)
-    // • isCurrent     : true = this month auto-refreshes every 5 min (LIVE badge)
-
-    //
-    // TO ADD A NEW MONTH:
-    //   1. Create your new monthly folder + spreadsheet in Google Drive as usual
-    //   2. Copy the spreadsheet ID from its URL
-    //   3. Set isCurrent: false on the previous month
-    //   4. Add a new entry below with the new ID and isCurrent: true
     const MONTHS = [
       {
         label:          'January',
@@ -674,12 +647,7 @@
     const HISTORY_KEY    = 'gws_update_history';
     const MAX_HISTORY    = 10;
 
-    /* ════════════════════════════════════════════════════════════════════
-       MONTHLY CACHE
-       Stores fetched data keyed by "YYYY-MM" so the page always shows
-       the freshest data for the current month, and automatically
-       discards data from previous months.
-    ════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     function cacheKeyForMonth(monthIdx) {
       return `gws_cache_month_${monthIdx}_v3`;
     }
@@ -687,7 +655,6 @@
     function loadCache(monthIdx) {
       try {
         const raw = JSON.parse(localStorage.getItem(cacheKeyForMonth(monthIdx)) || '{}');
-        // For the current (live) month, invalidate cache if it's from a previous calendar month
         if (MONTHS[monthIdx] && MONTHS[monthIdx].isCurrent) {
           const d = new Date();
           const calKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
@@ -716,9 +683,7 @@
       try { localStorage.removeItem(cacheKeyForMonth(monthIdx)); } catch {}
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       UPDATE HISTORY  (persisted in localStorage, max 10 entries)
-    ════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     function loadHistory() {
       try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
       catch { return []; }
@@ -746,11 +711,7 @@
         </li>`).join('');
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       CHANGE DETECTION
-       Computes a lightweight fingerprint of the fetched data to detect
-       whether the Google Sheet has been updated since the last fetch.
-    ════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     function fingerprint(allClasses) {
       return allClasses.map(c =>
         c.students.map(s => `${s.name}|${s.avg}|${s.rank}|${s.grade}|${s.result}`).join(';')
@@ -760,9 +721,7 @@
 
     let lastFingerprint = null;
 
-    /* ════════════════════════════════════════════════════════════════════
-       LOCAL PHOTO STORAGE
-    ════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════�[...] */
     function loadPhotoStore() {
       try { return JSON.parse(localStorage.getItem(PHOTO_STORE) || '{}'); }
       catch { return {}; }
@@ -775,56 +734,44 @@
       return `${sheetName}||${studentName.trim()}`;
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       GOOGLE DRIVE PHOTO HELPER
-       Converts any Google Drive share link into a direct embeddable URL.
-       Priority chain: Drive URL → local upload → placeholder.
-    ════════════════════════════════════════════════════════════════════ */
+    /* GOOGLE DRIVE PHOTO HELPER - improved direct URLs */
     function driveUrlToDirectImg(url) {
       if (!url) return null;
       url = url.trim();
       if (!url.startsWith('http')) return null;
       // Format 1: /file/d/{fileId}/view  or  /file/d/{fileId}
       let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
       // Format 2: ?id={fileId}  (older Drive share links)
       m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
       // Format 3: /open?id={fileId}
       m = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
       // Format 4: uc?export=view&id={fileId}
       m = url.match(/uc\?.*[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
       // Format 5: direct image URL (jpg/png/webp etc.)
       if (/\.(jpg|jpeg|png|gif|webp)/i.test(url)) return url;
       return null;
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       FETCH & PARSE A SHEET
-    ════════════════════════════════════════════════════════════════════ */
+    /* FETCH & PARSE A SHEET */
     async function fetchSheet(sheetName, spreadsheetId) {
-      // Cache-bust with a per-minute timestamp so browsers don't serve stale responses
       const bust = Math.floor(Date.now() / 60000);
       const sid  = spreadsheetId || SPREADSHEET_ID;
       const url  = `https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&_=${bust}`;
       const res  = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status} for sheet "${sheetName}"`);
       const text  = await res.text();
-      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
+      const match = text.match(/google\.visualization\.Query\.setResponse\((([\s\S]*))\);?\s*$/);
       if (!match) throw new Error(`Unexpected response for "${sheetName}"`);
       const json = JSON.parse(match[1]);
       if (json.status !== 'ok') throw new Error(`Sheet error: ${json.errors?.[0]?.message || 'unknown'}`);
       return parseGviz(json, sheetName);
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       DYNAMIC PARSER
-       All metadata (school name, period, academic year, level) is
-       extracted from col[0].label of the gviz response. Column positions
-       are detected from column labels with known-position fallbacks.
-    ════════════════════════════════════════════════════════════════════ */
+    /* DYNAMIC PARSER */
     function parseGviz(json, sheetName) {
       const cols        = json.table.cols;
       const rows        = json.table.rows;
@@ -857,7 +804,6 @@
         if (lm2) levelName = lm2[1].trim();
       }
 
-      // Detect column positions from labels
       const colIndex = {};
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
@@ -868,7 +814,6 @@
         else if (lbl === 'rank')        colIndex.rank   = i;
         else if (lbl === 'result')      colIndex.result = i;
       });
-      // Also detect Photo URL column by label
       cols.forEach((c, i) => {
         const lbl = (c.label || '').trim().toLowerCase().replace(/\s+/g,'');
         if (lbl === 'photourl' || lbl === 'photo' || lbl === 'photolink' || lbl === 'photo-url') colIndex.photo = i;
@@ -879,7 +824,7 @@
       if (colIndex.grade  === undefined) colIndex.grade  = 4;
       if (colIndex.rank   === undefined) colIndex.rank   = 5;
       if (colIndex.result === undefined) colIndex.result = 6;
-      if (colIndex.photo  === undefined) colIndex.photo  = 7; // Column H is index 7
+      if (colIndex.photo  === undefined) colIndex.photo  = 7;
       colIndex.n = 0;
 
       const students = [];
@@ -888,15 +833,12 @@
         const cv = (i) => { const c = cells[i]; return c ? (c.v ?? '') : ''; };
         const name = String(cv(colIndex.name)).trim();
         if (!name) continue;
-        // Detect signature/footer rows
         const isFooterRow = /^(date|seen|teacher|prepared|checked|check)/i.test(name);
         if (isFooterRow) {
-          // 1. Look for Teacher Name
           const tm = name.match(/Teacher\s*[:\-]\s*(.+)/i);
           if (tm) {
             teacher = tm[1].trim();
           } else {
-            // Check current row columns for Teacher
             for (let i = 1; i < cells.length; i++) {
               const val = String(cv(i)).trim();
               if (/teacher\s*[:\-]\s*(.+)/i.test(val)) {
@@ -906,11 +848,8 @@
             }
           }
 
-          // 2. Look for Prepared By / Checked By name
-          // Check current row for the name (usually in col 4, 5, or 6)
           for (let i = 1; i < cells.length; i++) {
             const val = String(cv(i)).trim();
-            // It's a name if it's not a label and not the teacher name we just found
             if (val && !/^(pass|fail|grade|result|prepared|seen|checked|check|date|teacher)/i.test(val)) {
               if (val !== teacher) {
                 preparedBy = val;
@@ -938,7 +877,6 @@
         });
       }
 
-      // Second pass for teacher / prepared-by in footer
       for (const row of rows) {
         const cells = row.c || [];
         const cv = (i) => { const c = cells[i]; return c ? String(c.v ?? '').trim() : ''; };
@@ -948,10 +886,8 @@
           const pb = cv(4) || cv(5) || cv(6);
           if (pb && !/^(pass|fail|result|grade|avg|average)$/i.test(pb)) preparedBy = pb;
         }
-        // Look for Prepared by / Checked by / Seen and checked
         if (/(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?/i.test(col1) || /(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?/i.test(cv(4))) {
           let pb = cv(4) || cv(5) || cv(6) || col1;
-          // If the cell contains the label itself, try to extract the name
           if (pb && /(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?\s*[:\-]\s*(.+)/i.test(pb)) {
             preparedBy = pb.match(/(Prepared|Checked|Check|Seen)\s*(and|by)?\s*(checked|by)?\s*[:\-]\s*(.+)/i)[4].trim();
           } else if (pb && !/(Prepared|Checked|Check|Seen)/i.test(pb)) {
@@ -963,9 +899,7 @@
       return { sheetName, schoolName, period, academicYear, levelName, teacher, preparedBy, students };
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       RENDER HELPERS
-    ════════════════════════════════════════════════════════════════════ */
+    /* RENDER HELPERS */
     const rankEmoji = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
     function gradeClass(g) {
@@ -998,541 +932,4 @@
       if (sheetName === 'BB') return 'Beginner B';
       if (!levelName) return /^\d+$/.test(sheetName) ? `Level ${sheetName}` : sheetName;
       const l = levelName.toLowerCase();
-      if (l.startsWith('beginner')) return levelName;
-      if (l.startsWith('grade')) return levelName;
-      if (/^\d+$/.test(levelName)) return `Level ${levelName}`;
-      // If it's already a descriptive name like "Beginner A", just return it
-      if (/[a-zA-Z]/.test(levelName)) return levelName;
-      return `Level ${levelName}`;
-    }
-    function fmtTime(d) {
-      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    function fmtDateTime(d) {
-      return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
-           + ' ' + fmtTime(d);
-    }
 
-    /* ════════════════════════════════════════════════════════════════════
-       RENDER CARD
-    ════════════════════════════════════════════════════════════════════ */
-    function renderCard(s, sheetName) {
-      const rankClass  = `rank-${Math.min(parseInt(s.rank) || 0, 5)}`;
-      const emoji      = rankEmoji[s.rank];
-      const key        = photoKey(sheetName, s.name);
-      const store      = loadPhotoStore();
-      const localPhoto = store[key] || null;
-      const displayUrl = localPhoto || s.photoUrl;
-
-      const safeKey  = key.replace(/[^a-zA-Z0-9_-]/g, '_');
-      const imgId    = `pi_${safeKey}`;
-      const phId     = `ph_${safeKey}`;
-      const uploadId = `up_${safeKey}`;
-
-      // Priority: Google Sheet URL > local upload > placeholder
-      const finalUrl     = s.photoUrl || localPhoto;
-      const isSheetPhoto = !!s.photoUrl;
-      const photoContent = finalUrl
-        ? `<img class="card-photo" id="${imgId}"
-               src="${escHtml(finalUrl)}"
-               alt="${escHtml(s.name)}"
-               onerror="this.style.display='none';var p=document.getElementById('${phId}');if(p)p.style.display='flex'" />
-           <div class="card-photo-placeholder" id="${phId}" style="display:none">
-             <i class="bi bi-person-fill ph-icon"></i>
-             <span class="ph-label">No Photo</span>
-           </div>
-           ${isSheetPhoto ? '<div class="drive-badge" title="Photo from Google Drive"><i class="bi bi-google"></i></div>' : ''}`
-        : `<div class="card-photo-placeholder" id="${phId}">
-             <i class="bi bi-person-fill ph-icon"></i>
-             <span class="ph-label">Upload Photo</span>
-           </div>`;
-
-      const rankBadge = emoji
-        ? `<div class="rank-badge">${emoji}</div>`
-        : `<div class="rank-badge"><span class="rank-num">#${s.rank}</span></div>`;
-
-      return `
-        <div class="student-card ${rankClass}">
-          <div class="card-accent"></div>
-          <div class="card-photo-wrap"
-               onclick="document.getElementById('${uploadId}').click()"
-               title="Click to upload photo">
-            ${photoContent}
-            <div class="upload-overlay">
-              <i class="bi bi-camera-fill"></i>
-              <span>${isSheetPhoto ? 'Replace Photo' : 'Upload Photo'}</span>
-            </div>
-            ${rankBadge}
-          </div>
-          <input type="file" accept="image/*" class="upload-input"
-                 id="${uploadId}"
-                 data-key="${escHtml(key)}"
-                 data-imgid="${imgId}"
-                 data-phid="${phId}"
-                 onchange="handleUpload(this)" />
-          <div class="card-body-inner">
-            <div class="card-name" title="${escHtml(s.name)}">${escHtml(s.name)}</div>
-            <div class="card-divider"></div>
-            <div class="card-score-row">
-              <span class="card-avg">${avgDisplay(s.avg)}</span>
-              <span class="card-avg-label">avg</span>
-            </div>
-            <div class="card-gender">${genderLabel(s.gender)}</div>
-            <div class="card-badges">
-              <span class="badge-pill ${gradeClass(s.grade)}">Grade ${escHtml(s.grade)}</span>
-              ${resultBadge(s.result)}
-            </div>
-          </div>
-        </div>`;
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       HANDLE PHOTO UPLOAD
-       Flow:
-         1. Read file as base64 data URL (instant preview)
-         2. Show local preview immediately so user sees the photo right away
-         3. If SCRIPT_URL is configured: POST to Google Apps Script
-            → Script saves to Google Drive + writes URL to Sheet col H
-            → On success: replace local preview with Drive URL (visible to all)
-         4. If SCRIPT_URL is empty: save to localStorage only (local-only mode)
-    ════════════════════════════════════════════════════════════════════ */
-
-    // Show/hide the uploading spinner overlay on a card photo wrap
-    function setCardUploading(uploadId, uploading) {
-      const input = document.getElementById(uploadId);
-      if (!input) return;
-      const wrap = input.closest('.card-photo-wrap') || input.parentElement;
-      if (!wrap) return;
-      let spinner = wrap.querySelector('.upload-spinner');
-      if (uploading) {
-        if (!spinner) {
-          spinner = document.createElement('div');
-          spinner.className = 'upload-spinner';
-          spinner.innerHTML = '<div class="spinner-ring"></div><span>Uploading…</span>';
-          wrap.appendChild(spinner);
-        }
-        spinner.style.display = 'flex';
-      } else {
-        if (spinner) spinner.style.display = 'none';
-      }
-    }
-
-    // Apply a photo URL to the card image element
-    function applyPhotoToCard(imgId, phId, url) {
-      const imgEl = document.getElementById(imgId);
-      const phEl  = document.getElementById(phId);
-      if (imgEl) {
-        imgEl.src = url;
-        imgEl.style.display = 'block';
-        if (phEl) phEl.style.display = 'none';
-      } else if (phEl) {
-        const newImg = document.createElement('img');
-        newImg.className = 'card-photo';
-        newImg.id  = imgId;
-        newImg.src = url;
-        newImg.alt = imgId;
-        newImg.onerror = () => { newImg.style.display='none'; if(phEl) phEl.style.display='flex'; };
-        phEl.parentNode.insertBefore(newImg, phEl);
-        phEl.style.display = 'none';
-      }
-    }
-
-    function handleUpload(input) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const key      = input.dataset.key;
-      const imgId    = input.dataset.imgid;
-      const phId     = input.dataset.phid;
-      const uploadId = input.id;
-
-      // Parse sheetName and studentName from key (format: "SheetName||StudentName")
-      const parts       = key.split('||');
-      const sheetName   = parts[0]  || '';
-      const studentName = parts.slice(1).join('||') || '';
-
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        const dataUrl = e.target.result;
-
-        // ── Step 1: Instant local preview ──────────────────────────────────
-        applyPhotoToCard(imgId, phId, dataUrl);
-
-        // Always save locally as fallback
-        const store = loadPhotoStore();
-        store[key] = dataUrl;
-        savePhotoStore(store);
-
-        // ── Step 2: Upload to Google Drive via Apps Script ──────────────────
-        if (!SCRIPT_URL) {
-          showToast('✅ Photo saved locally on this device.');
-          return;
-        }
-
-        setCardUploading(uploadId, true);
-
-        try {
-          // Use FormData to avoid CORS preflight issues
-          const formData = new FormData();
-          formData.append('sheetName', sheetName);
-          formData.append('studentName', studentName);
-          formData.append('imageData', dataUrl);
-          formData.append('fileName', file.name);
-          
-          const resp = await fetch(SCRIPT_URL, {
-            method:  'POST',
-            body: formData
-            // Note: Don't set Content-Type header - browser will set it automatically with boundary
-          });
-
-          const result = await resp.json();
-
-          if (result.success && result.photoUrl) {
-            // Replace local preview with the permanent Drive URL
-            applyPhotoToCard(imgId, phId, result.photoUrl);
-
-            // Update local store with Drive URL (so it persists across refreshes)
-            store[key] = result.photoUrl;
-            savePhotoStore(store);
-
-            // Add the Google Drive badge to the photo wrap
-            const imgEl = document.getElementById(imgId);
-            if (imgEl) {
-              const wrap = imgEl.closest('.card-photo-wrap');
-              if (wrap && !wrap.querySelector('.drive-badge')) {
-                const badge = document.createElement('div');
-                badge.className = 'drive-badge';
-                badge.title = 'Photo saved to Google Drive — visible to all visitors';
-                badge.innerHTML = '<i class="bi bi-google"></i>';
-                wrap.appendChild(badge);
-              }
-            }
-
-            if (result.warning) {
-              showToast('⚠️ Photo uploaded but student not found in sheet.');
-            } else {
-              showToast('✅ Photo saved to Google Drive — visible to everyone!');
-            }
-          } else {
-            showToast('⚠️ Drive upload failed — photo saved locally only.');
-            console.warn('Upload error:', result.error);
-          }
-        } catch (err) {
-          showToast('⚠️ Could not reach upload server — photo saved locally only.');
-          console.error('Upload fetch error:', err);
-        } finally {
-          setCardUploading(uploadId, false);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       MONTH NAVIGATION
-    ════════════════════════════════════════════════════════════════════ */
-    function buildMonthNav() {
-      const btn = document.getElementById('monthDropdownBtn');
-      const menu = document.getElementById('monthDropdownMenu');
-      const current = MONTHS[activeMonthIdx];
-      
-      btn.innerHTML = `<i class="bi bi-calendar-event me-1"></i> ${escHtml(current.label)} ${current.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}`;
-      
-      menu.innerHTML = MONTHS.map((m, idx) => `
-        <li>
-          <a class="dropdown-item ${idx === activeMonthIdx ? 'active' : ''}" href="#" onclick="switchMonth(${idx}); return false;">
-            <span>${escHtml(m.label)}</span>
-            ${m.isCurrent ? '<span class="live-indicator">LIVE</span>' : ''}
-          </a>
-        </li>
-      `).join('');
-    }
-
-    async function switchMonth(idx) {
-      if (idx === activeMonthIdx) return;
-      activeMonthIdx = idx;
-      buildMonthNav();
-      // Stop live polling if switching to a historical month
-      // (polling restarts automatically if user switches back to current month)
-      await loadAllData(false);
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       BUILD UI
-    ════════════════════════════════════════════════════════════════════ */
-    function buildGrid(students, sheetName) {
-      const sorted = students.slice().sort((a, b) => a.rank - b.rank).slice(0, 5);
-      return `<div class="cards-grid">${sorted.map(s => renderCard(s, sheetName)).join('')}</div>`;
-    }
-
-    function buildTabPane(classData, index) {
-      const { sheetName, levelName, students, teacher, preparedBy } = classData;
-      const displayName = levelDisplay(levelName, sheetName);
-      const hasTie = students.length > 1 && students.every(s => s.rank === students[0].rank);
-      const tieNote = hasTie
-        ? `<div class="tie-notice"><i class="bi bi-info-circle me-1"></i>All students share equal scores this period.</div>` : '';
-      const footerTeacher    = teacher    ? `<span><i class="bi bi-person-badge me-1"></i>Teacher: <strong>${escHtml(teacher)}</strong></span>` : '';
-      const footerPreparedBy = preparedBy ? `<span><i class="bi bi-pencil-square me-1"></i>Checked by: <strong>${escHtml(preparedBy)}</strong></span>` : '';
-      const classFooter = (footerTeacher || footerPreparedBy)
-        ? `<div class="class-footer">${footerTeacher}${footerPreparedBy}</div>` : '';
-      return `
-        <div class="tab-pane fade ${index === 0 ? 'show active' : ''}"
-             id="tab-pane-${index}" role="tabpanel" aria-labelledby="tab-btn-${index}">
-          <div class="class-title">
-            <h2>${escHtml(displayName)}</h2>
-            <p>Top 5 Outstanding Students</p>
-            ${tieNote}
-          </div>
-          ${buildGrid(students, sheetName)}
-          ${classFooter}
-        </div>`;
-    }
-
-    function buildUI(allClasses) {
-      const tabsEl    = document.getElementById('classTabs');
-      const contentEl = document.getElementById('tabContent');
-      tabsEl.innerHTML    = '';
-      contentEl.innerHTML = '';
-
-      const first = allClasses[0];
-      if (first) {
-        if (first.schoolName)   document.getElementById('schoolName').textContent   = first.schoolName;
-        if (first.academicYear) document.getElementById('academicYear').textContent = `Academic Year ${first.academicYear}`;
-        if (first.period)       document.getElementById('periodBadge').textContent  = `⭐ Top 5 of ${first.period}`;
-        if (first.period)       document.getElementById('currentPeriodLabel').textContent = first.period;
-
-        const preparedBy = allClasses.map(d => d.preparedBy).find(p => p) || '';
-        const teacher    = allClasses.map(d => d.teacher).find(t => t) || '';
-        const footerParts = [`© ${new Date().getFullYear()} ${first.schoolName}`];
-        if (preparedBy) footerParts.push(`Developed by <strong>${escHtml('Phoun Borin')}</strong>`);
-        document.getElementById('siteFooter').innerHTML = footerParts.join(' &nbsp;·&nbsp; ');
-      }
-
-      allClasses.forEach((data, i) => {
-        const displayName = levelDisplay(data.levelName, data.sheetName);
-        const li = document.createElement('li');
-        li.className = 'nav-item';
-        li.innerHTML = `
-          <button class="nav-link ${i === 0 ? 'active' : ''}"
-            id="tab-btn-${i}" data-bs-toggle="tab"
-            data-bs-target="#tab-pane-${i}" type="button" role="tab"
-            aria-controls="tab-pane-${i}" aria-selected="${i === 0}">
-            ${escHtml(displayName)}
-          </button>`;
-        tabsEl.appendChild(li);
-        contentEl.insertAdjacentHTML('beforeend', buildTabPane(data, i));
-      });
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       COUNTDOWN RING
-    ════════════════════════════════════════════════════════════════════ */
-    let countdownInterval = null;
-    let nextRefreshAt     = null;
-    const RING_CIRCUMFERENCE = 69.1; // 2π × r (r=11)
-
-    function startCountdown() {
-      nextRefreshAt = Date.now() + REFRESH_MS;
-      if (countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(tickCountdown, 1000);
-      tickCountdown();
-    }
-
-    function tickCountdown() {
-      const remaining = Math.max(0, nextRefreshAt - Date.now());
-      const mins      = Math.floor(remaining / 60000);
-      const secs      = Math.floor((remaining % 60000) / 1000);
-      const fraction  = remaining / REFRESH_MS;
-      const offset    = RING_CIRCUMFERENCE * (1 - fraction);
-
-      const ringFill = document.getElementById('ringFill');
-      const countdownText = document.getElementById('countdownText');
-      if (ringFill)      ringFill.style.strokeDashoffset = offset;
-      if (countdownText) countdownText.textContent = mins > 0 ? `${mins}m` : `${secs}s`;
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       TOAST
-    ════════════════════════════════════════════════════════════════════ */
-    let toastTimer = null;
-    function showToast(msg) {
-      const toast = document.getElementById('changeToast');
-      document.getElementById('changeToastMsg').textContent = msg;
-      toast.classList.add('show');
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(hideToast, 5000);
-    }
-    function hideToast() {
-      document.getElementById('changeToast').classList.remove('show');
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       STATUS BAR UPDATE
-    ════════════════════════════════════════════════════════════════════ */
-    function setStatus(type, msg) {
-      const dot    = document.getElementById('liveDot');
-      const status = document.getElementById('updateStatus');
-      dot.className    = 'live-dot ' + (type === 'live' ? '' : type);
-      status.textContent = msg;
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       MAIN LOAD FUNCTION
-       ─ Loads data for the currently selected month (activeMonthIdx)
-       ─ Historical months: served from cache, no background polling
-       ─ Current (live) month: 5-min polling + change detection
-    ════════════════════════════════════════════════════════════════════ */
-    let isFirstLoad = true;
-
-    async function loadAllData(isManual = false) {
-      const monthIdx   = activeMonthIdx;
-      const monthCfg   = MONTHS[monthIdx];
-      const sheetNames = monthCfg.sheets;
-      const isLive     = monthCfg.isCurrent;
-
-      const loadingBox  = document.getElementById('loadingBox');
-      const errorBox    = document.getElementById('errorBox');
-      const tabContent  = document.getElementById('tabContent');
-      const updateBar   = document.getElementById('updateBar');
-      const refreshBtn  = document.getElementById('refreshBtn');
-      const countdownWrap = document.getElementById('countdownWrap');
-
-      // Show spinner on first load or manual refresh or month switch
-      if (isFirstLoad || isManual) {
-        loadingBox.classList.remove('d-none');
-        errorBox.classList.add('d-none');
-        tabContent.classList.add('d-none');
-        updateBar.classList.add('d-none');
-      }
-
-      if (isManual) {
-        refreshBtn.classList.add('spinning');
-        clearCache(monthIdx);
-      }
-
-      // Hide countdown ring for historical months (no polling)
-      if (countdownWrap) countdownWrap.style.display = isLive ? '' : 'none';
-
-      try {
-        let results;
-        const cached = !isManual && isFirstLoad ? loadCache(monthIdx) : null;
-
-        if (cached) {
-          results = cached;
-          buildUI(results);
-          lastFingerprint = fingerprint(results);
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          updateBar.classList.remove('d-none');
-          setStatus(isLive ? 'stale' : 'live', isLive ? 'Loaded from cache — verifying…' : `Historical data — ${monthCfg.label}`);
-          document.getElementById('lastUpdated').textContent = 'cached';
-          isFirstLoad = false;
-
-          // Background verification only for the live month
-          if (isLive) {
-            Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId))).then(fresh => {
-              if (activeMonthIdx !== monthIdx) return; // user switched month
-              const newFp = fingerprint(fresh);
-              if (newFp !== lastFingerprint) {
-                lastFingerprint = newFp;
-                saveCache(monthIdx, fresh);
-                buildUI(fresh);
-                const now = new Date();
-                document.getElementById('lastUpdated').textContent = fmtTime(now);
-                setStatus('live', 'Live data');
-                showToast('Sheet updated — page refreshed with latest data!');
-                pushHistory({ type: 'changed', time: fmtDateTime(now), msg: `New data detected for ${monthCfg.label}.` });
-              } else {
-                setStatus('live', 'Live data');
-                document.getElementById('lastUpdated').textContent = fmtTime(new Date());
-                pushHistory({ type: 'same', time: fmtDateTime(new Date()), msg: 'No changes detected.' });
-              }
-            }).catch(err => {
-              setStatus('stale', 'Using cached data');
-              console.warn('Background verify failed:', err);
-            });
-          }
-
-        } else {
-          // Full fresh fetch
-          results = await Promise.all(sheetNames.map(n => fetchSheet(n, monthCfg.spreadsheetId)));
-          if (activeMonthIdx !== monthIdx) return; // user switched month mid-fetch
-
-          const newFp  = fingerprint(results);
-          const changed = lastFingerprint !== null && newFp !== lastFingerprint;
-
-          if (changed && isLive) showToast('New data detected — page updated with latest results!');
-
-          lastFingerprint = newFp;
-          saveCache(monthIdx, results);
-          buildUI(results);
-
-          const now = new Date();
-          loadingBox.classList.add('d-none');
-          tabContent.classList.remove('d-none');
-          updateBar.classList.remove('d-none');
-          setStatus('live', isLive ? 'Live data' : `Historical — ${monthCfg.label}`);
-          document.getElementById('lastUpdated').textContent = fmtTime(now);
-
-          if (isLive) {
-            pushHistory({
-              type: changed ? 'changed' : 'same',
-              time: fmtDateTime(now),
-              msg:  changed ? `Data changed for ${monthCfg.label}.` : 'No changes detected.',
-            });
-          }
-
-          isFirstLoad = false;
-        }
-
-        // Only run countdown for the live month
-        if (isLive) startCountdown();
-
-      } catch (err) {
-        console.error(err);
-        loadingBox.classList.add('d-none');
-        if (isFirstLoad) {
-          errorBox.classList.remove('d-none');
-          document.getElementById('errorMsg').textContent = err.message;
-        } else {
-          setStatus('error', 'Refresh failed — retrying soon');
-          updateBar.classList.remove('d-none');
-          tabContent.classList.remove('d-none');
-          pushHistory({ type: 'error', time: fmtDateTime(new Date()), msg: `Fetch failed: ${err.message}` });
-        }
-      } finally {
-        if (isManual) refreshBtn.classList.remove('spinning');
-      }
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       MANUAL REFRESH
-    ════════════════════════════════════════════════════════════════════ */
-    function manualRefresh() {
-      loadAllData(true);
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
-       VISIBILITY API — resume polling when tab becomes visible again
-    ════════════════════════════════════════════════════════════════════ */
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && MONTHS[activeMonthIdx]?.isCurrent) {
-        const stale = nextRefreshAt && Date.now() > nextRefreshAt;
-        if (stale) loadAllData(false);
-      }
-    });
-
-    /* ════════════════════════════════════════════════════════════════════
-       INIT
-    ════════════════════════════════════════════════════════════════════ */
-    buildMonthNav();
-    loadAllData();
-    // Auto-poll only for the live/current month
-    setInterval(() => {
-      if (MONTHS[activeMonthIdx]?.isCurrent) loadAllData(false);
-    }, REFRESH_MS);
-
-    // Restore history on page load
-    renderHistory(loadHistory());
-  </script>
-</body>
-</html>
